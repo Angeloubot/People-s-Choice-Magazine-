@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>People's Choice | Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f7;color:#222}
+header{background:#171717;color:white;padding:20px}
+header strong{font-family:Georgia,serif;font-size:23px}
+header span{color:#e7549b}
+main{max-width:1050px;margin:30px auto;padding:15px}
+.panel{background:white;padding:24px;border-radius:10px;margin-bottom:20px;box-shadow:0 2px 12px #0000000b}
+h2{font-family:Georgia,serif}
+input,textarea,select{width:100%;padding:13px;margin:8px 0 16px;border:1px solid #ddd;border-radius:5px;font:inherit}
+textarea{min-height:150px;resize:vertical}
+label{font-size:13px;font-weight:bold}
+button{border:0;border-radius:5px;padding:12px 18px;background:#e7549b;color:white;font-weight:bold;cursor:pointer}
+button.secondary{background:#222}
+button:disabled{opacity:.5}
+.hidden{display:none!important}
+.article{border-bottom:1px solid #eee;padding:15px 0}
+.article img{width:100px;height:75px;object-fit:cover;float:right;border-radius:5px}
+.status{font-size:12px;color:#e7549b;font-weight:bold}
+small{color:#777}
+#message{padding:12px;background:#fff1f7;border-radius:5px;margin:12px 0;white-space:pre-wrap}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>*{flex:1}
+</style>
+</head>
+<body>
+<header>
+<strong>PEOPLE'S <span>CHOICE</span> MAGAZINE</strong>
+<div><small>EDITORIAL CONTROL CENTRE</small></div>
+</header>
+
+<main>
+<section id="login" class="panel">
+<h2>Admin & Editor Login</h2>
+<p>Sign in to manage magazine articles.</p>
+<form id="loginForm">
+<label>Email address</label>
+<input id="email" type="email" required placeholder="Your email">
+<label>Password</label>
+<input id="password" type="password" required placeholder="Your password">
+<button type="submit">Sign In</button>
+</form>
+<div id="loginMessage"></div>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="panel">
+<div class="row">
+<div>
+<h2>Welcome to your dashboard</h2>
+<p id="userInfo"></p>
+</div>
+<div style="text-align:right">
+<button class="secondary" id="logout">Log Out</button>
+</div>
+</div>
+</div>
+
+<div class="panel">
+<h2>Create New Article</h2>
+<form id="articleForm">
+<label>Article headline</label>
+<input id="title" required placeholder="Enter headline">
+
+<label>Short description</label>
+<textarea id="excerpt" required placeholder="Article summary"></textarea>
+
+<label>Full article</label>
+<textarea id="content" required placeholder="Write your full article here"></textarea>
+
+<div class="row">
+<div>
+<label>News category</label>
+<select id="category">
+<option value="local">Local News</option>
+<option value="national">National News</option>
+</select>
+</div>
+<div>
+<label>Section</label>
+<select id="section">
+<option value="entertainment">Entertainment</option>
+<option value="music">Music</option>
+</select>
+</div>
+</div>
+
+<label>Journalist</label>
+<select id="journalist">
+<option value="">No journalist selected</option>
+</select>
+
+<label>Article photograph</label>
+<input id="photo" type="file" accept="image/*">
+
+<button type="submit" id="saveButton">Save Article</button>
+</form>
+<div id="message" class="hidden"></div>
+</div>
+
+<div class="panel">
+<h2>Manage Articles</h2>
+<div id="articles">Loading articles...</div>
+</div>
+</section>
+</main>
+
+<script>
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+let currentUser = null;
+let currentRole = null;
+
+const $ = id => document.getElementById(id);
+
+function message(text, error=false) {
+  $('message').textContent = text;
+  $('message').style.color = error ? '#b42318' : '#222';
+  $('message').classList.remove('hidden');
+}
+
+async function startDashboard() {
+  const {data:{user},error} = await db.auth.getUser();
+
+  if(error || !user) {
+    $('login').classList.remove('hidden');
+    $('dashboard').classList.add('hidden');
+    return;
+  }
+
+  const {data:profile,error:profileError} = await db
+    .from('profiles')
+    .select('full_name,role')
+    .eq('id',user.id)
+    .single();
+
+  if(profileError || !profile) {
+    $('loginMessage').textContent =
+      'Could not load your profile. Contact the administrator.';
+    return;
+  }
+
+  currentUser = user;
+  currentRole = profile.role;
+
+  $('login').classList.add('hidden');
+  $('dashboard').classList.remove('hidden');
+  $('userInfo').textContent =
+    (profile.full_name || user.email) + ' · ' + currentRole.toUpperCase();
+
+  await loadJournalists();
+  await loadArticles();
+}
+
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  $('loginMessage').textContent='Signing in...';
+
+  const {error} = await db.auth.signInWithPassword({
+    email:$('email').value,
+    password:$('password').value
+  });
+
+  if(error) {
+    $('loginMessage').textContent=error.message;
+    return;
+  }
+
+  await startDashboard();
+});
+
+$('logout').onclick=async()=>{
+  await db.auth.signOut();
+  location.reload();
+};
+
+async function loadJournalists(){
+  const {data,error}=await db.from('journalists')
+    .select('id,name').order('name');
+
+  if(error) return;
+
+  $('journalist').innerHTML='<option value="">No journalist selected</option>';
+
+  data.forEach(j=>{
+    const option=document.createElement('option');
+    option.value=j.id;
+    option.textContent=j.name;
+    $('journalist').appendChild(option);
+  });
+}
+
+function makeSlug(title){
+  return title.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-|-$/g,'') + '-' + Date.now();
+}
+
+$('articleForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  const button=$('saveButton');
+  button.disabled=true;
+  message('Saving your article...');
+
+  try {
+    let imageUrl=null;
+    const file=$('photo').files[0];
+
+    if(file){
+      if(file.size>5*1024*1024)
+        throw new Error('Please choose an image smaller than 5MB.');
+
+      if(!file.type.startsWith('image/'))
+        throw new Error('Please upload an image file.');
+
+      const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'-');
+      const path=currentUser.id+'/'+Date.now()+'-'+safeName;
+
+      const {error:uploadError}=await db.storage
+        .from('article-images')
+        .upload(path,file,{upsert:false});
+
+      if(uploadError) throw uploadError;
+
+      const {data}=db.storage.from('article-images').getPublicUrl(path);
+      imageUrl=data.publicUrl;
+    }
+
+    const status=currentRole==='admin'?'published':'draft';
+
+    const article={
+      title:$('title').value.trim(),
+      slug:makeSlug($('title').value),
+      excerpt:$('excerpt').value.trim(),
+      content:$('content').value.trim(),
+      image_url:imageUrl,
+      category:$('category').value,
+      section:$('section').value,
+      journalist_id:$('journalist').value || null,
+      author_id:currentUser.id,
+      status:status,
+      published_at:status==='published'?new Date().toISOString():null
+    };
+
+    const {error}=await db.from('articles').insert(article);
+
+    if(error) throw error;
+
+    message(status==='published'
+      ?'Article published successfully!'
+      :'Draft saved! An administrator must publish it.');
+
+    $('articleForm').reset();
+    await loadArticles();
+
+  } catch(error) {
+    message(error.message || 'Something went wrong.',true);
+  } finally {
+    button.disabled=false;
+  }
+});
+
+async function loadArticles(){
+  $('articles').textContent='Loading...';
+
+  const {data,error}=await db.from('articles')
+    .select('id,title,status,category,section,created_at,image_url')
+    .order('created_at',{ascending:false});
+
+  if(error){
+    $('articles').textContent=error.message;
+    return;
+  }
+
+  $('articles').innerHTML='';
+
+  if(!data.length){
+    $('articles').textContent='No articles yet.';
+    return;
+  }
+
+  data.forEach(article=>{
+    const div=document.createElement('div');
+    div.className='article';
+
+    const heading=document.createElement('h3');
+    heading.textContent=article.title;
+
+    const details=document.createElement('p');
+    details.className='status';
+    details.textContent=article.category.toUpperCase()+' · '+
+      article.section.toUpperCase()+' · '+article.status.toUpperCase();
+
+    div.append(heading,details);
+
+    if(article.image_url){
+      const img=document.createElement('img');
+      img.src=article.image_url;
+      img.alt='Article photograph';
+      div.prepend(img);
+    }
+
+    if(currentRole==='admin'){
+      const btn=document.createElement('button');
+      btn.textContent=article.status==='published'?'Unpublish':'Publish';
+      btn.onclick=()=>changeStatus(article);
+      div.appendChild(btn);
+    }
+
+    $('articles').appendChild(div);
+  });
+}
+
+async function changeStatus(article){
+  const next=article.status==='published'?'draft':'published';
+
+  const {error}=await db.from('articles').update({
+    status:next,
+    published_at:next==='published'?new Date().toISOString():null
+  }).eq('id',article.id);
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  await loadArticles();
+}
+
+startDashboard();
+
+db.auth.onAuthStateChange((event,session)=>{
+  if(event==='SIGNED_OUT') {
+    $('dashboard').classList.add('hidden');
+    $('login').classList.remove('hidden');
+  }
+});
+</script>
+</body>
+</html>
