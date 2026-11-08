@@ -11,237 +11,56 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f5f7;
-  color:#222;
-}
-
-header{
-  background:#171717;
-  color:white;
-  padding:20px 5%;
-}
-
-header strong{
-  font-family:Georgia,serif;
-  font-size:23px;
-}
-
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f7;color:#222}
+header{background:#171717;color:white;padding:20px 5%}
+header strong{font-family:Georgia,serif;font-size:23px}
 header span{color:#e7549b}
-
-main{
-  max-width:1100px;
-  margin:30px auto;
-  padding:15px;
-}
-
-.panel{
-  background:white;
-  padding:24px;
-  border-radius:10px;
-  margin-bottom:20px;
-  box-shadow:0 2px 12px #0000000b;
-}
-
+main{max-width:1100px;margin:30px auto;padding:15px}
+.panel{background:white;padding:24px;border-radius:10px;margin-bottom:20px;box-shadow:0 2px 12px #0000000b}
 h2{font-family:Georgia,serif}
-
-input,textarea,select{
-  width:100%;
-  padding:13px;
-  margin:8px 0 16px;
-  border:1px solid #ddd;
-  border-radius:5px;
-  font:inherit;
-}
-
-textarea{
-  min-height:150px;
-  resize:vertical;
-}
-
-label{
-  font-size:13px;
-  font-weight:bold;
-}
-
-button{
-  border:0;
-  border-radius:5px;
-  padding:12px 18px;
-  background:#e7549b;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-  margin:4px 2px;
-}
-
+input,textarea,select{width:100%;padding:13px;margin:8px 0 16px;border:1px solid #ddd;border-radius:5px;font:inherit}
+textarea{min-height:130px;resize:vertical}
+label{font-size:13px;font-weight:bold}
+button{border:0;border-radius:5px;padding:12px 18px;background:#e7549b;color:white;font-weight:bold;cursor:pointer;margin:4px 2px}
 button.secondary{background:#222}
 button.danger{background:#b42318}
 button.success{background:#16834a}
 button:disabled{opacity:.5;cursor:not-allowed}
-
 .hidden{display:none!important}
-
-.row{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
+.row{display:flex;gap:12px;flex-wrap:wrap}
 .row>*{flex:1;min-width:180px}
-
-.article{
-  border-bottom:1px solid #eee;
-  padding:18px 0;
-  overflow:hidden;
-}
-
-.article img{
-  width:110px;
-  height:80px;
-  object-fit:cover;
-  float:right;
-  border-radius:5px;
-  margin-left:12px;
-}
-
-.status{
-  font-size:12px;
-  color:#e7549b;
-  font-weight:bold;
-}
-
+.article{border-bottom:1px solid #eee;padding:18px 0;overflow:hidden}
+.article img{width:110px;height:80px;object-fit:cover;float:right;border-radius:5px;margin-left:12px}
+.status{font-size:12px;color:#e7549b;font-weight:bold}
 small{color:#777}
-
-#message,#loginMessage,.banner-message{
-  padding:12px;
-  background:#fff1f7;
-  border-radius:5px;
-  margin:12px 0;
-  white-space:pre-wrap;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:20px;
-}
-
-.stat{
-  background:#fff1f7;
-  padding:18px;
-  border-radius:8px;
-  text-align:center;
-}
-
-.stat strong{
-  display:block;
-  font-size:25px;
-  color:#e7549b;
-}
-
+#message,#loginMessage,.notice{padding:12px;background:#fff1f7;border-radius:5px;margin:12px 0;white-space:pre-wrap}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.stat{background:#fff1f7;padding:18px;border-radius:8px;text-align:center}
+.stat strong{display:block;font-size:25px;color:#e7549b}
 .stat small{font-weight:bold}
-
-/* BANNER MANAGER */
-
-.banner-item{
-  border:1px solid #eee;
-  border-radius:8px;
-  padding:14px;
-  margin:15px 0;
-  display:grid;
-  grid-template-columns:150px 1fr;
-  gap:15px;
-}
-
-.banner-item img{
-  width:150px;
-  height:110px;
-  object-fit:cover;
-  border-radius:5px;
-  background:#eee;
-}
-
-.banner-details h3{
-  margin:3px 0 8px;
-  font-family:Georgia,serif;
-}
-
-.banner-details p{
-  font-size:13px;
-  color:#777;
-  overflow-wrap:anywhere;
-}
-
-.banner-status{
-  display:inline-block;
-  font-size:11px;
-  font-weight:bold;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#e7f8ed;
-  color:#16834a;
-}
-
-.banner-status.inactive{
-  background:#eee;
-  color:#666;
-}
-
-.banner-preview{
-  width:100%;
-  height:190px;
-  object-fit:cover;
-  border-radius:7px;
-  background:#eee;
-  margin:10px 0;
-}
-
-.check-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin:10px 0 18px;
-}
-
-.check-row input{
-  width:18px;
-  height:18px;
-  margin:0;
-}
-
-.check-row label{font-size:14px}
-
-.help-text{
-  font-size:12px;
-  color:#777;
-  line-height:1.5;
-}
-
+.help-text{font-size:12px;color:#777;line-height:1.5}
+.check-row{display:flex;align-items:center;gap:10px;margin:10px 0 18px}
+.check-row input{width:18px;margin:0}
+.banner-item,.video-item{border:1px solid #eee;border-radius:8px;padding:14px;margin:15px 0;display:grid;grid-template-columns:150px 1fr;gap:15px}
+.banner-item img,.video-item img{width:150px;height:110px;object-fit:cover;border-radius:5px;background:#eee}
+.video-item video{width:150px;max-height:110px;object-fit:cover;background:#111;border-radius:5px}
+.banner-details h3,.video-details h3{margin:3px 0 8px;font-family:Georgia,serif}
+.banner-details p,.video-details p{font-size:13px;color:#777;overflow-wrap:anywhere}
+.pill{display:inline-block;font-size:11px;font-weight:bold;padding:5px 9px;border-radius:20px;background:#e7f8ed;color:#16834a}
+.pill.inactive{background:#eee;color:#666}
+.preview{width:100%;max-height:220px;object-fit:cover;border-radius:7px;margin:10px 0;background:#eee}
+hr{border:0;border-top:1px solid #eee;margin:25px 0}
 @media(max-width:600px){
-  main{padding:10px}
-  .panel{padding:17px}
-  .stats{grid-template-columns:1fr 1fr}
-  .article img{width:80px;height:65px}
-
-  .banner-item{
-    grid-template-columns:1fr;
-  }
-
-  .banner-item img{
-    width:100%;
-    height:170px;
-  }
+ main{padding:10px}.panel{padding:17px}
+ .stats{grid-template-columns:1fr 1fr}
+ .article img{width:80px;height:65px}
+ .banner-item,.video-item{grid-template-columns:1fr}
+ .banner-item img,.video-item img,.video-item video{width:100%;height:190px}
 }
 </style>
 </head>
 
 <body>
-
 <header>
 <strong>PEOPLE'S <span>CHOICE</span> MAGAZINE</strong>
 <div><small>EDITORIAL CONTROL CENTRE</small></div>
@@ -249,157 +68,77 @@ small{color:#777}
 
 <main>
 
-<!-- LOGIN -->
-
 <section id="login" class="panel">
 <h2>Admin & Editor Login</h2>
-<p>Sign in to manage magazine articles and banners.</p>
-
+<p>Sign in to manage your magazine.</p>
 <form id="loginForm">
-
 <label>Email Address</label>
 <input id="email" type="email" required>
-
 <label>Password</label>
 <input id="password" type="password" required>
-
 <button type="submit">Sign In</button>
-
 </form>
-
 <div id="loginMessage"></div>
 </section>
-
-
-<!-- DASHBOARD -->
 
 <section id="dashboard" class="hidden">
 
 <div class="panel">
-
 <div class="row">
 <div>
 <h2>Welcome to your dashboard</h2>
 <p id="userInfo"></p>
 </div>
-
 <div style="text-align:right">
 <button class="secondary" id="logout">Log Out</button>
 </div>
 </div>
-
 <div class="stats">
-
-<div class="stat">
-<strong id="totalCount">0</strong>
-<small>Total Articles</small>
-</div>
-
-<div class="stat">
-<strong id="publishedCount">0</strong>
-<small>Published</small>
-</div>
-
-<div class="stat">
-<strong id="draftCount">0</strong>
-<small>Drafts</small>
-</div>
-
+<div class="stat"><strong id="totalCount">0</strong><small>Total Articles</small></div>
+<div class="stat"><strong id="publishedCount">0</strong><small>Published</small></div>
+<div class="stat"><strong id="draftCount">0</strong><small>Drafts</small></div>
 </div>
 </div>
 
-
-<!-- HOMEPAGE BANNER MANAGER -->
+<!-- HOMEPAGE BANNERS -->
 
 <div class="panel hidden" id="bannerManager">
-
 <h2>Homepage Banner Manager</h2>
-
-<p class="help-text">
-Manage the banners displayed on your public magazine homepage.
-Add, edit, activate, deactivate and arrange your featured banners.
-</p>
+<p class="help-text">Manage the banners displayed on your public homepage.</p>
 
 <div class="stats">
-
-<div class="stat">
-<strong id="bannerCount">0</strong>
-<small>Total Banners</small>
+<div class="stat"><strong id="bannerCount">0</strong><small>Total Banners</small></div>
+<div class="stat"><strong id="activeBannerCount">0</strong><small>Active Banners</small></div>
+<div class="stat"><strong id="inactiveBannerCount">0</strong><small>Inactive Banners</small></div>
 </div>
 
-<div class="stat">
-<strong id="activeBannerCount">0</strong>
-<small>Active Banners</small>
-</div>
-
-<div class="stat">
-<strong id="inactiveBannerCount">0</strong>
-<small>Inactive Banners</small>
-</div>
-
-</div>
-
-<hr style="border:0;border-top:1px solid #eee;margin:25px 0">
-
+<hr>
 <h3 id="bannerFormHeading">Add New Banner</h3>
 
 <form id="bannerForm">
-
 <input type="hidden" id="bannerId">
 
 <label>Banner Headline</label>
-<input
-  id="bannerTitle"
-  required
-  maxlength="200"
-  placeholder="Enter banner headline">
+<input id="bannerTitle" required maxlength="200" placeholder="Enter banner headline">
 
 <label>Short Description</label>
-<textarea
-  id="bannerSubtitle"
-  style="min-height:90px"
-  placeholder="Write a short banner description"></textarea>
+<textarea id="bannerSubtitle" style="min-height:80px" placeholder="Banner description"></textarea>
 
-<label>Banner Category / Label</label>
-<input
-  id="bannerLabel"
-  placeholder="e.g. BREAKING NEWS, MUSIC, FEATURED"
-  value="FEATURED">
+<label>Category / Label</label>
+<input id="bannerLabel" value="FEATURED">
 
 <label>Banner Image URL (optional)</label>
-<input
-  id="bannerImageUrl"
-  type="url"
-  placeholder="https://example.com/image.jpg">
-
-<p class="help-text">
-You can paste an image URL or upload an image below.
-Uploading an image takes priority over the URL.
-</p>
+<input id="bannerImageUrl" type="url" placeholder="https://example.com/image.jpg">
 
 <label>Upload Banner Image</label>
-<input
-  id="bannerImageFile"
-  type="file"
-  accept="image/*">
+<input id="bannerImageFile" type="file" accept="image/*">
+<p class="help-text">Maximum image size: 5MB.</p>
 
-<p class="help-text">
-Maximum image size: 5MB.
-Use landscape images for the best homepage appearance.
-</p>
-
-<label>Banner Destination Link</label>
-<input
-  id="bannerLink"
-  type="text"
-  placeholder="article.html?id=123 or https://example.com">
+<label>Destination Link</label>
+<input id="bannerLink" placeholder="article.html?id=123 or https://example.com">
 
 <label>Display Order</label>
-<input
-  id="bannerOrder"
-  type="number"
-  value="0"
-  min="0">
+<input id="bannerOrder" type="number" value="0" min="0">
 
 <div class="check-row">
 <input id="bannerActive" type="checkbox" checked>
@@ -407,53 +146,113 @@ Use landscape images for the best homepage appearance.
 </div>
 
 <label>Image Preview</label>
-<img
-  id="bannerPreview"
-  class="banner-preview"
-  src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000"
-  alt="Banner preview">
+<img id="bannerPreview" class="preview"
+src="https://placehold.co/1000x400?text=Banner+Preview">
 
-<div class="row">
-<button type="submit" id="bannerSaveButton">
-Save Banner
-</button>
-
-<button
-  type="button"
-  class="secondary hidden"
-  id="cancelBannerEdit">
-Cancel Editing
-</button>
-</div>
-
-<div id="bannerMessage" class="banner-message hidden"></div>
-
+<button type="submit" id="bannerSaveButton">Save Banner</button>
+<button type="button" class="secondary hidden" id="cancelBannerEdit">Cancel Editing</button>
+<div id="bannerMessage" class="notice hidden"></div>
 </form>
 
-<hr style="border:0;border-top:1px solid #eee;margin:25px 0">
-
+<hr>
 <h3>Manage Existing Banners</h3>
-
-<div id="bannerList">
-Loading banners...
+<div id="bannerList">Loading banners...</div>
+<button type="button" class="secondary" id="refreshBanners">Refresh Banners</button>
 </div>
 
-<button
-  type="button"
-  class="secondary"
-  id="refreshBanners">
-Refresh Banners
-</button>
+<!-- VIDEO AND SKIT MANAGER -->
 
+<div class="panel hidden" id="videoManager">
+<h2>🎬 Videos & Skits Manager</h2>
+<p class="help-text">
+Upload local comedy skits, entertainment videos, creator interviews and other video content.
+</p>
+
+<div class="stats">
+<div class="stat"><strong id="videoCount">0</strong><small>Total Videos</small></div>
+<div class="stat"><strong id="publishedVideoCount">0</strong><small>Published</small></div>
+<div class="stat"><strong id="draftVideoCount">0</strong><small>Drafts</small></div>
 </div>
 
+<hr>
 
-<!-- CREATE ARTICLE -->
+<h3 id="videoFormHeading">Upload New Video</h3>
+
+<form id="videoForm">
+<input type="hidden" id="videoId">
+
+<label>Video Title</label>
+<input id="videoTitle" required maxlength="200"
+placeholder="Enter video title">
+
+<label>Video Description</label>
+<textarea id="videoDescription"
+placeholder="Describe this video or skit"></textarea>
+
+<label>Content Creator / Artist Name</label>
+<input id="creatorName" required
+placeholder="Enter creator's name">
+
+<div class="row">
+<div>
+<label>Video Category</label>
+<select id="videoCategory">
+<option value="Comedy">Comedy & Skits</option>
+<option value="Drama">Drama</option>
+<option value="Lifestyle">Lifestyle</option>
+<option value="Music">Music</option>
+<option value="Interviews">Interviews</option>
+<option value="Entertainment">Entertainment</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div>
+<label>Publishing Status</label>
+<select id="videoStatus">
+<option value="draft">Save as Draft</option>
+<option value="published">Publish Video</option>
+</select>
+</div>
+</div>
+
+<label>Upload Video File (MP4 / WebM)</label>
+<input id="videoFile" type="file" accept="video/mp4,video/webm">
+
+<p class="help-text">
+Maximum file size: 50MB. Leave empty when editing to keep the existing video.
+</p>
+
+<label>Thumbnail Image (optional)</label>
+<input id="thumbnailFile" type="file" accept="image/*">
+
+<label>Or Thumbnail Image URL</label>
+<input id="thumbnailUrl" type="url" placeholder="https://example.com/thumbnail.jpg">
+
+<div class="check-row">
+<input id="videoFeatured" type="checkbox">
+<label for="videoFeatured">Feature this video on the homepage</label>
+</div>
+
+<label>Video Preview</label>
+<video id="videoPreview" class="preview hidden" controls></video>
+<img id="thumbnailPreview" class="preview hidden" alt="Thumbnail preview">
+
+<button type="submit" id="videoSaveButton">Upload Video</button>
+<button type="button" class="secondary hidden" id="cancelVideoEdit">Cancel Editing</button>
+
+<div id="videoMessage" class="notice hidden"></div>
+</form>
+
+<hr>
+<h3>Manage Uploaded Videos</h3>
+<div id="videoList">Loading videos...</div>
+<button type="button" class="secondary" id="refreshVideos">Refresh Videos</button>
+</div>
+
+<!-- ARTICLE FORM -->
 
 <div class="panel">
-
 <h2 id="formHeading">Create New Article</h2>
-
 <form id="articleForm">
 
 <label>Article Headline</label>
@@ -466,7 +265,6 @@ Refresh Banners
 <textarea id="content" required placeholder="Write your full article here"></textarea>
 
 <div class="row">
-
 <div>
 <label>News Category</label>
 <select id="category">
@@ -475,7 +273,6 @@ Refresh Banners
 <option value="international">International News</option>
 </select>
 </div>
-
 <div>
 <label>Section</label>
 <select id="section">
@@ -485,7 +282,6 @@ Refresh Banners
 <option value="general">General News</option>
 </select>
 </div>
-
 </div>
 
 <label>Journalist</label>
@@ -495,35 +291,23 @@ Refresh Banners
 
 <label>Article Photograph</label>
 <input id="photo" type="file" accept="image/*">
-
-<p id="imageInfo">
-<small>Maximum image size: 5MB. Leave empty to keep the existing image when editing.</small>
-</p>
+<p><small>Maximum image size: 5MB. Leave empty to keep existing image.</small></p>
 
 <button type="submit" id="saveButton">Save Article</button>
-
-<button type="button" id="cancelEdit" class="secondary hidden">
-Cancel Editing
-</button>
-
+<button type="button" id="cancelEdit" class="secondary hidden">Cancel Editing</button>
 </form>
-
 <div id="message" class="hidden"></div>
-
 </div>
-
 
 <!-- ARTICLE MANAGEMENT -->
 
 <div class="panel">
-
 <h2>Manage Articles</h2>
 
 <label>Search Articles</label>
 <input id="searchArticles" type="search" placeholder="Search headlines...">
 
 <div class="row">
-
 <div>
 <label>Filter by Status</label>
 <select id="statusFilter">
@@ -532,7 +316,6 @@ Cancel Editing
 <option value="draft">Drafts</option>
 </select>
 </div>
-
 <div>
 <label>Filter by Category</label>
 <select id="categoryFilter">
@@ -542,179 +325,107 @@ Cancel Editing
 <option value="international">International News</option>
 </select>
 </div>
-
 </div>
-
 <div id="articles">Loading articles...</div>
-
 </div>
 
 </section>
 </main>
 
-
 <script>
-
-// SUPABASE CONNECTION
-
-const db = window.supabase.createClient(
+const db=window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
 
-let currentUser = null;
-let currentRole = null;
-let editingArticleId = null;
-let existingImageUrl = null;
-let allArticles = [];
+const $=id=>document.getElementById(id);
 
-let allBanners = [];
-let editingBannerId = null;
-let existingBannerImage = null;
+let currentUser=null;
+let currentRole=null;
 
-const $ = id => document.getElementById(id);
+let allArticles=[];
+let allBanners=[];
+let allVideos=[];
 
+let editingArticleId=null;
+let existingImageUrl=null;
 
-// MESSAGE DISPLAY
+let editingBannerId=null;
+let existingBannerImage=null;
 
-function message(text,error=false){
+let editingVideoId=null;
+let existingVideoUrl=null;
+let existingThumbnailUrl=null;
 
-  $('message').textContent=text;
-
-  $('message').style.color=
-    error?'#b42318':'#222';
-
-  $('message').classList.remove('hidden');
+function showMessage(id,text,error=false){
+  $(id).textContent=text;
+  $(id).style.color=error?'#b42318':'#222';
+  $(id).classList.remove('hidden');
 }
 
-
-// BANNER MESSAGE
-
-function bannerMessage(text,error=false){
-
-  $('bannerMessage').textContent=text;
-
-  $('bannerMessage').style.color=
-    error?'#b42318':'#222';
-
-  $('bannerMessage').classList.remove('hidden');
-}
-
-
-// SAFE IMAGE URL
-
-function validImageUrl(url){
-
+function validUrl(url){
   try{
-    const parsed=new URL(url);
-
-    return ['http:','https:'].includes(parsed.protocol);
-
-  }catch{
-    return false;
-  }
-
+    return ['http:','https:'].includes(new URL(url).protocol);
+  }catch{return false;}
 }
 
-
-// IMAGE PREVIEW
-
-$('bannerImageUrl').addEventListener('input',()=>{
-
-  const url=$('bannerImageUrl').value.trim();
-
-  if(validImageUrl(url)){
-    $('bannerPreview').src=url;
-  }
-
-});
-
-$('bannerImageFile').addEventListener('change',()=>{
-
-  const file=$('bannerImageFile').files[0];
-
-  if(!file) return;
-
-  if(!file.type.startsWith('image/')){
-    bannerMessage('Please select a valid image.',true);
-    $('bannerImageFile').value='';
-    return;
-  }
-
-  if(file.size>5*1024*1024){
-    bannerMessage('Image must be smaller than 5MB.',true);
-    $('bannerImageFile').value='';
-    return;
-  }
-
-  $('bannerPreview').src=URL.createObjectURL(file);
-
-});
-
-
-// SLUG GENERATOR
+function safeFileName(name){
+  return name.replace(/[^a-zA-Z0-9._-]/g,'-');
+}
 
 function makeSlug(title){
-
   return title.toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g,'')
     .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-|-$/g,'')
-    +'-'+Date.now();
-
+    .replace(/^-|-$/g,'')+'-'+Date.now();
 }
 
+async function uploadFile(bucket,path,file){
+  const {error}=await db.storage.from(bucket)
+    .upload(path,file,{upsert:false});
+  if(error)throw error;
 
-// LOGIN
+  return db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+}
+
+function setPreview(id,url){
+  $(id).src=url;
+}
+
+/* LOGIN */
 
 $('loginForm').addEventListener('submit',async e=>{
-
   e.preventDefault();
-
   $('loginMessage').textContent='Signing in...';
 
   const {error}=await db.auth.signInWithPassword({
-
     email:$('email').value,
     password:$('password').value
-
   });
 
   if(error){
-
     $('loginMessage').textContent=error.message;
     return;
-
   }
 
   await startDashboard();
-
 });
 
-
-// LOGOUT
-
 $('logout').onclick=async()=>{
-
   await db.auth.signOut();
   location.reload();
-
 };
 
-
-// DASHBOARD INITIALISATION
+/* DASHBOARD */
 
 async function startDashboard(){
-
   const {data:{user},error}=await db.auth.getUser();
 
   if(error||!user){
-
     $('login').classList.remove('hidden');
     $('dashboard').classList.add('hidden');
     return;
-
   }
 
   const {data:profile,error:profileError}=await db
@@ -724,12 +435,8 @@ async function startDashboard(){
     .single();
 
   if(profileError||!profile){
-
-    $('loginMessage').textContent=
-      'Could not load your profile. Contact the administrator.';
-
+    $('loginMessage').textContent='Could not load your profile. Contact the administrator.';
     return;
-
   }
 
   currentUser=user;
@@ -739,1069 +446,817 @@ async function startDashboard(){
   $('dashboard').classList.remove('hidden');
 
   $('userInfo').textContent=
-    (profile.full_name||user.email)+
-    ' · '+currentRole.toUpperCase();
+    (profile.full_name||user.email)+' · '+currentRole.toUpperCase();
 
-  // Only administrators can manage banners.
   if(currentRole==='admin'){
-
     $('bannerManager').classList.remove('hidden');
-
-    await loadBanners();
-
+    $('videoManager').classList.remove('hidden');
+    await Promise.all([loadBanners(),loadVideos()]);
   }else{
-
     $('bannerManager').classList.add('hidden');
-
+    $('videoManager').classList.add('hidden');
   }
 
   await loadJournalists();
   await loadArticles();
-
 }
 
-
-// LOAD JOURNALISTS
+/* JOURNALISTS */
 
 async function loadJournalists(){
+  const {data,error}=await db.from('journalists')
+    .select('id,name').order('name');
 
-  const {data,error}=await db
-    .from('journalists')
-    .select('id,name')
-    .order('name');
-
-  if(error){
-
-    console.error(error);
-    return;
-
-  }
+  if(error){console.error(error);return;}
 
   $('journalist').innerHTML=
     '<option value="">No journalist selected</option>';
 
   (data||[]).forEach(j=>{
-
     const option=document.createElement('option');
-
     option.value=j.id;
     option.textContent=j.name;
-
     $('journalist').appendChild(option);
-
   });
-
 }
 
-
-// RESET ARTICLE FORM
+/* ARTICLES */
 
 function resetArticleForm(){
-
   $('articleForm').reset();
-
   editingArticleId=null;
   existingImageUrl=null;
-
   $('formHeading').textContent='Create New Article';
   $('saveButton').textContent='Save Article';
-
   $('cancelEdit').classList.add('hidden');
-
 }
 
-
-// CANCEL EDITING
-
-$('cancelEdit').onclick=()=>{
-
-  resetArticleForm();
-
-};
-
-
-// CREATE OR UPDATE ARTICLE
+$('cancelEdit').onclick=resetArticleForm;
 
 $('articleForm').addEventListener('submit',async e=>{
-
   e.preventDefault();
 
   const button=$('saveButton');
-
   button.disabled=true;
 
-  message(
-    editingArticleId
-      ?'Updating article...'
-      :'Saving article...'
-  );
+  showMessage('message',editingArticleId?'Updating article...':'Saving article...');
 
   try{
-
     let imageUrl=existingImageUrl;
-
     const file=$('photo').files[0];
 
     if(file){
+      if(!file.type.startsWith('image/')||file.size>5*1024*1024)
+        throw new Error('Please select an image smaller than 5MB.');
 
-      if(file.size>5*1024*1024){
-
-        throw new Error(
-          'Please choose an image smaller than 5MB.'
-        );
-
-      }
-
-      if(!file.type.startsWith('image/')){
-
-        throw new Error('Please upload an image file.');
-
-      }
-
-      const safeName=file.name.replace(
-        /[^a-zA-Z0-9._-]/g,'-'
+      imageUrl=await uploadFile(
+        'article-images',
+        currentUser.id+'/'+Date.now()+'-'+safeFileName(file.name),
+        file
       );
-
-      const path=
-        currentUser.id+'/'+Date.now()+'-'+safeName;
-
-      const {error:uploadError}=await db.storage
-        .from('article-images')
-        .upload(path,file,{upsert:false});
-
-      if(uploadError) throw uploadError;
-
-      const {data}=db.storage
-        .from('article-images')
-        .getPublicUrl(path);
-
-      imageUrl=data.publicUrl;
-
     }
 
     const article={
-
       title:$('title').value.trim(),
-
       slug:makeSlug($('title').value),
-
       excerpt:$('excerpt').value.trim(),
-
       content:$('content').value.trim(),
-
       image_url:imageUrl,
-
       category:$('category').value,
-
       section:$('section').value,
-
       journalist_id:$('journalist').value||null
-
     };
 
     let result;
 
     if(editingArticleId){
-
-      result=await db.from('articles')
-        .update(article)
-        .eq('id',editingArticleId);
-
+      delete article.slug;
+      result=await db.from('articles').update(article).eq('id',editingArticleId);
     }else{
-
-      const status=
-        currentRole==='admin'?'published':'draft';
-
       article.author_id=currentUser.id;
-
-      article.status=status;
-
-      article.published_at=
-        status==='published'
-          ?new Date().toISOString()
-          :null;
-
+      article.status=currentRole==='admin'?'published':'draft';
+      article.published_at=article.status==='published'?new Date().toISOString():null;
       result=await db.from('articles').insert(article);
-
     }
 
-    if(result.error) throw result.error;
+    if(result.error)throw result.error;
 
-    message(
-
-      editingArticleId
-        ?'Article updated successfully!'
-        :currentRole==='admin'
-          ?'Article published successfully!'
-          :'Draft saved! Awaiting administrator approval.'
-
-    );
+    showMessage('message',editingArticleId?'Article updated successfully!':
+      currentRole==='admin'?'Article published successfully!':'Draft saved! Awaiting administrator approval.');
 
     resetArticleForm();
-
     await loadArticles();
 
-  }catch(error){
-
-    message(error.message||'Something went wrong.',true);
-
+  }catch(err){
+    showMessage('message',err.message,true);
   }finally{
-
     button.disabled=false;
-
   }
-
 });
-
-
-// ======================================
-// HOMEPAGE BANNER MANAGEMENT
-// ======================================
-
-
-// LOAD BANNERS
-
-async function loadBanners(){
-
-  if(currentRole!=='admin') return;
-
-  $('bannerList').textContent='Loading banners...';
-
-  const {data,error}=await db
-    .from('banners')
-    .select('*')
-    .order('sort_order',{ascending:true})
-    .order('created_at',{ascending:false});
-
-  if(error){
-
-    $('bannerList').textContent=
-      'Unable to load banners: '+error.message;
-
-    return;
-
-  }
-
-  allBanners=data||[];
-
-  $('bannerCount').textContent=allBanners.length;
-
-  $('activeBannerCount').textContent=
-    allBanners.filter(b=>b.is_active).length;
-
-  $('inactiveBannerCount').textContent=
-    allBanners.filter(b=>!b.is_active).length;
-
-  renderBanners();
-
-}
-
-
-// DISPLAY BANNERS
-
-function renderBanners(){
-
-  $('bannerList').innerHTML='';
-
-  if(!allBanners.length){
-
-    $('bannerList').innerHTML=
-      '<p>No banners yet. Add your first homepage banner above.</p>';
-
-    return;
-
-  }
-
-  allBanners.forEach((banner,index)=>{
-
-    const item=document.createElement('div');
-
-    item.className='banner-item';
-
-    const img=document.createElement('img');
-
-    img.src=banner.image_url;
-    img.alt=banner.title||'Homepage banner';
-
-    img.onerror=()=>{
-      img.src='https://placehold.co/600x300?text=Banner+Image';
-    };
-
-    const details=document.createElement('div');
-
-    details.className='banner-details';
-
-    const heading=document.createElement('h3');
-
-    heading.textContent=banner.title;
-
-    const description=document.createElement('p');
-
-    description.textContent=banner.subtitle||'No description';
-
-    const label=document.createElement('p');
-
-    label.textContent='Label: '+(banner.label||'FEATURED');
-
-    const order=document.createElement('p');
-
-    order.textContent='Display order: '+banner.sort_order;
-
-    const status=document.createElement('span');
-
-    status.className=
-      'banner-status'+
-      (banner.is_active?'':' inactive');
-
-    status.textContent=
-      banner.is_active?'ACTIVE':'INACTIVE';
-
-    details.append(
-      heading,
-      description,
-      label,
-      order,
-      status
-    );
-
-    const actions=document.createElement('div');
-
-    actions.style.marginTop='12px';
-
-    const edit=document.createElement('button');
-
-    edit.textContent='Edit';
-    edit.className='secondary';
-
-    edit.onclick=()=>editBanner(banner);
-
-    const toggle=document.createElement('button');
-
-    toggle.textContent=
-      banner.is_active?'Deactivate':'Activate';
-
-    toggle.className=
-      banner.is_active?'secondary':'success';
-
-    toggle.onclick=()=>toggleBanner(banner);
-
-    const up=document.createElement('button');
-
-    up.textContent='↑';
-    up.title='Move banner up';
-    up.className='secondary';
-    up.disabled=index===0;
-
-    up.onclick=()=>moveBanner(index,-1);
-
-    const down=document.createElement('button');
-
-    down.textContent='↓';
-    down.title='Move banner down';
-    down.className='secondary';
-    down.disabled=index===allBanners.length-1;
-
-    down.onclick=()=>moveBanner(index,1);
-
-    const remove=document.createElement('button');
-
-    remove.textContent='Remove';
-    remove.className='danger';
-
-    remove.onclick=()=>deleteBanner(banner);
-
-    actions.append(edit,toggle,up,down,remove);
-
-    details.appendChild(actions);
-
-    item.append(img,details);
-
-    $('bannerList').appendChild(item);
-
-  });
-
-}
-
-
-// RESET BANNER FORM
-
-function resetBannerForm(){
-
-  $('bannerForm').reset();
-
-  editingBannerId=null;
-  existingBannerImage=null;
-
-  $('bannerId').value='';
-
-  $('bannerFormHeading').textContent='Add New Banner';
-
-  $('bannerSaveButton').textContent='Save Banner';
-
-  $('bannerActive').checked=true;
-
-  $('bannerOrder').value=allBanners.length*10;
-
-  $('bannerPreview').src=
-    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000';
-
-  $('bannerImageFile').value='';
-
-  $('cancelBannerEdit').classList.add('hidden');
-
-  $('bannerMessage').classList.add('hidden');
-
-}
-
-
-// EDIT BANNER
-
-function editBanner(banner){
-
-  editingBannerId=banner.id;
-
-  existingBannerImage=banner.image_url;
-
-  $('bannerId').value=banner.id;
-
-  $('bannerTitle').value=banner.title||'';
-
-  $('bannerSubtitle').value=banner.subtitle||'';
-
-  $('bannerLabel').value=banner.label||'FEATURED';
-
-  $('bannerImageUrl').value=banner.image_url||'';
-
-  $('bannerLink').value=banner.link_url||'#';
-
-  $('bannerOrder').value=banner.sort_order??0;
-
-  $('bannerActive').checked=!!banner.is_active;
-
-  $('bannerPreview').src=banner.image_url;
-
-  $('bannerFormHeading').textContent='Edit Homepage Banner';
-
-  $('bannerSaveButton').textContent='Update Banner';
-
-  $('cancelBannerEdit').classList.remove('hidden');
-
-  $('bannerMessage').classList.add('hidden');
-
-  $('bannerManager').scrollIntoView({
-    behavior:'smooth',
-    block:'start'
-  });
-
-}
-
-
-// CANCEL BANNER EDIT
-
-$('cancelBannerEdit').onclick=()=>{
-
-  resetBannerForm();
-
-};
-
-
-// SAVE / UPDATE BANNER
-
-$('bannerForm').addEventListener('submit',async e=>{
-
-  e.preventDefault();
-
-  if(currentRole!=='admin'){
-
-    bannerMessage('Administrator permission required.',true);
-    return;
-
-  }
-
-  const button=$('bannerSaveButton');
-
-  button.disabled=true;
-
-  button.textContent='Saving...';
-
-  try{
-
-    let imageUrl=existingBannerImage;
-
-    const file=$('bannerImageFile').files[0];
-
-    if(file){
-
-      if(!file.type.startsWith('image/')){
-
-        throw new Error('Please select a valid image.');
-
-      }
-
-      if(file.size>5*1024*1024){
-
-        throw new Error('Image must be smaller than 5MB.');
-
-      }
-
-      const safeName=file.name.replace(
-        /[^a-zA-Z0-9._-]/g,'-'
-      );
-
-      const path=
-        'banners/'+currentUser.id+'/'+Date.now()+'-'+safeName;
-
-      const {error:uploadError}=await db.storage
-        .from('article-images')
-        .upload(path,file,{upsert:false});
-
-      if(uploadError) throw uploadError;
-
-      const {data}=db.storage
-        .from('article-images')
-        .getPublicUrl(path);
-
-      imageUrl=data.publicUrl;
-
-    }else{
-
-      const typedUrl=$('bannerImageUrl').value.trim();
-
-      if(typedUrl){
-
-        if(!validImageUrl(typedUrl)){
-
-          throw new Error('Please enter a valid HTTP or HTTPS image URL.');
-
-        }
-
-        imageUrl=typedUrl;
-
-      }
-
-    }
-
-    if(!imageUrl){
-
-      throw new Error('Please upload an image or provide an image URL.');
-
-    }
-
-    const bannerData={
-
-      title:$('bannerTitle').value.trim(),
-
-      subtitle:$('bannerSubtitle').value.trim(),
-
-      label:$('bannerLabel').value.trim()||'FEATURED',
-
-      image_url:imageUrl,
-
-      link_url:$('bannerLink').value.trim()||'#',
-
-      sort_order:Math.max(
-        0,
-        parseInt($('bannerOrder').value,10)||0
-      ),
-
-      is_active:$('bannerActive').checked,
-
-      updated_at:new Date().toISOString()
-
-    };
-
-    let result;
-
-    if(editingBannerId){
-
-      result=await db
-        .from('banners')
-        .update(bannerData)
-        .eq('id',editingBannerId);
-
-    }else{
-
-      result=await db
-        .from('banners')
-        .insert(bannerData);
-
-    }
-
-    if(result.error) throw result.error;
-
-    bannerMessage(
-      editingBannerId
-        ?'Banner updated successfully!'
-        :'Banner added successfully!'
-    );
-
-    await loadBanners();
-
-    resetBannerForm();
-
-    bannerMessage(
-      editingBannerId
-        ?'Banner updated successfully!'
-        :'Banner added successfully!'
-    );
-
-  }catch(error){
-
-    bannerMessage(
-      error.message||'Unable to save banner.',
-      true
-    );
-
-  }finally{
-
-    button.disabled=false;
-
-    button.textContent=
-      editingBannerId?'Update Banner':'Save Banner';
-
-  }
-
-});
-
-
-// ACTIVATE / DEACTIVATE
-
-async function toggleBanner(banner){
-
-  if(currentRole!=='admin') return;
-
-  const nextStatus=!banner.is_active;
-
-  const {error}=await db
-    .from('banners')
-    .update({
-      is_active:nextStatus,
-      updated_at:new Date().toISOString()
-    })
-    .eq('id',banner.id);
-
-  if(error){
-
-    alert('Unable to update banner: '+error.message);
-    return;
-
-  }
-
-  await loadBanners();
-
-}
-
-
-// CHANGE BANNER ORDER
-
-async function moveBanner(index,direction){
-
-  if(currentRole!=='admin') return;
-
-  const otherIndex=index+direction;
-
-  if(otherIndex<0||otherIndex>=allBanners.length) return;
-
-  const first=allBanners[index];
-  const second=allBanners[otherIndex];
-
-  const firstOrder=first.sort_order??0;
-  const secondOrder=second.sort_order??0;
-
-  const {error:firstError}=await db
-    .from('banners')
-    .update({
-      sort_order:secondOrder,
-      updated_at:new Date().toISOString()
-    })
-    .eq('id',first.id);
-
-  if(firstError){
-
-    alert(firstError.message);
-    return;
-
-  }
-
-  const {error:secondError}=await db
-    .from('banners')
-    .update({
-      sort_order:firstOrder,
-      updated_at:new Date().toISOString()
-    })
-    .eq('id',second.id);
-
-  if(secondError){
-
-    alert(
-      'Order partially updated. Refresh and check the banner list: '+
-      secondError.message
-    );
-
-  }
-
-  await loadBanners();
-
-}
-
-
-// DELETE BANNER
-
-async function deleteBanner(banner){
-
-  if(currentRole!=='admin') return;
-
-  const confirmed=confirm(
-    'Permanently remove this homepage banner?\n\n'+
-    banner.title+
-    '\n\nThis cannot be undone.'
-  );
-
-  if(!confirmed) return;
-
-  const {error}=await db
-    .from('banners')
-    .delete()
-    .eq('id',banner.id);
-
-  if(error){
-
-    alert('Unable to delete banner: '+error.message);
-    return;
-
-  }
-
-  if(editingBannerId===banner.id){
-
-    resetBannerForm();
-
-  }
-
-  await loadBanners();
-
-  alert('Banner removed successfully!');
-
-}
-
-
-// REFRESH BANNERS
-
-$('refreshBanners').onclick=loadBanners;
-
-
-// ======================================
-// ARTICLE MANAGEMENT
-// ======================================
-
-
-// LOAD ARTICLES
 
 async function loadArticles(){
-
   $('articles').textContent='Loading articles...';
 
   const {data,error}=await db.from('articles')
-    .select('*')
-    .order('created_at',{ascending:false});
+    .select('*').order('created_at',{ascending:false});
 
   if(error){
-
     $('articles').textContent=error.message;
     return;
-
   }
 
   allArticles=data||[];
-
   updateStats();
-
   renderArticles();
-
 }
-
-
-// DASHBOARD STATISTICS
 
 function updateStats(){
-
   $('totalCount').textContent=allArticles.length;
-
-  $('publishedCount').textContent=
-    allArticles.filter(a=>a.status==='published').length;
-
-  $('draftCount').textContent=
-    allArticles.filter(a=>a.status==='draft').length;
-
+  $('publishedCount').textContent=allArticles.filter(a=>a.status==='published').length;
+  $('draftCount').textContent=allArticles.filter(a=>a.status==='draft').length;
 }
 
-
-// SEARCH AND FILTER
-
 function renderArticles(){
-
   const search=$('searchArticles').value.toLowerCase();
-
   const status=$('statusFilter').value;
-
   const category=$('categoryFilter').value;
 
-  const filtered=allArticles.filter(article=>{
-
-    return (
-
-      (article.title||'').toLowerCase().includes(search)
-
-      &&
-
-      (status==='all'||article.status===status)
-
-      &&
-
-      (category==='all'||article.category===category)
-
-    );
-
-  });
+  const filtered=allArticles.filter(a=>
+    (a.title||'').toLowerCase().includes(search)&&
+    (status==='all'||a.status===status)&&
+    (category==='all'||a.category===category)
+  );
 
   $('articles').innerHTML='';
 
   if(!filtered.length){
-
     $('articles').textContent='No matching articles found.';
     return;
-
   }
 
   filtered.forEach(article=>{
-
     const div=document.createElement('div');
-
     div.className='article';
 
     const heading=document.createElement('h3');
-
     heading.textContent=article.title;
 
     const details=document.createElement('p');
-
     details.className='status';
-
     details.textContent=
-
-      (article.category||'').toUpperCase()+
-      ' · '+
-      (article.section||'').toUpperCase()+
-      ' · '+
+      (article.category||'').toUpperCase()+' · '+
+      (article.section||'').toUpperCase()+' · '+
       (article.status||'').toUpperCase();
 
     div.append(heading,details);
 
     if(article.image_url){
-
       const img=document.createElement('img');
-
       img.src=article.image_url;
       img.alt='Article photograph';
-
       div.prepend(img);
-
     }
 
     if(currentRole==='admin'){
+      const edit=document.createElement('button');
+      edit.textContent='Edit';
+      edit.className='secondary';
+      edit.onclick=()=>editArticle(article);
 
-      const editBtn=document.createElement('button');
+      const publish=document.createElement('button');
+      publish.textContent=article.status==='published'?'Unpublish':'Publish';
+      publish.onclick=()=>changeStatus(article);
 
-      editBtn.textContent='Edit';
+      const remove=document.createElement('button');
+      remove.textContent='Delete';
+      remove.className='danger';
+      remove.onclick=()=>deleteArticle(article);
 
-      editBtn.className='secondary';
-
-      editBtn.onclick=()=>editArticle(article);
-
-
-      const statusBtn=document.createElement('button');
-
-      statusBtn.textContent=
-        article.status==='published'
-          ?'Unpublish'
-          :'Publish';
-
-      statusBtn.onclick=()=>changeStatus(article);
-
-
-      const deleteBtn=document.createElement('button');
-
-      deleteBtn.textContent='Delete';
-
-      deleteBtn.className='danger';
-
-      deleteBtn.onclick=()=>deleteArticle(article);
-
-
-      div.append(editBtn,statusBtn,deleteBtn);
-
+      div.append(edit,publish,remove);
     }
 
     $('articles').appendChild(div);
-
   });
-
 }
 
+function editArticle(a){
+  if(currentRole!=='admin')return;
 
-// EDIT ARTICLE
+  editingArticleId=a.id;
+  existingImageUrl=a.image_url;
 
-function editArticle(article){
-
-  if(currentRole!=='admin') return;
-
-  editingArticleId=article.id;
-
-  existingImageUrl=article.image_url;
-
-  $('title').value=article.title||'';
-
-  $('excerpt').value=article.excerpt||'';
-
-  $('content').value=article.content||'';
-
-  $('category').value=article.category||'local';
-
-  $('section').value=article.section||'entertainment';
-
-  $('journalist').value=article.journalist_id||'';
+  $('title').value=a.title||'';
+  $('excerpt').value=a.excerpt||'';
+  $('content').value=a.content||'';
+  $('category').value=a.category||'local';
+  $('section').value=a.section||'entertainment';
+  $('journalist').value=a.journalist_id||'';
 
   $('formHeading').textContent='Edit Article';
-
   $('saveButton').textContent='Update Article';
-
   $('cancelEdit').classList.remove('hidden');
 
-  message('Editing: '+article.title);
-
   window.scrollTo({top:0,behavior:'smooth'});
-
 }
 
+async function changeStatus(a){
+  const next=a.status==='published'?'draft':'published';
 
-// PUBLISH / UNPUBLISH
+  if(!confirm('Are you sure you want to '+next+' this article?'))return;
 
-async function changeStatus(article){
+  const {error}=await db.from('articles').update({
+    status:next,
+    published_at:next==='published'?new Date().toISOString():null
+  }).eq('id',a.id);
 
-  if(currentRole!=='admin') return;
-
-  const next=
-    article.status==='published'
-      ?'draft'
-      :'published';
-
-  if(!confirm(
-    'Are you sure you want to '+
-    (next==='published'?'publish':'unpublish')+
-    ' this article?'
-  )) return;
-
-  const {error}=await db.from('articles')
-    .update({
-
-      status:next,
-
-      published_at:
-        next==='published'
-          ?new Date().toISOString()
-          :null
-
-    })
-    .eq('id',article.id);
-
-  if(error){
-
-    alert(error.message);
-    return;
-
-  }
-
+  if(error){alert(error.message);return;}
   await loadArticles();
-
 }
 
+async function deleteArticle(a){
+  if(!confirm('Permanently delete '+a.title+'?'))return;
 
-// DELETE ARTICLE
+  const {error}=await db.from('articles').delete().eq('id',a.id);
+  if(error){alert(error.message);return;}
 
-async function deleteArticle(article){
-
-  if(currentRole!=='admin') return;
-
-  const confirmed=confirm(
-
-    'Are you sure you want to permanently delete:\n\n'+
-    article.title+
-    '\n\nThis action cannot be undone.'
-
-  );
-
-  if(!confirmed) return;
-
-  const {error}=await db.from('articles')
-    .delete()
-    .eq('id',article.id);
-
-  if(error){
-
-    alert('Delete failed: '+error.message);
-    return;
-
-  }
-
-  if(editingArticleId===article.id){
-
-    resetArticleForm();
-
-  }
-
-  alert('Article deleted successfully!');
-
+  if(editingArticleId===a.id)resetArticleForm();
   await loadArticles();
-
 }
 
+/* BANNERS */
 
-// FILTER EVENTS
-
-$('searchArticles').addEventListener(
-  'input',renderArticles
-);
-
-$('statusFilter').addEventListener(
-  'change',renderArticles
-);
-
-$('categoryFilter').addEventListener(
-  'change',renderArticles
-);
-
-
-// AUTH SESSION
-
-db.auth.onAuthStateChange((event,session)=>{
-
-  if(event==='SIGNED_OUT'){
-
-    currentUser=null;
-    currentRole=null;
-
-    $('dashboard').classList.add('hidden');
-    $('login').classList.remove('hidden');
-
-  }
-
+$('bannerImageUrl').addEventListener('input',()=>{
+  const url=$('bannerImageUrl').value.trim();
+  if(validUrl(url))setPreview('bannerPreview',url);
 });
 
+$('bannerImageFile').addEventListener('change',()=>{
+  const file=$('bannerImageFile').files[0];
+  if(!file)return;
 
-// START
+  if(!file.type.startsWith('image/')||file.size>5*1024*1024){
+    showMessage('bannerMessage','Image must be smaller than 5MB.',true);
+    $('bannerImageFile').value='';
+    return;
+  }
+
+  setPreview('bannerPreview',URL.createObjectURL(file));
+});
+
+async function loadBanners(){
+  if(currentRole!=='admin')return;
+
+  $('bannerList').textContent='Loading banners...';
+
+  const {data,error}=await db.from('banners').select('*')
+    .order('sort_order',{ascending:true})
+    .order('created_at',{ascending:false});
+
+  if(error){
+    $('bannerList').textContent='Unable to load banners: '+error.message;
+    return;
+  }
+
+  allBanners=data||[];
+
+  $('bannerCount').textContent=allBanners.length;
+  $('activeBannerCount').textContent=allBanners.filter(b=>b.is_active).length;
+  $('inactiveBannerCount').textContent=allBanners.filter(b=>!b.is_active).length;
+
+  renderBanners();
+}
+
+function renderBanners(){
+  $('bannerList').innerHTML='';
+
+  if(!allBanners.length){
+    $('bannerList').textContent='No banners yet. Add your first banner above.';
+    return;
+  }
+
+  allBanners.forEach((b,index)=>{
+    const item=document.createElement('div');
+    item.className='banner-item';
+
+    const img=document.createElement('img');
+    img.src=b.image_url||'https://placehold.co/600x300';
+    img.alt=b.title||'Banner';
+
+    const details=document.createElement('div');
+    details.className='banner-details';
+
+    const heading=document.createElement('h3');
+    heading.textContent=b.title;
+
+    const desc=document.createElement('p');
+    desc.textContent=b.subtitle||'No description';
+
+    const label=document.createElement('p');
+    label.textContent='Label: '+(b.label||'FEATURED');
+
+    const status=document.createElement('span');
+    status.className='pill'+(b.is_active?'':' inactive');
+    status.textContent=b.is_active?'ACTIVE':'INACTIVE';
+
+    details.append(heading,desc,label,status);
+
+    const actions=document.createElement('div');
+    actions.style.marginTop='12px';
+
+    const edit=document.createElement('button');
+    edit.textContent='Edit';
+    edit.className='secondary';
+    edit.onclick=()=>editBanner(b);
+
+    const toggle=document.createElement('button');
+    toggle.textContent=b.is_active?'Deactivate':'Activate';
+    toggle.className='secondary';
+    toggle.onclick=async()=>{
+      const {error}=await db.from('banners').update({is_active:!b.is_active}).eq('id',b.id);
+      if(error){alert(error.message);return;}
+      await loadBanners();
+    };
+
+    const up=document.createElement('button');
+    up.textContent='↑';
+    up.className='secondary';
+    up.disabled=index===0;
+    up.onclick=()=>moveBanner(index,-1);
+
+    const down=document.createElement('button');
+    down.textContent='↓';
+    down.className='secondary';
+    down.disabled=index===allBanners.length-1;
+    down.onclick=()=>moveBanner(index,1);
+
+    const remove=document.createElement('button');
+    remove.textContent='Delete';
+    remove.className='danger';
+    remove.onclick=()=>deleteBanner(b);
+
+    actions.append(edit,toggle,up,down,remove);
+    details.appendChild(actions);
+    item.append(img,details);
+    $('bannerList').appendChild(item);
+  });
+}
+
+function resetBannerForm(){
+  $('bannerForm').reset();
+  editingBannerId=null;
+  existingBannerImage=null;
+
+  $('bannerId').value='';
+  $('bannerFormHeading').textContent='Add New Banner';
+  $('bannerSaveButton').textContent='Save Banner';
+  $('bannerActive').checked=true;
+  $('bannerOrder').value=allBanners.length*10;
+  $('bannerPreview').src='https://placehold.co/1000x400?text=Banner+Preview';
+  $('bannerImageFile').value='';
+  $('cancelBannerEdit').classList.add('hidden');
+  $('bannerMessage').classList.add('hidden');
+}
+
+function editBanner(b){
+  editingBannerId=b.id;
+  existingBannerImage=b.image_url;
+
+  $('bannerId').value=b.id;
+  $('bannerTitle').value=b.title||'';
+  $('bannerSubtitle').value=b.subtitle||'';
+  $('bannerLabel').value=b.label||'FEATURED';
+  $('bannerImageUrl').value=b.image_url||'';
+  $('bannerLink').value=b.link_url||'#';
+  $('bannerOrder').value=b.sort_order??0;
+  $('bannerActive').checked=!!b.is_active;
+  $('bannerPreview').src=b.image_url||'';
+
+  $('bannerFormHeading').textContent='Edit Homepage Banner';
+  $('bannerSaveButton').textContent='Update Banner';
+  $('cancelBannerEdit').classList.remove('hidden');
+
+  $('bannerManager').scrollIntoView({behavior:'smooth'});
+}
+
+$('cancelBannerEdit').onclick=resetBannerForm;
+
+$('bannerForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  if(currentRole!=='admin')return;
+
+  const button=$('bannerSaveButton');
+  button.disabled=true;
+
+  try{
+    let imageUrl=existingBannerImage;
+    const file=$('bannerImageFile').files[0];
+
+    if(file){
+      if(!file.type.startsWith('image/')||file.size>5*1024*1024)
+        throw new Error('Image must be smaller than 5MB.');
+
+      imageUrl=await uploadFile(
+        'article-images',
+        'banners/'+currentUser.id+'/'+Date.now()+'-'+safeFileName(file.name),
+        file
+      );
+    }else if($('bannerImageUrl').value.trim()){
+      const url=$('bannerImageUrl').value.trim();
+      if(!validUrl(url))throw new Error('Invalid image URL.');
+      imageUrl=url;
+    }
+
+    if(!imageUrl)throw new Error('Please provide a banner image.');
+
+    const data={
+      title:$('bannerTitle').value.trim(),
+      subtitle:$('bannerSubtitle').value.trim(),
+      label:$('bannerLabel').value.trim()||'FEATURED',
+      image_url:imageUrl,
+      link_url:$('bannerLink').value.trim()||'#',
+      sort_order:Math.max(0,parseInt($('bannerOrder').value,10)||0),
+      is_active:$('bannerActive').checked,
+      updated_at:new Date().toISOString()
+    };
+
+    const result=editingBannerId
+      ?await db.from('banners').update(data).eq('id',editingBannerId)
+      :await db.from('banners').insert(data);
+
+    if(result.error)throw result.error;
+
+    resetBannerForm();
+    await loadBanners();
+    showMessage('bannerMessage','Banner saved successfully!');
+
+  }catch(err){
+    showMessage('bannerMessage',err.message,true);
+  }finally{
+    button.disabled=false;
+  }
+});
+
+async function moveBanner(index,direction){
+  const other=index+direction;
+  if(other<0||other>=allBanners.length)return;
+
+  const a=allBanners[index];
+  const b=allBanners[other];
+
+  const first=await db.from('banners').update({sort_order:b.sort_order??0}).eq('id',a.id);
+  if(first.error){alert(first.error.message);return;}
+
+  const second=await db.from('banners').update({sort_order:a.sort_order??0}).eq('id',b.id);
+  if(second.error){alert(second.error.message);return;}
+
+  await loadBanners();
+}
+
+async function deleteBanner(b){
+  if(!confirm('Permanently delete banner: '+b.title+'?'))return;
+
+  const {error}=await db.from('banners').delete().eq('id',b.id);
+  if(error){alert(error.message);return;}
+
+  if(editingBannerId===b.id)resetBannerForm();
+  await loadBanners();
+}
+
+$('refreshBanners').onclick=loadBanners;
+
+/* VIDEO MANAGER */
+
+$('thumbnailUrl').addEventListener('input',()=>{
+  const url=$('thumbnailUrl').value.trim();
+  if(validUrl(url)){
+    $('thumbnailPreview').src=url;
+    $('thumbnailPreview').classList.remove('hidden');
+  }
+});
+
+$('thumbnailFile').addEventListener('change',()=>{
+  const file=$('thumbnailFile').files[0];
+  if(!file)return;
+
+  if(!file.type.startsWith('image/')||file.size>5*1024*1024){
+    showMessage('videoMessage','Thumbnail must be an image smaller than 5MB.',true);
+    $('thumbnailFile').value='';
+    return;
+  }
+
+  $('thumbnailPreview').src=URL.createObjectURL(file);
+  $('thumbnailPreview').classList.remove('hidden');
+});
+
+$('videoFile').addEventListener('change',()=>{
+  const file=$('videoFile').files[0];
+  if(!file)return;
+
+  if(!['video/mp4','video/webm'].includes(file.type)){
+    showMessage('videoMessage','Please choose an MP4 or WebM video.',true);
+    $('videoFile').value='';
+    return;
+  }
+
+  if(file.size>50*1024*1024){
+    showMessage('videoMessage','Video must be smaller than 50MB.',true);
+    $('videoFile').value='';
+    return;
+  }
+
+  $('videoPreview').src=URL.createObjectURL(file);
+  $('videoPreview').classList.remove('hidden');
+});
+
+async function loadVideos(){
+  if(currentRole!=='admin')return;
+
+  $('videoList').textContent='Loading videos...';
+
+  const {data,error}=await db.from('videos').select('*')
+    .order('created_at',{ascending:false});
+
+  if(error){
+    $('videoList').textContent='Unable to load videos: '+error.message;
+    return;
+  }
+
+  allVideos=data||[];
+
+  $('videoCount').textContent=allVideos.length;
+  $('publishedVideoCount').textContent=allVideos.filter(v=>v.status==='published').length;
+  $('draftVideoCount').textContent=allVideos.filter(v=>v.status==='draft').length;
+
+  renderVideos();
+}
+
+function renderVideos(){
+  $('videoList').innerHTML='';
+
+  if(!allVideos.length){
+    $('videoList').textContent='No videos uploaded yet.';
+    return;
+  }
+
+  allVideos.forEach(v=>{
+    const item=document.createElement('div');
+    item.className='video-item';
+
+    const media=document.createElement('div');
+
+    if(v.thumbnail_url){
+      const img=document.createElement('img');
+      img.src=v.thumbnail_url;
+      img.alt=v.title;
+      media.appendChild(img);
+    }else{
+      const video=document.createElement('video');
+      video.src=v.video_url;
+      video.controls=true;
+      media.appendChild(video);
+    }
+
+    const details=document.createElement('div');
+    details.className='video-details';
+
+    const title=document.createElement('h3');
+    title.textContent=v.title;
+
+    const creator=document.createElement('p');
+    creator.textContent='Creator: '+v.creator_name;
+
+    const category=document.createElement('p');
+    category.textContent='Category: '+(v.category||'Other');
+
+    const status=document.createElement('span');
+    status.className='pill'+(v.status==='published'?'':' inactive');
+    status.textContent=(v.status||'draft').toUpperCase();
+
+    const featured=document.createElement('p');
+    featured.textContent=v.is_featured?'★ Featured on homepage':'Not featured';
+
+    details.append(title,creator,category,status,featured);
+
+    const actions=document.createElement('div');
+    actions.style.marginTop='12px';
+
+    const preview=document.createElement('button');
+    preview.textContent='Preview';
+    preview.className='secondary';
+    preview.onclick=()=>{
+      const w=window.open('','_blank');
+      if(w){
+        const vdo=w.document.createElement('video');
+        vdo.src=v.video_url;
+        vdo.controls=true;
+        vdo.autoplay=true;
+        vdo.style.cssText='width:100%;height:auto';
+        w.document.body.style.margin='0';
+        w.document.body.appendChild(vdo);
+      }
+    };
+
+    const edit=document.createElement('button');
+    edit.textContent='Edit';
+    edit.className='secondary';
+    edit.onclick=()=>editVideo(v);
+
+    const toggle=document.createElement('button');
+    toggle.textContent=v.status==='published'?'Unpublish':'Publish';
+    toggle.onclick=()=>changeVideoStatus(v);
+
+    const remove=document.createElement('button');
+    remove.textContent='Delete';
+    remove.className='danger';
+    remove.onclick=()=>deleteVideo(v);
+
+    actions.append(preview,edit,toggle,remove);
+    details.appendChild(actions);
+
+    item.append(media,details);
+    $('videoList').appendChild(item);
+  });
+}
+
+function resetVideoForm(){
+  $('videoForm').reset();
+
+  editingVideoId=null;
+  existingVideoUrl=null;
+  existingThumbnailUrl=null;
+
+  $('videoId').value='';
+  $('videoFormHeading').textContent='Upload New Video';
+  $('videoSaveButton').textContent='Upload Video';
+  $('cancelVideoEdit').classList.add('hidden');
+
+  $('videoPreview').removeAttribute('src');
+  $('videoPreview').classList.add('hidden');
+  $('thumbnailPreview').removeAttribute('src');
+  $('thumbnailPreview').classList.add('hidden');
+
+  $('videoMessage').classList.add('hidden');
+}
+
+function editVideo(v){
+  editingVideoId=v.id;
+  existingVideoUrl=v.video_url;
+  existingThumbnailUrl=v.thumbnail_url;
+
+  $('videoId').value=v.id;
+  $('videoTitle').value=v.title||'';
+  $('videoDescription').value=v.description||'';
+  $('creatorName').value=v.creator_name||'';
+  $('videoCategory').value=v.category||'Other';
+  $('videoStatus').value=v.status||'draft';
+  $('videoFeatured').checked=!!v.is_featured;
+  $('thumbnailUrl').value=v.thumbnail_url||'';
+
+  if(v.video_url){
+    $('videoPreview').src=v.video_url;
+    $('videoPreview').classList.remove('hidden');
+  }
+
+  if(v.thumbnail_url){
+    $('thumbnailPreview').src=v.thumbnail_url;
+    $('thumbnailPreview').classList.remove('hidden');
+  }
+
+  $('videoFormHeading').textContent='Edit Video';
+  $('videoSaveButton').textContent='Update Video';
+  $('cancelVideoEdit').classList.remove('hidden');
+
+  $('videoManager').scrollIntoView({behavior:'smooth'});
+}
+
+$('cancelVideoEdit').onclick=resetVideoForm;
+
+$('videoForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  if(currentRole!=='admin'){
+    showMessage('videoMessage','Administrator permission required.',true);
+    return;
+  }
+
+  const button=$('videoSaveButton');
+  button.disabled=true;
+  button.textContent='Uploading...';
+
+  try{
+    let videoUrl=existingVideoUrl;
+    let thumbnailUrl=existingThumbnailUrl;
+
+    const videoFile=$('videoFile').files[0];
+    const thumbnailFile=$('thumbnailFile').files[0];
+
+    if(videoFile){
+      if(!['video/mp4','video/webm'].includes(videoFile.type))
+        throw new Error('Only MP4 and WebM videos are supported.');
+
+      if(videoFile.size>50*1024*1024)
+        throw new Error('Video must be smaller than 50MB.');
+
+      videoUrl=await uploadFile(
+        'magazine-videos',
+        currentUser.id+'/'+Date.now()+'-'+safeFileName(videoFile.name),
+        videoFile
+      );
+    }
+
+    if(thumbnailFile){
+      if(!thumbnailFile.type.startsWith('image/')||thumbnailFile.size>5*1024*1024)
+        throw new Error('Thumbnail must be an image smaller than 5MB.');
+
+      thumbnailUrl=await uploadFile(
+        'article-images',
+        'video-thumbnails/'+currentUser.id+'/'+Date.now()+'-'+safeFileName(thumbnailFile.name),
+        thumbnailFile
+      );
+    }else if($('thumbnailUrl').value.trim()){
+      const url=$('thumbnailUrl').value.trim();
+      if(!validUrl(url))throw new Error('Invalid thumbnail URL.');
+      thumbnailUrl=url;
+    }
+
+    if(!videoUrl)throw new Error('Please select a video file.');
+
+    const videoData={
+      title:$('videoTitle').value.trim(),
+      description:$('videoDescription').value.trim(),
+      creator_name:$('creatorName').value.trim(),
+      category:$('videoCategory').value,
+      video_url:videoUrl,
+      thumbnail_url:thumbnailUrl,
+      status:$('videoStatus').value,
+      is_featured:$('videoFeatured').checked,
+      updated_at:new Date().toISOString()
+    };
+
+    const result=editingVideoId
+      ?await db.from('videos').update(videoData).eq('id',editingVideoId)
+      :await db.from('videos').insert(videoData);
+
+    if(result.error)throw result.error;
+
+    resetVideoForm();
+    await loadVideos();
+    showMessage('videoMessage','Video saved successfully!');
+
+  }catch(err){
+    showMessage('videoMessage',err.message,true);
+  }finally{
+    button.disabled=false;
+    button.textContent=editingVideoId?'Update Video':'Upload Video';
+  }
+});
+
+async function changeVideoStatus(v){
+  const next=v.status==='published'?'draft':'published';
+
+  const {error}=await db.from('videos')
+    .update({status:next,updated_at:new Date().toISOString()})
+    .eq('id',v.id);
+
+  if(error){alert(error.message);return;}
+  await loadVideos();
+}
+
+async function deleteVideo(v){
+  if(!confirm('Permanently delete this video record?\n\n'+v.title+'\n\nThe uploaded file in Storage will not be deleted.'))return;
+
+  const {error}=await db.from('videos').delete().eq('id',v.id);
+
+  if(error){alert(error.message);return;}
+
+  if(editingVideoId===v.id)resetVideoForm();
+
+  await loadVideos();
+}
+
+$('refreshVideos').onclick=loadVideos;
+
+/* FILTERS */
+
+$('searchArticles').addEventListener('input',renderArticles);
+$('statusFilter').addEventListener('change',renderArticles);
+$('categoryFilter').addEventListener('change',renderArticles);
+
+/* AUTH */
+
+db.auth.onAuthStateChange(event=>{
+  if(event==='SIGNED_OUT'){
+    currentUser=null;
+    currentRole=null;
+    $('dashboard').classList.add('hidden');
+    $('login').classList.remove('hidden');
+  }
+});
+
+/* START */
 
 startDashboard();
-
 </script>
-
 </body>
 </html>
