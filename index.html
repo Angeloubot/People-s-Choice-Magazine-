@@ -2,472 +2,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="People's Choice Magazine - Your voice. Your stories. Your choice.">
-  <title>People's Choice Magazine | Latest News</title>
-  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="People's Choice Magazine - Your voice. Your stories. Your choice.">
+<title>People's Choice Magazine | Latest News</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 
-  <style>
-    :root {
-      --pink: #e7549b;
-      --dark: #171717;
-      --light: #fff1f7;
-      --white: #ffffff;
-      --gray: #777;
-    }
+<style>
+:root {
+  --pink:#e7549b;
+  --dark:#171717;
+  --light:#fff1f7;
+  --white:#fff;
+  --gray:#777;
+}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+*{box-sizing:border-box;margin:0;padding:0}
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f5f5f5;
-      color: var(--dark);
-    }
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f5f5;
+  color:var(--dark);
+}
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+a{text-decoration:none;color:inherit}
 
-    .topbar {
-      background: var(--dark);
-      color: white;
-      padding: 9px 5%;
-      font-size: 12px;
-    }
+.topbar{
+  background:var(--dark);
+  color:white;
+  padding:9px 5%;
+  font-size:12px;
+}
 
-    .masthead {
-      background: white;
-      padding: 22px 5%;
-      text-align: center;
-      border-bottom: 3px solid var(--pink);
-    }
+.masthead{
+  background:white;
+  padding:22px 5%;
+  text-align:center;
+  border-bottom:3px solid var(--pink);
+}
 
-    .logo {
-      font-family: Georgia, serif;
-      font-size: clamp(25px, 5vw, 42px);
-      font-weight: bold;
-      letter-spacing: -1.5px;
-    }
+.logo{
+  font-family:Georgia,serif;
+  font-size:clamp(25px,5vw,42px);
+  font-weight:bold;
+  letter-spacing:-1.5px;
+}
 
-    .logo span {
-      color: var(--pink);
-    }
+.logo span{color:var(--pink)}
 
-    .tagline {
-      font-size: 10px;
-      letter-spacing: 3px;
-      margin-top: 7px;
-      color: var(--gray);
-    }
+.tagline{
+  font-size:10px;
+  letter-spacing:3px;
+  margin-top:7px;
+  color:var(--gray);
+}
 
-    nav {
-      background: var(--dark);
-      color: white;
-      padding: 0 5%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+nav{
+  background:var(--dark);
+  color:white;
+  padding:0 5%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+}
 
-    nav a {
-      padding: 17px 22px;
-      font-size: 13px;
-      font-weight: bold;
-      transition: .2s;
-    }
+nav a{
+  padding:17px 22px;
+  font-size:13px;
+  font-weight:bold;
+  transition:.2s;
+}
 
-    nav a:hover {
-      background: var(--pink);
-    }
+nav a:hover{background:var(--pink)}
 
-    .container {
-      max-width: 1250px;
-      margin: 25px auto;
-      padding: 0 18px;
-    }
+.container{
+  max-width:1250px;
+  margin:25px auto;
+  padding:0 18px;
+}
 
-    .section-title {
-      border-left: 5px solid var(--pink);
-      padding-left: 12px;
-      margin-bottom: 18px;
-      font-size: 19px;
-    }
+.section-title{
+  border-left:5px solid var(--pink);
+  padding-left:12px;
+  margin-bottom:18px;
+  font-size:19px;
+}
 
-    .hero {
-      position: relative;
-      height: 440px;
-      background:
-        linear-gradient(90deg, rgba(0,0,0,.8), transparent),
-        url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600") center/cover;
-      display: flex;
-      align-items: end;
-      color: white;
-      overflow: hidden;
-    }
+/* HOMEPAGE BANNER CAROUSEL */
 
-    .hero-content {
-      padding: 35px;
-      max-width: 650px;
-    }
+.hero{
+  position:relative;
+  height:440px;
+  background:#222;
+  display:flex;
+  align-items:end;
+  color:white;
+  overflow:hidden;
+  border-radius:3px;
+}
 
-    .category {
-      display: inline-block;
-      background: var(--pink);
-      color: white;
-      padding: 7px 12px;
-      font-size: 11px;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin-bottom: 13px;
-    }
+.hero-image{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
-    .hero h1 {
-      font-family: Georgia, serif;
-      font-size: clamp(28px, 4vw, 43px);
-      line-height: 1.15;
-      margin-bottom: 14px;
-    }
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    90deg,
+    rgba(0,0,0,.85),
+    rgba(0,0,0,.25)
+  );
+}
 
-    .hero p {
-      color: #eee;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
+.hero-content{
+  position:relative;
+  z-index:2;
+  padding:35px;
+  max-width:700px;
+}
 
-    .read-more {
-      display: inline-block;
-      border: 1px solid white;
-      padding: 11px 22px;
-      border-radius: 3px;
-      font-size: 12px;
-      font-weight: bold;
-    }
+.category{
+  display:inline-block;
+  background:var(--pink);
+  color:white;
+  padding:7px 12px;
+  font-size:11px;
+  font-weight:bold;
+  text-transform:uppercase;
+  margin-bottom:13px;
+}
 
-    .read-more:hover {
-      background: var(--pink);
-      border-color: var(--pink);
-    }
+.hero h1{
+  font-family:Georgia,serif;
+  font-size:clamp(28px,4vw,43px);
+  line-height:1.15;
+  margin-bottom:14px;
+}
 
-    .news-layout {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 25px;
-      margin-top: 35px;
-    }
+.hero p{
+  color:#eee;
+  line-height:1.6;
+  margin-bottom:20px;
+}
 
-    .news-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
+.read-more{
+  display:inline-block;
+  border:1px solid white;
+  padding:11px 22px;
+  border-radius:3px;
+  font-size:12px;
+  font-weight:bold;
+}
 
-    .news-card {
-      background: white;
-      overflow: hidden;
-      border: 1px solid #eee;
-    }
+.read-more:hover{
+  background:var(--pink);
+  border-color:var(--pink);
+}
 
-    .news-card img {
-      width: 100%;
-      height: 190px;
-      object-fit: cover;
-      display: block;
-    }
+.hero-link{
+  display:block;
+  color:white;
+}
 
-    .news-info {
-      padding: 16px;
-    }
+.hero-controls{
+  position:absolute;
+  z-index:4;
+  right:20px;
+  bottom:20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-    .news-info small {
-      color: var(--pink);
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: 10px;
-    }
+.hero-arrow{
+  width:38px;
+  height:38px;
+  border:1px solid white;
+  background:rgba(0,0,0,.5);
+  color:white;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:20px;
+}
 
-    .news-info h3 {
-      font-family: Georgia, serif;
-      font-size: 19px;
-      margin: 9px 0;
-      line-height: 1.3;
-    }
+.hero-arrow:hover{
+  background:var(--pink);
+}
 
-    .news-info p {
-      color: var(--gray);
-      font-size: 13px;
-      line-height: 1.6;
-    }
+.hero-dots{
+  display:flex;
+  gap:7px;
+  align-items:center;
+}
 
-    .sidebar {
-      background: white;
-      padding: 20px;
-      height: fit-content;
-    }
+.hero-dot{
+  width:9px;
+  height:9px;
+  border:0;
+  border-radius:50%;
+  background:rgba(255,255,255,.6);
+  cursor:pointer;
+}
 
-    .sidebar h2 {
-      font-family: Georgia, serif;
-      font-size: 21px;
-      border-bottom: 2px solid var(--pink);
-      padding-bottom: 12px;
-      margin-bottom: 15px;
-    }
+.hero-dot.active{
+  background:var(--pink);
+  width:23px;
+  border-radius:10px;
+}
 
-    .top-story {
-      padding: 13px 0;
-      border-bottom: 1px solid #eee;
-      font-family: Georgia, serif;
-      font-weight: bold;
-      font-size: 15px;
-      line-height: 1.4;
-    }
+.news-layout{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:25px;
+  margin-top:35px;
+}
 
-    .top-story span {
-      display: block;
-      color: var(--pink);
-      font: bold 10px Arial;
-      margin-bottom: 6px;
-    }
+.news-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
 
-    .category-section {
-      margin-top: 40px;
-    }
+.news-card{
+  background:white;
+  overflow:hidden;
+  border:1px solid #eee;
+}
 
-    .category-banner {
-      background: var(--light);
-      padding: 20px;
-      border-left: 5px solid var(--pink);
-      margin-bottom: 20px;
-    }
+.news-card img{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  display:block;
+}
 
-    .category-banner h2 {
-      font-family: Georgia, serif;
-      font-size: 25px;
-    }
+.news-info{padding:16px}
 
-    .category-banner p {
-      color: var(--gray);
-      font-size: 13px;
-      margin-top: 6px;
-    }
+.news-info small{
+  color:var(--pink);
+  font-weight:bold;
+  text-transform:uppercase;
+  font-size:10px;
+}
 
-    .contact {
-      margin-top: 45px;
-      background: var(--dark);
-      color: white;
-      padding: 40px 20px;
-      text-align: center;
-    }
+.news-info h3{
+  font-family:Georgia,serif;
+  font-size:19px;
+  margin:9px 0;
+  line-height:1.3;
+}
 
-    .contact h2 {
-      font-family: Georgia, serif;
-      font-size: 27px;
-      margin-bottom: 12px;
-    }
+.news-info p{
+  color:var(--gray);
+  font-size:13px;
+  line-height:1.6;
+}
 
-    .contact p {
-      color: #ccc;
-      margin: 10px 0;
-    }
+.sidebar{
+  background:white;
+  padding:20px;
+  height:fit-content;
+}
 
-    .contact a {
-      color: var(--pink);
-    }
+.sidebar h2{
+  font-family:Georgia,serif;
+  font-size:21px;
+  border-bottom:2px solid var(--pink);
+  padding-bottom:12px;
+  margin-bottom:15px;
+}
 
-    footer {
-      background: #0d0d0d;
-      color: #aaa;
-      text-align: center;
-      padding: 20px;
-      font-size: 12px;
-    }
+.top-story{
+  padding:13px 0;
+  border-bottom:1px solid #eee;
+  font-family:Georgia,serif;
+  font-weight:bold;
+  font-size:15px;
+  line-height:1.4;
+}
 
-    @media(max-width: 750px) {
-      nav {
-        justify-content: flex-start;
-      }
+.top-story span{
+  display:block;
+  color:var(--pink);
+  font: bold 10px Arial;
+  margin-bottom:6px;
+}
 
-      nav a {
-        padding: 14px 11px;
-        font-size: 11px;
-      }
+.category-section{margin-top:40px}
 
-      .hero {
-        height: 370px;
-      }
+.category-banner{
+  background:var(--light);
+  padding:20px;
+  border-left:5px solid var(--pink);
+  margin-bottom:20px;
+}
 
-      .hero-content {
-        padding: 20px;
-      }
+.category-banner h2{
+  font-family:Georgia,serif;
+  font-size:25px;
+}
 
-      .news-layout {
-        grid-template-columns: 1fr;
-      }
+.category-banner p{
+  color:var(--gray);
+  font-size:13px;
+  margin-top:6px;
+}
 
-      .news-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
+.contact{
+  margin-top:45px;
+  background:var(--dark);
+  color:white;
+  padding:40px 20px;
+  text-align:center;
+}
 
-      .news-card img {
-        height: 130px;
-      }
+.contact h2{
+  font-family:Georgia,serif;
+  font-size:27px;
+  margin-bottom:12px;
+}
 
-      .news-info {
-        padding: 10px;
-      }
+.contact p{color:#ccc;margin:10px 0}
+.contact a{color:var(--pink)}
 
-      .news-info h3 {
-        font-size: 15px;
-      }
+footer{
+  background:#0d0d0d;
+  color:#aaa;
+  text-align:center;
+  padding:20px;
+  font-size:12px;
+}
 
-      .news-info p {
-        font-size: 11px;
-      }
-    }
+@media(max-width:750px){
+  nav{justify-content:flex-start}
+  nav a{padding:14px 11px;font-size:11px}
 
-    @media(max-width: 400px) {
-      .news-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  .hero{height:370px}
+  .hero-content{padding:20px}
+
+  .hero-controls{
+    right:12px;
+    bottom:12px;
+  }
+
+  .news-layout{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .news-card img{height:130px}
+  .news-info{padding:10px}
+  .news-info h3{font-size:15px}
+  .news-info p{font-size:11px}
+}
+
+@media(max-width:400px){
+  .news-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
 
-  <div class="topbar">
-    PEOPLE'S CHOICE MAGAZINE | YOUR DAILY NEWS SOURCE
+<div class="topbar">
+  PEOPLE'S CHOICE MAGAZINE | YOUR DAILY NEWS SOURCE
+</div>
+
+<header class="masthead">
+  <div class="logo">PEOPLE'S <span>CHOICE</span></div>
+  <div class="tagline">MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.</div>
+</header>
+
+<nav>
+  <a href="#home">HOME</a>
+  <a href="#local">LOCAL NEWS</a>
+  <a href="#national">NATIONAL NEWS</a>
+  <a href="#contact">CONTACT US</a>
+</nav>
+
+<main class="container" id="home">
+
+  <!-- DYNAMIC HOMEPAGE BANNERS -->
+
+  <div class="hero" id="hero">
+    <img class="hero-image" id="hero-image"
+      src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600"
+      alt="Featured magazine story">
+
+    <div class="hero-content">
+      <a href="#local" class="hero-link" id="hero-link">
+        <span class="category" id="hero-label">EDITOR'S PICK</span>
+        <h1 id="hero-title">Your Stories. Your People. Your Magazine.</h1>
+        <p id="hero-subtitle">
+          Discover the latest stories shaping entertainment,
+          music and culture in Zimbabwe.
+        </p>
+        <span class="read-more" id="hero-button">EXPLORE STORIES →</span>
+      </a>
+    </div>
+
+    <div class="hero-controls" id="hero-controls" hidden>
+      <div class="hero-dots" id="hero-dots"></div>
+      <button class="hero-arrow" id="hero-prev"
+        type="button" aria-label="Previous banner">‹</button>
+      <button class="hero-arrow" id="hero-next"
+        type="button" aria-label="Next banner">›</button>
+    </div>
   </div>
 
-  <header class="masthead">
-    <div class="logo">PEOPLE'S <span>CHOICE</span></div>
-    <div class="tagline">MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.</div>
-  </header>
+  <div class="news-layout">
 
-  <nav>
-    <a href="#home">HOME</a>
-    <a href="#local">LOCAL NEWS</a>
-    <a href="#national">NATIONAL NEWS</a>
-    <a href="#contact">CONTACT US</a>
-  </nav>
-
-  <main class="container" id="home">
-
-    <div class="hero">
-      <div class="hero-content">
-        <span class="category">Editor's Pick</span>
-        <h1>Your Stories. Your People. Your Magazine.</h1>
-        <p>Discover the latest stories shaping entertainment, music and culture in Zimbabwe.</p>
-        <a href="#local" class="read-more">EXPLORE STORIES →</a>
+    <section>
+      <h2 class="section-title">LATEST STORIES</h2>
+      <div class="news-grid" id="latest-news">
+        <p>Loading latest stories...</p>
       </div>
-    </div>
-
-    <div class="news-layout">
-      <section>
-        <h2 class="section-title">LATEST STORIES</h2>
-
-        <div class="news-grid">
-          <article class="news-card">
-            <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=700" alt="Live music">
-            <div class="news-info">
-              <small>Music</small>
-              <h3>Zimbabwe's Music Scene Continues to Grow</h3>
-              <p>Discover the artists and sounds making waves.</p>
-            </div>
-          </article>
-
-          <article class="news-card">
-            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700" alt="Entertainment event">
-            <div class="news-info">
-              <small>Entertainment</small>
-              <h3>Inside Zimbabwe's Entertainment Industry</h3>
-              <p>Events, personalities and stories worth following.</p>
-            </div>
-          </article>
-
-          <article class="news-card">
-            <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=700" alt="Concert">
-            <div class="news-info">
-              <small>Local News</small>
-              <h3>Celebrating Local Creative Talent</h3>
-              <p>Giving a platform to emerging creative voices.</p>
-            </div>
-          </article>
-
-          <article class="news-card">
-            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=700" alt="Singer performing">
-            <div class="news-info">
-              <small>Artists</small>
-              <h3>Meet the Voices Shaping Our Culture</h3>
-              <p>Stories behind the people making a difference.</p>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <aside class="sidebar">
-        <h2>Top Stories</h2>
-
-        <div class="top-story">
-          <span>ENTERTAINMENT</span>
-          Zimbabwe's entertainment industry
-        </div>
-
-        <div class="top-story">
-          <span>MUSIC</span>
-          New sounds and emerging artists
-        </div>
-
-        <div class="top-story">
-          <span>LOCAL NEWS</span>
-          Creative talent making headlines
-        </div>
-
-        <div class="top-story">
-          <span>NATIONAL NEWS</span>
-          Stories from across Zimbabwe
-        </div>
-      </aside>
-    </div>
-
-    <section class="category-section" id="local">
-      <div class="category-banner">
-        <h2>Local News</h2>
-        <p>Entertainment and music stories from our communities.</p>
-      </div>
-      <p><div class="news-grid" id="local-news"></div>.</p>
     </section>
 
-    <section class="category-section" id="national">
-      <div class="category-banner">
-        <h2>National News</h2>
-        <p>Entertainment and music developments from across Zimbabwe.</p>
+    <aside class="sidebar">
+      <h2>Top Stories</h2>
+      <div id="top-stories">
+        <p>Loading stories...</p>
       </div>
-      <p><div class="news-grid" id="national-news"></div>.</p>
-    </section>
+    </aside>
 
-  </main>
+  </div>
 
-  <section class="contact" id="contact">
-    <h2>Contact People's Choice Magazine</h2>
-    <p>Have a story, news tip or collaboration proposal?</p>
-    <p>Get in touch with our editorial team.</p>
-    <p><a href="mailto:peopleschoicemagazine@gmail.com">Email Our Editorial Team</a></p>
+  <section class="category-section" id="local">
+    <div class="category-banner">
+      <h2>Local News</h2>
+      <p>Entertainment and music stories from our communities.</p>
+    </div>
+    <div class="news-grid" id="local-news"></div>
   </section>
 
-  <footer>
-    © 2026 People's Choice Magazine. All Rights Reserved.
-  </footer>
-  
+  <section class="category-section" id="national">
+    <div class="category-banner">
+      <h2>National News</h2>
+      <p>Entertainment and music developments from across Zimbabwe.</p>
+    </div>
+    <div class="news-grid" id="national-news"></div>
+  </section>
+
+</main>
+
+<section class="contact" id="contact">
+  <h2>Contact People's Choice Magazine</h2>
+  <p>Have a story, news tip or collaboration proposal?</p>
+  <p>Get in touch with our editorial team.</p>
+  <p>
+    <a href="mailto:peopleschoicemagazine@gmail.com">
+      Email Our Editorial Team
+    </a>
+  </p>
+</section>
+
+<footer>
+  © 2026 People's Choice Magazine. All Rights Reserved.
+</footer>
+
 <script>
 const db = window.supabase.createClient(
   SUPABASE_URL,
@@ -475,7 +474,7 @@ const db = window.supabase.createClient(
 );
 
 function escapeHTML(value) {
-  return String(value || "").replace(/[&<>"']/g, char => ({
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
@@ -484,22 +483,200 @@ function escapeHTML(value) {
   })[char]);
 }
 
+// Only allow safe web links and local page links.
+function safeLink(value, fallback = "#") {
+  const url = String(value || "").trim();
+
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith("#")) return url;
+  if (url.startsWith("/") && !url.startsWith("//")) return url;
+
+  if (
+    url &&
+    !url.startsWith("//") &&
+    !url.includes(":") &&
+    !url.startsWith("\\")
+  ) return url;
+
+  return fallback;
+}
+
+function safeImage(value) {
+  const url = String(value || "").trim();
+
+  if (/^https?:\/\//i.test(url)) return url;
+
+  return "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
+}
+
+/* ==============================
+   HOMEPAGE BANNER MANAGEMENT
+============================== */
+
+let banners = [];
+let activeBanner = 0;
+let bannerTimer = null;
+
+const defaultBanner = {
+  title: "Your Stories. Your People. Your Magazine.",
+  subtitle: "Discover the latest stories shaping entertainment, music and culture in Zimbabwe.",
+  label: "EDITOR'S PICK",
+  image_url: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600",
+  link_url: "#local"
+};
+
+function displayBanner(index) {
+  if (!banners.length) return;
+
+  activeBanner = index;
+
+  const banner = banners[index];
+
+  document.getElementById("hero-image").src =
+    safeImage(banner.image_url);
+
+  document.getElementById("hero-image").alt =
+    banner.title || "Featured story";
+
+  document.getElementById("hero-title").textContent =
+    banner.title || "";
+
+  document.getElementById("hero-subtitle").textContent =
+    banner.subtitle || "";
+
+  document.getElementById("hero-label").textContent =
+    banner.label || "FEATURED";
+
+  document.getElementById("hero-link").href =
+    safeLink(banner.link_url);
+
+  document.getElementById("hero-button").textContent =
+    banner.link_url && banner.link_url !== "#"
+      ? "READ MORE →"
+      : "EXPLORE STORIES →";
+
+  document.querySelectorAll(".hero-dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === index);
+    dot.setAttribute("aria-current", i === index ? "true" : "false");
+  });
+}
+
+function renderBannerDots() {
+  const dots = document.getElementById("hero-dots");
+
+  dots.innerHTML = banners.map((banner, index) => `
+    <button
+      class="hero-dot ${index === activeBanner ? "active" : ""}"
+      type="button"
+      aria-label="Show banner ${index + 1}"
+      data-banner-index="${index}">
+    </button>
+  `).join("");
+
+  dots.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", () => {
+      displayBanner(Number(button.dataset.bannerIndex));
+      restartBannerTimer();
+    });
+  });
+}
+
+function nextBanner() {
+  if (banners.length < 2) return;
+
+  displayBanner((activeBanner + 1) % banners.length);
+}
+
+function previousBanner() {
+  if (banners.length < 2) return;
+
+  displayBanner(
+    (activeBanner - 1 + banners.length) % banners.length
+  );
+}
+
+function startBannerTimer() {
+  clearInterval(bannerTimer);
+
+  if (banners.length > 1) {
+    bannerTimer = setInterval(nextBanner, 5000);
+  }
+}
+
+function restartBannerTimer() {
+  startBannerTimer();
+}
+
+async function loadBanners() {
+  const hero = document.getElementById("hero");
+
+  const { data, error } = await db
+    .from("banners")
+    .select("id,title,subtitle,label,image_url,link_url,sort_order")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Banner loading error:", error);
+    banners = [defaultBanner];
+  } else {
+    banners = data && data.length ? data : [defaultBanner];
+  }
+
+  activeBanner = 0;
+
+  displayBanner(0);
+  renderBannerDots();
+
+  const controls = document.getElementById("hero-controls");
+
+  controls.hidden = banners.length < 2;
+
+  if (banners.length > 1) {
+    startBannerTimer();
+  } else {
+    clearInterval(bannerTimer);
+  }
+
+  hero.addEventListener("mouseenter", () => {
+    clearInterval(bannerTimer);
+  });
+
+  hero.addEventListener("mouseleave", startBannerTimer);
+
+  document.getElementById("hero-next").onclick = () => {
+    nextBanner();
+    restartBannerTimer();
+  };
+
+  document.getElementById("hero-prev").onclick = () => {
+    previousBanner();
+    restartBannerTimer();
+  };
+}
+
+/* ==============================
+   ARTICLE MANAGEMENT
+============================== */
 
 function articleCard(article) {
-  const image = article.image_url ||
-    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
+  const image = safeImage(article.image_url);
 
   const articleLink = "article.html?id=" +
     encodeURIComponent(article.id);
 
   return `
     <article class="news-card">
+
       <a href="${articleLink}">
         <img src="${escapeHTML(image)}"
-             alt="${escapeHTML(article.title)}">
+             alt="${escapeHTML(article.title)}"
+             loading="lazy">
       </a>
 
       <div class="news-info">
+
         <small>
           ${escapeHTML(article.category)} ·
           ${escapeHTML(article.section)}
@@ -517,13 +694,14 @@ function articleCard(article) {
            style="color:#e7549b;border-color:#e7549b;margin-top:12px">
           READ FULL STORY →
         </a>
+
       </div>
     </article>
   `;
 }
 
-
 async function loadArticles() {
+
   const { data, error } = await db
     .from("articles")
     .select("id,title,excerpt,content,image_url,category,section,status,published_at,created_at")
@@ -532,22 +710,40 @@ async function loadArticles() {
 
   if (error) {
     console.error("Article loading error:", error);
-    document.querySelector(".news-grid").innerHTML =
+
+    document.getElementById("latest-news").innerHTML =
       "<p>Unable to load stories. Please try again later.</p>";
+
+    document.getElementById("top-stories").innerHTML =
+      "<p>Unable to load stories.</p>";
+
     return;
   }
 
   const articles = data || [];
 
   // Latest stories
-  document.querySelector(".news-grid").innerHTML =
+  document.getElementById("latest-news").innerHTML =
     articles.length
       ? articles.slice(0, 4).map(articleCard).join("")
       : "<p>No published stories yet.</p>";
 
+  // Top stories
+  document.getElementById("top-stories").innerHTML =
+    articles.length
+      ? articles.slice(0, 5).map(article => `
+          <div class="top-story">
+            <a href="article.html?id=${encodeURIComponent(article.id)}">
+              <span>${escapeHTML(article.category)}</span>
+              ${escapeHTML(article.title)}
+            </a>
+          </div>
+        `).join("")
+      : "<p>No published stories yet.</p>";
+
   // Local stories
   const local = articles.filter(a =>
-    String(a.category).toLowerCase() === "local"
+    String(a.category || "").toLowerCase() === "local"
   );
 
   document.getElementById("local-news").innerHTML =
@@ -557,7 +753,7 @@ async function loadArticles() {
 
   // National stories
   const national = articles.filter(a =>
-    String(a.category).toLowerCase() === "national"
+    String(a.category || "").toLowerCase() === "national"
   );
 
   document.getElementById("national-news").innerHTML =
@@ -566,11 +762,26 @@ async function loadArticles() {
       : "<p>No national stories published yet.</p>";
 }
 
-loadArticles();
-</script>
-</body>
-</html>
+/* ==============================
+   INITIALISE HOMEPAGE
+============================== */
 
+async function initialiseHomepage() {
+  await Promise.all([
+    loadBanners(),
+    loadArticles()
+  ]);
+}
+
+initialiseHomepage();
+
+// Refresh banner content when visitors return to the page.
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    loadBanners();
+  }
+});
+</script>
 
 </body>
 </html>
