@@ -80,7 +80,8 @@ button{
 
 button.secondary{background:#222}
 button.danger{background:#b42318}
-button:disabled{opacity:.5}
+button.success{background:#16834a}
+button:disabled{opacity:.5;cursor:not-allowed}
 
 .hidden{display:none!important}
 
@@ -115,7 +116,7 @@ button:disabled{opacity:.5}
 
 small{color:#777}
 
-#message,#loginMessage{
+#message,#loginMessage,.banner-message{
   padding:12px;
   background:#fff1f7;
   border-radius:5px;
@@ -145,11 +146,96 @@ small{color:#777}
 
 .stat small{font-weight:bold}
 
+/* BANNER MANAGER */
+
+.banner-item{
+  border:1px solid #eee;
+  border-radius:8px;
+  padding:14px;
+  margin:15px 0;
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:15px;
+}
+
+.banner-item img{
+  width:150px;
+  height:110px;
+  object-fit:cover;
+  border-radius:5px;
+  background:#eee;
+}
+
+.banner-details h3{
+  margin:3px 0 8px;
+  font-family:Georgia,serif;
+}
+
+.banner-details p{
+  font-size:13px;
+  color:#777;
+  overflow-wrap:anywhere;
+}
+
+.banner-status{
+  display:inline-block;
+  font-size:11px;
+  font-weight:bold;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#e7f8ed;
+  color:#16834a;
+}
+
+.banner-status.inactive{
+  background:#eee;
+  color:#666;
+}
+
+.banner-preview{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+  border-radius:7px;
+  background:#eee;
+  margin:10px 0;
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:10px 0 18px;
+}
+
+.check-row input{
+  width:18px;
+  height:18px;
+  margin:0;
+}
+
+.check-row label{font-size:14px}
+
+.help-text{
+  font-size:12px;
+  color:#777;
+  line-height:1.5;
+}
+
 @media(max-width:600px){
   main{padding:10px}
   .panel{padding:17px}
   .stats{grid-template-columns:1fr 1fr}
   .article img{width:80px;height:65px}
+
+  .banner-item{
+    grid-template-columns:1fr;
+  }
+
+  .banner-item img{
+    width:100%;
+    height:170px;
+  }
 }
 </style>
 </head>
@@ -167,7 +253,7 @@ small{color:#777}
 
 <section id="login" class="panel">
 <h2>Admin & Editor Login</h2>
-<p>Sign in to manage magazine articles.</p>
+<p>Sign in to manage magazine articles and banners.</p>
 
 <form id="loginForm">
 
@@ -192,7 +278,6 @@ small{color:#777}
 <div class="panel">
 
 <div class="row">
-
 <div>
 <h2>Welcome to your dashboard</h2>
 <p id="userInfo"></p>
@@ -201,7 +286,6 @@ small{color:#777}
 <div style="text-align:right">
 <button class="secondary" id="logout">Log Out</button>
 </div>
-
 </div>
 
 <div class="stats">
@@ -222,6 +306,145 @@ small{color:#777}
 </div>
 
 </div>
+</div>
+
+
+<!-- HOMEPAGE BANNER MANAGER -->
+
+<div class="panel hidden" id="bannerManager">
+
+<h2>Homepage Banner Manager</h2>
+
+<p class="help-text">
+Manage the banners displayed on your public magazine homepage.
+Add, edit, activate, deactivate and arrange your featured banners.
+</p>
+
+<div class="stats">
+
+<div class="stat">
+<strong id="bannerCount">0</strong>
+<small>Total Banners</small>
+</div>
+
+<div class="stat">
+<strong id="activeBannerCount">0</strong>
+<small>Active Banners</small>
+</div>
+
+<div class="stat">
+<strong id="inactiveBannerCount">0</strong>
+<small>Inactive Banners</small>
+</div>
+
+</div>
+
+<hr style="border:0;border-top:1px solid #eee;margin:25px 0">
+
+<h3 id="bannerFormHeading">Add New Banner</h3>
+
+<form id="bannerForm">
+
+<input type="hidden" id="bannerId">
+
+<label>Banner Headline</label>
+<input
+  id="bannerTitle"
+  required
+  maxlength="200"
+  placeholder="Enter banner headline">
+
+<label>Short Description</label>
+<textarea
+  id="bannerSubtitle"
+  style="min-height:90px"
+  placeholder="Write a short banner description"></textarea>
+
+<label>Banner Category / Label</label>
+<input
+  id="bannerLabel"
+  placeholder="e.g. BREAKING NEWS, MUSIC, FEATURED"
+  value="FEATURED">
+
+<label>Banner Image URL (optional)</label>
+<input
+  id="bannerImageUrl"
+  type="url"
+  placeholder="https://example.com/image.jpg">
+
+<p class="help-text">
+You can paste an image URL or upload an image below.
+Uploading an image takes priority over the URL.
+</p>
+
+<label>Upload Banner Image</label>
+<input
+  id="bannerImageFile"
+  type="file"
+  accept="image/*">
+
+<p class="help-text">
+Maximum image size: 5MB.
+Use landscape images for the best homepage appearance.
+</p>
+
+<label>Banner Destination Link</label>
+<input
+  id="bannerLink"
+  type="text"
+  placeholder="article.html?id=123 or https://example.com">
+
+<label>Display Order</label>
+<input
+  id="bannerOrder"
+  type="number"
+  value="0"
+  min="0">
+
+<div class="check-row">
+<input id="bannerActive" type="checkbox" checked>
+<label for="bannerActive">Display this banner on homepage</label>
+</div>
+
+<label>Image Preview</label>
+<img
+  id="bannerPreview"
+  class="banner-preview"
+  src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000"
+  alt="Banner preview">
+
+<div class="row">
+<button type="submit" id="bannerSaveButton">
+Save Banner
+</button>
+
+<button
+  type="button"
+  class="secondary hidden"
+  id="cancelBannerEdit">
+Cancel Editing
+</button>
+</div>
+
+<div id="bannerMessage" class="banner-message hidden"></div>
+
+</form>
+
+<hr style="border:0;border-top:1px solid #eee;margin:25px 0">
+
+<h3>Manage Existing Banners</h3>
+
+<div id="bannerList">
+Loading banners...
+</div>
+
+<button
+  type="button"
+  class="secondary"
+  id="refreshBanners">
+Refresh Banners
+</button>
+
 </div>
 
 
@@ -273,7 +496,9 @@ small{color:#777}
 <label>Article Photograph</label>
 <input id="photo" type="file" accept="image/*">
 
-<p id="imageInfo"><small>Maximum image size: 5MB. Leave empty to keep the existing image when editing.</small></p>
+<p id="imageInfo">
+<small>Maximum image size: 5MB. Leave empty to keep the existing image when editing.</small>
+</p>
 
 <button type="submit" id="saveButton">Save Article</button>
 
@@ -343,6 +568,10 @@ let editingArticleId = null;
 let existingImageUrl = null;
 let allArticles = [];
 
+let allBanners = [];
+let editingBannerId = null;
+let existingBannerImage = null;
+
 const $ = id => document.getElementById(id);
 
 
@@ -357,6 +586,70 @@ function message(text,error=false){
 
   $('message').classList.remove('hidden');
 }
+
+
+// BANNER MESSAGE
+
+function bannerMessage(text,error=false){
+
+  $('bannerMessage').textContent=text;
+
+  $('bannerMessage').style.color=
+    error?'#b42318':'#222';
+
+  $('bannerMessage').classList.remove('hidden');
+}
+
+
+// SAFE IMAGE URL
+
+function validImageUrl(url){
+
+  try{
+    const parsed=new URL(url);
+
+    return ['http:','https:'].includes(parsed.protocol);
+
+  }catch{
+    return false;
+  }
+
+}
+
+
+// IMAGE PREVIEW
+
+$('bannerImageUrl').addEventListener('input',()=>{
+
+  const url=$('bannerImageUrl').value.trim();
+
+  if(validImageUrl(url)){
+    $('bannerPreview').src=url;
+  }
+
+});
+
+$('bannerImageFile').addEventListener('change',()=>{
+
+  const file=$('bannerImageFile').files[0];
+
+  if(!file) return;
+
+  if(!file.type.startsWith('image/')){
+    bannerMessage('Please select a valid image.',true);
+    $('bannerImageFile').value='';
+    return;
+  }
+
+  if(file.size>5*1024*1024){
+    bannerMessage('Image must be smaller than 5MB.',true);
+    $('bannerImageFile').value='';
+    return;
+  }
+
+  $('bannerPreview').src=URL.createObjectURL(file);
+
+});
 
 
 // SLUG GENERATOR
@@ -448,6 +741,19 @@ async function startDashboard(){
   $('userInfo').textContent=
     (profile.full_name||user.email)+
     ' · '+currentRole.toUpperCase();
+
+  // Only administrators can manage banners.
+  if(currentRole==='admin'){
+
+    $('bannerManager').classList.remove('hidden');
+
+    await loadBanners();
+
+  }else{
+
+    $('bannerManager').classList.add('hidden');
+
+  }
 
   await loadJournalists();
   await loadArticles();
@@ -646,6 +952,546 @@ $('articleForm').addEventListener('submit',async e=>{
   }
 
 });
+
+
+// ======================================
+// HOMEPAGE BANNER MANAGEMENT
+// ======================================
+
+
+// LOAD BANNERS
+
+async function loadBanners(){
+
+  if(currentRole!=='admin') return;
+
+  $('bannerList').textContent='Loading banners...';
+
+  const {data,error}=await db
+    .from('banners')
+    .select('*')
+    .order('sort_order',{ascending:true})
+    .order('created_at',{ascending:false});
+
+  if(error){
+
+    $('bannerList').textContent=
+      'Unable to load banners: '+error.message;
+
+    return;
+
+  }
+
+  allBanners=data||[];
+
+  $('bannerCount').textContent=allBanners.length;
+
+  $('activeBannerCount').textContent=
+    allBanners.filter(b=>b.is_active).length;
+
+  $('inactiveBannerCount').textContent=
+    allBanners.filter(b=>!b.is_active).length;
+
+  renderBanners();
+
+}
+
+
+// DISPLAY BANNERS
+
+function renderBanners(){
+
+  $('bannerList').innerHTML='';
+
+  if(!allBanners.length){
+
+    $('bannerList').innerHTML=
+      '<p>No banners yet. Add your first homepage banner above.</p>';
+
+    return;
+
+  }
+
+  allBanners.forEach((banner,index)=>{
+
+    const item=document.createElement('div');
+
+    item.className='banner-item';
+
+    const img=document.createElement('img');
+
+    img.src=banner.image_url;
+    img.alt=banner.title||'Homepage banner';
+
+    img.onerror=()=>{
+      img.src='https://placehold.co/600x300?text=Banner+Image';
+    };
+
+    const details=document.createElement('div');
+
+    details.className='banner-details';
+
+    const heading=document.createElement('h3');
+
+    heading.textContent=banner.title;
+
+    const description=document.createElement('p');
+
+    description.textContent=banner.subtitle||'No description';
+
+    const label=document.createElement('p');
+
+    label.textContent='Label: '+(banner.label||'FEATURED');
+
+    const order=document.createElement('p');
+
+    order.textContent='Display order: '+banner.sort_order;
+
+    const status=document.createElement('span');
+
+    status.className=
+      'banner-status'+
+      (banner.is_active?'':' inactive');
+
+    status.textContent=
+      banner.is_active?'ACTIVE':'INACTIVE';
+
+    details.append(
+      heading,
+      description,
+      label,
+      order,
+      status
+    );
+
+    const actions=document.createElement('div');
+
+    actions.style.marginTop='12px';
+
+    const edit=document.createElement('button');
+
+    edit.textContent='Edit';
+    edit.className='secondary';
+
+    edit.onclick=()=>editBanner(banner);
+
+    const toggle=document.createElement('button');
+
+    toggle.textContent=
+      banner.is_active?'Deactivate':'Activate';
+
+    toggle.className=
+      banner.is_active?'secondary':'success';
+
+    toggle.onclick=()=>toggleBanner(banner);
+
+    const up=document.createElement('button');
+
+    up.textContent='↑';
+    up.title='Move banner up';
+    up.className='secondary';
+    up.disabled=index===0;
+
+    up.onclick=()=>moveBanner(index,-1);
+
+    const down=document.createElement('button');
+
+    down.textContent='↓';
+    down.title='Move banner down';
+    down.className='secondary';
+    down.disabled=index===allBanners.length-1;
+
+    down.onclick=()=>moveBanner(index,1);
+
+    const remove=document.createElement('button');
+
+    remove.textContent='Remove';
+    remove.className='danger';
+
+    remove.onclick=()=>deleteBanner(banner);
+
+    actions.append(edit,toggle,up,down,remove);
+
+    details.appendChild(actions);
+
+    item.append(img,details);
+
+    $('bannerList').appendChild(item);
+
+  });
+
+}
+
+
+// RESET BANNER FORM
+
+function resetBannerForm(){
+
+  $('bannerForm').reset();
+
+  editingBannerId=null;
+  existingBannerImage=null;
+
+  $('bannerId').value='';
+
+  $('bannerFormHeading').textContent='Add New Banner';
+
+  $('bannerSaveButton').textContent='Save Banner';
+
+  $('bannerActive').checked=true;
+
+  $('bannerOrder').value=allBanners.length*10;
+
+  $('bannerPreview').src=
+    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000';
+
+  $('bannerImageFile').value='';
+
+  $('cancelBannerEdit').classList.add('hidden');
+
+  $('bannerMessage').classList.add('hidden');
+
+}
+
+
+// EDIT BANNER
+
+function editBanner(banner){
+
+  editingBannerId=banner.id;
+
+  existingBannerImage=banner.image_url;
+
+  $('bannerId').value=banner.id;
+
+  $('bannerTitle').value=banner.title||'';
+
+  $('bannerSubtitle').value=banner.subtitle||'';
+
+  $('bannerLabel').value=banner.label||'FEATURED';
+
+  $('bannerImageUrl').value=banner.image_url||'';
+
+  $('bannerLink').value=banner.link_url||'#';
+
+  $('bannerOrder').value=banner.sort_order??0;
+
+  $('bannerActive').checked=!!banner.is_active;
+
+  $('bannerPreview').src=banner.image_url;
+
+  $('bannerFormHeading').textContent='Edit Homepage Banner';
+
+  $('bannerSaveButton').textContent='Update Banner';
+
+  $('cancelBannerEdit').classList.remove('hidden');
+
+  $('bannerMessage').classList.add('hidden');
+
+  $('bannerManager').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+  });
+
+}
+
+
+// CANCEL BANNER EDIT
+
+$('cancelBannerEdit').onclick=()=>{
+
+  resetBannerForm();
+
+};
+
+
+// SAVE / UPDATE BANNER
+
+$('bannerForm').addEventListener('submit',async e=>{
+
+  e.preventDefault();
+
+  if(currentRole!=='admin'){
+
+    bannerMessage('Administrator permission required.',true);
+    return;
+
+  }
+
+  const button=$('bannerSaveButton');
+
+  button.disabled=true;
+
+  button.textContent='Saving...';
+
+  try{
+
+    let imageUrl=existingBannerImage;
+
+    const file=$('bannerImageFile').files[0];
+
+    if(file){
+
+      if(!file.type.startsWith('image/')){
+
+        throw new Error('Please select a valid image.');
+
+      }
+
+      if(file.size>5*1024*1024){
+
+        throw new Error('Image must be smaller than 5MB.');
+
+      }
+
+      const safeName=file.name.replace(
+        /[^a-zA-Z0-9._-]/g,'-'
+      );
+
+      const path=
+        'banners/'+currentUser.id+'/'+Date.now()+'-'+safeName;
+
+      const {error:uploadError}=await db.storage
+        .from('article-images')
+        .upload(path,file,{upsert:false});
+
+      if(uploadError) throw uploadError;
+
+      const {data}=db.storage
+        .from('article-images')
+        .getPublicUrl(path);
+
+      imageUrl=data.publicUrl;
+
+    }else{
+
+      const typedUrl=$('bannerImageUrl').value.trim();
+
+      if(typedUrl){
+
+        if(!validImageUrl(typedUrl)){
+
+          throw new Error('Please enter a valid HTTP or HTTPS image URL.');
+
+        }
+
+        imageUrl=typedUrl;
+
+      }
+
+    }
+
+    if(!imageUrl){
+
+      throw new Error('Please upload an image or provide an image URL.');
+
+    }
+
+    const bannerData={
+
+      title:$('bannerTitle').value.trim(),
+
+      subtitle:$('bannerSubtitle').value.trim(),
+
+      label:$('bannerLabel').value.trim()||'FEATURED',
+
+      image_url:imageUrl,
+
+      link_url:$('bannerLink').value.trim()||'#',
+
+      sort_order:Math.max(
+        0,
+        parseInt($('bannerOrder').value,10)||0
+      ),
+
+      is_active:$('bannerActive').checked,
+
+      updated_at:new Date().toISOString()
+
+    };
+
+    let result;
+
+    if(editingBannerId){
+
+      result=await db
+        .from('banners')
+        .update(bannerData)
+        .eq('id',editingBannerId);
+
+    }else{
+
+      result=await db
+        .from('banners')
+        .insert(bannerData);
+
+    }
+
+    if(result.error) throw result.error;
+
+    bannerMessage(
+      editingBannerId
+        ?'Banner updated successfully!'
+        :'Banner added successfully!'
+    );
+
+    await loadBanners();
+
+    resetBannerForm();
+
+    bannerMessage(
+      editingBannerId
+        ?'Banner updated successfully!'
+        :'Banner added successfully!'
+    );
+
+  }catch(error){
+
+    bannerMessage(
+      error.message||'Unable to save banner.',
+      true
+    );
+
+  }finally{
+
+    button.disabled=false;
+
+    button.textContent=
+      editingBannerId?'Update Banner':'Save Banner';
+
+  }
+
+});
+
+
+// ACTIVATE / DEACTIVATE
+
+async function toggleBanner(banner){
+
+  if(currentRole!=='admin') return;
+
+  const nextStatus=!banner.is_active;
+
+  const {error}=await db
+    .from('banners')
+    .update({
+      is_active:nextStatus,
+      updated_at:new Date().toISOString()
+    })
+    .eq('id',banner.id);
+
+  if(error){
+
+    alert('Unable to update banner: '+error.message);
+    return;
+
+  }
+
+  await loadBanners();
+
+}
+
+
+// CHANGE BANNER ORDER
+
+async function moveBanner(index,direction){
+
+  if(currentRole!=='admin') return;
+
+  const otherIndex=index+direction;
+
+  if(otherIndex<0||otherIndex>=allBanners.length) return;
+
+  const first=allBanners[index];
+  const second=allBanners[otherIndex];
+
+  const firstOrder=first.sort_order??0;
+  const secondOrder=second.sort_order??0;
+
+  const {error:firstError}=await db
+    .from('banners')
+    .update({
+      sort_order:secondOrder,
+      updated_at:new Date().toISOString()
+    })
+    .eq('id',first.id);
+
+  if(firstError){
+
+    alert(firstError.message);
+    return;
+
+  }
+
+  const {error:secondError}=await db
+    .from('banners')
+    .update({
+      sort_order:firstOrder,
+      updated_at:new Date().toISOString()
+    })
+    .eq('id',second.id);
+
+  if(secondError){
+
+    alert(
+      'Order partially updated. Refresh and check the banner list: '+
+      secondError.message
+    );
+
+  }
+
+  await loadBanners();
+
+}
+
+
+// DELETE BANNER
+
+async function deleteBanner(banner){
+
+  if(currentRole!=='admin') return;
+
+  const confirmed=confirm(
+    'Permanently remove this homepage banner?\n\n'+
+    banner.title+
+    '\n\nThis cannot be undone.'
+  );
+
+  if(!confirmed) return;
+
+  const {error}=await db
+    .from('banners')
+    .delete()
+    .eq('id',banner.id);
+
+  if(error){
+
+    alert('Unable to delete banner: '+error.message);
+    return;
+
+  }
+
+  if(editingBannerId===banner.id){
+
+    resetBannerForm();
+
+  }
+
+  await loadBanners();
+
+  alert('Banner removed successfully!');
+
+}
+
+
+// REFRESH BANNERS
+
+$('refreshBanners').onclick=loadBanners;
+
+
+// ======================================
+// ARTICLE MANAGEMENT
+// ======================================
 
 
 // LOAD ARTICLES
