@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Article | People's Choice Magazine</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<style>
+:root {
+  --pink:#e7549b;
+  --dark:#171717;
+  --gray:#777;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f5f5f5;
+  color:var(--dark);
+}
+
+header{
+  background:white;
+  padding:25px 5%;
+  text-align:center;
+  border-bottom:3px solid var(--pink);
+}
+
+.logo{
+  font-family:Georgia,serif;
+  font-size:32px;
+  font-weight:bold;
+}
+
+.logo span{color:var(--pink)}
+
+nav{
+  background:var(--dark);
+  padding:16px;
+  text-align:center;
+}
+
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:13px;
+}
+
+.container{
+  max-width:850px;
+  margin:35px auto;
+  padding:20px;
+  background:white;
+}
+
+.category{
+  color:var(--pink);
+  font-weight:bold;
+  text-transform:uppercase;
+  font-size:12px;
+}
+
+h1{
+  font-family:Georgia,serif;
+  font-size:clamp(28px,5vw,42px);
+  line-height:1.2;
+  margin:15px 0;
+}
+
+.meta{
+  color:var(--gray);
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+.featured{
+  width:100%;
+  max-height:450px;
+  object-fit:cover;
+  margin-bottom:25px;
+}
+
+.excerpt{
+  font-size:19px;
+  font-weight:bold;
+  line-height:1.6;
+  margin-bottom:25px;
+}
+
+.content{
+  font-size:17px;
+  line-height:1.9;
+  white-space:pre-wrap;
+}
+
+.share{
+  margin-top:35px;
+  padding-top:20px;
+  border-top:1px solid #eee;
+}
+
+.share a{
+  display:inline-block;
+  background:var(--pink);
+  color:white;
+  padding:12px 18px;
+  margin:5px 5px 5px 0;
+  text-decoration:none;
+  border-radius:4px;
+  font-size:13px;
+}
+
+footer{
+  background:var(--dark);
+  color:white;
+  text-align:center;
+  padding:25px;
+  font-size:12px;
+}
+
+.error{
+  padding:40px;
+  text-align:center;
+}
+
+@media(max-width:600px){
+  .container{margin:15px auto;padding:18px}
+  .content{font-size:16px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">PEOPLE'S <span>CHOICE</span></div>
+  <p>Your Voice. Your Stories. Your Choice.</p>
+</header>
+
+<nav>
+  <a href="index.html">← BACK TO HOMEPAGE</a>
+</nav>
+
+<main class="container" id="article">
+  <p>Loading article...</p>
+</main>
+
+<footer>
+  © 2026 People's Choice Magazine. All Rights Reserved.
+</footer>
+
+<script>
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const articleId = new URLSearchParams(
+  window.location.search
+).get("id");
+
+function safe(value) {
+  return String(value || "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;","&gt;":"&gt;",
+    '"':"&quot;","'":"&#039;"
+  }[c]));
+}
+
+async function loadArticle() {
+  const container = document.getElementById("article");
+
+  if (!articleId) {
+    container.innerHTML = '<div class="error">Article not found.</div>';
+    return;
+  }
+
+  const {data, error} = await db
+    .from("articles")
+    .select("*")
+    .eq("id", articleId)
+    .eq("status", "published")
+    .single();
+
+  if (error || !data) {
+    container.innerHTML =
+      '<div class="error">Sorry, this article could not be found.</div>';
+    return;
+  }
+
+  const title = safe(data.title);
+  const excerpt = safe(data.excerpt);
+  const author = safe(data.author || "People's Choice Editorial Team");
+  const category = safe(data.category);
+  const section = safe(data.section);
+  const content = safe(data.content);
+  const image = safe(data.image_url);
+
+  const date = data.published_at
+    ? new Date(data.published_at).toLocaleDateString()
+    : "";
+
+  const url = window.location.href;
+
+  container.innerHTML = `
+    <div class="category">${category} · ${section}</div>
+    <h1>${title}</h1>
+    <div class="meta">By ${author} · ${date}</div>
+    ${image ? `<img class="featured" src="${image}" alt="${title}">` : ""}
+    <div class="excerpt">${excerpt}</div>
+    <div class="content">${content}</div>
+
+    <div class="share">
+      <strong>Share this story:</strong><br>
+      <a target="_blank" rel="noopener"
+        href="https://wa.me/?text=${encodeURIComponent(title + " " + url)}">
+        WhatsApp
+      </a>
+      <a target="_blank" rel="noopener"
+        href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}">
+        Facebook
+      </a>
+    </div>
+  `;
+
+  document.title = title + " | People's Choice Magazine";
+}
+
+loadArticle();
+</script>
+
+</body>
+</html>
