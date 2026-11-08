@@ -166,8 +166,11 @@ const articleId = new URLSearchParams(
 
 function safe(value) {
   return String(value || "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;","&gt;":"&gt;",
-    '"':"&quot;","'":"&#039;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
   }[c]));
 }
 
