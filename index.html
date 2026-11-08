@@ -11,359 +11,201 @@
 <script src="config.js"></script>
 
 <style>
-:root {
-  --pink:#e7549b;
-  --dark:#171717;
-  --light:#fff1f7;
-  --white:#fff;
-  --gray:#777;
+:root{
+--pink:#e7549b;
+--dark:#171717;
+--light:#fff1f7;
+--white:#fff;
+--gray:#777;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f5f5;
-  color:var(--dark);
-}
-
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f5f5;color:var(--dark)}
 a{text-decoration:none;color:inherit}
 
-.topbar{
-  background:var(--dark);
-  color:white;
-  padding:9px 5%;
-  font-size:12px;
-}
+.topbar{background:var(--dark);color:white;padding:9px 5%;font-size:12px}
 
-.masthead{
-  background:white;
-  padding:22px 5%;
-  text-align:center;
-  border-bottom:3px solid var(--pink);
-}
-
-.logo{
-  font-family:Georgia,serif;
-  font-size:clamp(25px,5vw,42px);
-  font-weight:bold;
-  letter-spacing:-1.5px;
-}
-
+.masthead{background:white;padding:22px 5%;text-align:center;border-bottom:3px solid var(--pink)}
+.logo{font-family:Georgia,serif;font-size:clamp(25px,5vw,42px);font-weight:bold;letter-spacing:-1.5px}
 .logo span{color:var(--pink)}
+.tagline{font-size:10px;letter-spacing:3px;margin-top:7px;color:var(--gray)}
 
-.tagline{
-  font-size:10px;
-  letter-spacing:3px;
-  margin-top:7px;
-  color:var(--gray);
-}
-
-nav{
-  background:var(--dark);
-  color:white;
-  padding:0 5%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-nav a{
-  padding:17px 22px;
-  font-size:13px;
-  font-weight:bold;
-  transition:.2s;
-}
-
+nav{background:var(--dark);color:white;padding:0 5%;display:flex;justify-content:center;align-items:center;flex-wrap:wrap}
+nav a{padding:17px 18px;font-size:12px;font-weight:bold;transition:.2s}
 nav a:hover{background:var(--pink)}
 
-.container{
-  max-width:1250px;
-  margin:25px auto;
-  padding:0 18px;
-}
+.container{max-width:1250px;margin:25px auto;padding:0 18px}
 
-.section-title{
-  border-left:5px solid var(--pink);
-  padding-left:12px;
-  margin-bottom:18px;
-  font-size:19px;
-}
+.section-title{border-left:5px solid var(--pink);padding-left:12px;margin-bottom:18px;font-size:19px}
 
-/* HOMEPAGE BANNER CAROUSEL */
+/* HERO */
 
-.hero{
-  position:relative;
-  height:440px;
-  background:#222;
-  display:flex;
-  align-items:end;
-  color:white;
-  overflow:hidden;
-  border-radius:3px;
-}
+.hero{position:relative;height:440px;background:#222;display:flex;align-items:end;color:white;overflow:hidden;border-radius:3px}
+.hero-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.85),rgba(0,0,0,.25))}
+.hero-content{position:relative;z-index:2;padding:35px;max-width:700px}
+.category{display:inline-block;background:var(--pink);color:white;padding:7px 12px;font-size:11px;font-weight:bold;text-transform:uppercase;margin-bottom:13px}
+.hero h1{font-family:Georgia,serif;font-size:clamp(28px,4vw,43px);line-height:1.15;margin-bottom:14px}
+.hero p{color:#eee;line-height:1.6;margin-bottom:20px}
+.read-more{display:inline-block;border:1px solid white;padding:11px 22px;border-radius:3px;font-size:12px;font-weight:bold}
+.read-more:hover{background:var(--pink);border-color:var(--pink)}
+.hero-link{display:block;color:white}
 
-.hero-image{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+.hero-controls{position:absolute;z-index:4;right:20px;bottom:20px;display:flex;align-items:center;gap:10px}
+.hero-arrow{width:38px;height:38px;border:1px solid white;background:rgba(0,0,0,.5);color:white;border-radius:50%;cursor:pointer;font-size:20px}
+.hero-arrow:hover{background:var(--pink)}
+.hero-dots{display:flex;gap:7px;align-items:center}
+.hero-dot{width:9px;height:9px;border:0;border-radius:50%;background:rgba(255,255,255,.6);cursor:pointer}
+.hero-dot.active{background:var(--pink);width:23px;border-radius:10px}
 
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(
-    90deg,
-    rgba(0,0,0,.85),
-    rgba(0,0,0,.25)
-  );
-}
+/* NEWS */
 
-.hero-content{
-  position:relative;
-  z-index:2;
-  padding:35px;
-  max-width:700px;
-}
-
-.category{
-  display:inline-block;
-  background:var(--pink);
-  color:white;
-  padding:7px 12px;
-  font-size:11px;
-  font-weight:bold;
-  text-transform:uppercase;
-  margin-bottom:13px;
-}
-
-.hero h1{
-  font-family:Georgia,serif;
-  font-size:clamp(28px,4vw,43px);
-  line-height:1.15;
-  margin-bottom:14px;
-}
-
-.hero p{
-  color:#eee;
-  line-height:1.6;
-  margin-bottom:20px;
-}
-
-.read-more{
-  display:inline-block;
-  border:1px solid white;
-  padding:11px 22px;
-  border-radius:3px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-.read-more:hover{
-  background:var(--pink);
-  border-color:var(--pink);
-}
-
-.hero-link{
-  display:block;
-  color:white;
-}
-
-.hero-controls{
-  position:absolute;
-  z-index:4;
-  right:20px;
-  bottom:20px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.hero-arrow{
-  width:38px;
-  height:38px;
-  border:1px solid white;
-  background:rgba(0,0,0,.5);
-  color:white;
-  border-radius:50%;
-  cursor:pointer;
-  font-size:20px;
-}
-
-.hero-arrow:hover{
-  background:var(--pink);
-}
-
-.hero-dots{
-  display:flex;
-  gap:7px;
-  align-items:center;
-}
-
-.hero-dot{
-  width:9px;
-  height:9px;
-  border:0;
-  border-radius:50%;
-  background:rgba(255,255,255,.6);
-  cursor:pointer;
-}
-
-.hero-dot.active{
-  background:var(--pink);
-  width:23px;
-  border-radius:10px;
-}
-
-.news-layout{
-  display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:25px;
-  margin-top:35px;
-}
-
-.news-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:20px;
-}
-
-.news-card{
-  background:white;
-  overflow:hidden;
-  border:1px solid #eee;
-}
-
-.news-card img{
-  width:100%;
-  height:190px;
-  object-fit:cover;
-  display:block;
-}
-
+.news-layout{display:grid;grid-template-columns:2fr 1fr;gap:25px;margin-top:35px}
+.news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.news-card{background:white;overflow:hidden;border:1px solid #eee}
+.news-card img{width:100%;height:190px;object-fit:cover;display:block}
 .news-info{padding:16px}
+.news-info small{color:var(--pink);font-weight:bold;text-transform:uppercase;font-size:10px}
+.news-info h3{font-family:Georgia,serif;font-size:19px;margin:9px 0;line-height:1.3}
+.news-info p{color:var(--gray);font-size:13px;line-height:1.6}
 
-.news-info small{
-  color:var(--pink);
-  font-weight:bold;
-  text-transform:uppercase;
-  font-size:10px;
-}
-
-.news-info h3{
-  font-family:Georgia,serif;
-  font-size:19px;
-  margin:9px 0;
-  line-height:1.3;
-}
-
-.news-info p{
-  color:var(--gray);
-  font-size:13px;
-  line-height:1.6;
-}
-
-.sidebar{
-  background:white;
-  padding:20px;
-  height:fit-content;
-}
-
-.sidebar h2{
-  font-family:Georgia,serif;
-  font-size:21px;
-  border-bottom:2px solid var(--pink);
-  padding-bottom:12px;
-  margin-bottom:15px;
-}
-
-.top-story{
-  padding:13px 0;
-  border-bottom:1px solid #eee;
-  font-family:Georgia,serif;
-  font-weight:bold;
-  font-size:15px;
-  line-height:1.4;
-}
-
-.top-story span{
-  display:block;
-  color:var(--pink);
-  font: bold 10px Arial;
-  margin-bottom:6px;
-}
+.sidebar{background:white;padding:20px;height:fit-content}
+.sidebar h2{font-family:Georgia,serif;font-size:21px;border-bottom:2px solid var(--pink);padding-bottom:12px;margin-bottom:15px}
+.top-story{padding:13px 0;border-bottom:1px solid #eee;font-family:Georgia,serif;font-weight:bold;font-size:15px;line-height:1.4}
+.top-story span{display:block;color:var(--pink);font:bold 10px Arial;margin-bottom:6px}
 
 .category-section{margin-top:40px}
+.category-banner{background:var(--light);padding:20px;border-left:5px solid var(--pink);margin-bottom:20px}
+.category-banner h2{font-family:Georgia,serif;font-size:25px}
+.category-banner p{color:var(--gray);font-size:13px;margin-top:6px}
 
-.category-banner{
-  background:var(--light);
-  padding:20px;
-  border-left:5px solid var(--pink);
-  margin-bottom:20px;
+/* CREATORS CORNER */
+
+#creators{margin-top:45px}
+
+.creator-heading{
+background:var(--dark);
+color:white;
+padding:25px;
+border-left:5px solid var(--pink);
+margin-bottom:20px;
 }
 
-.category-banner h2{
-  font-family:Georgia,serif;
-  font-size:25px;
+.creator-heading h2{
+font-family:Georgia,serif;
+font-size:27px;
 }
 
-.category-banner p{
-  color:var(--gray);
-  font-size:13px;
-  margin-top:6px;
+.creator-heading p{
+color:#ddd;
+font-size:13px;
+margin-top:8px;
 }
 
-.contact{
-  margin-top:45px;
-  background:var(--dark);
-  color:white;
-  padding:40px 20px;
-  text-align:center;
+.video-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
 }
 
-.contact h2{
-  font-family:Georgia,serif;
-  font-size:27px;
-  margin-bottom:12px;
+.video-card{
+background:white;
+border:1px solid #eee;
+overflow:hidden;
+border-radius:4px;
 }
 
+.video-card video{
+width:100%;
+aspect-ratio:16/9;
+display:block;
+background:#111;
+object-fit:contain;
+}
+
+.video-info{padding:15px}
+
+.video-category{
+color:var(--pink);
+font-size:10px;
+font-weight:bold;
+text-transform:uppercase;
+}
+
+.video-info h3{
+font-family:Georgia,serif;
+font-size:18px;
+line-height:1.3;
+margin:8px 0;
+}
+
+.video-info p{
+font-size:12px;
+color:var(--gray);
+line-height:1.5;
+margin-top:6px;
+}
+
+.creator-name{
+font-weight:bold;
+color:#333!important;
+}
+
+.featured-tag{
+display:inline-block;
+background:var(--light);
+color:var(--pink);
+font-size:10px;
+font-weight:bold;
+padding:5px 8px;
+margin-bottom:8px;
+}
+
+.video-empty{
+background:white;
+padding:25px;
+text-align:center;
+color:#777;
+font-size:13px;
+grid-column:1/-1;
+}
+
+.video-loading{
+background:white;
+padding:25px;
+text-align:center;
+color:#777;
+grid-column:1/-1;
+}
+
+/* FOOTER */
+
+.contact{margin-top:45px;background:var(--dark);color:white;padding:40px 20px;text-align:center}
+.contact h2{font-family:Georgia,serif;font-size:27px;margin-bottom:12px}
 .contact p{color:#ccc;margin:10px 0}
 .contact a{color:var(--pink)}
-
-footer{
-  background:#0d0d0d;
-  color:#aaa;
-  text-align:center;
-  padding:20px;
-  font-size:12px;
-}
+footer{background:#0d0d0d;color:#aaa;text-align:center;padding:20px;font-size:12px}
 
 @media(max-width:750px){
-  nav{justify-content:flex-start}
-  nav a{padding:14px 11px;font-size:11px}
-
-  .hero{height:370px}
-  .hero-content{padding:20px}
-
-  .hero-controls{
-    right:12px;
-    bottom:12px;
-  }
-
-  .news-layout{grid-template-columns:1fr}
-  .news-grid{grid-template-columns:1fr 1fr;gap:10px}
-  .news-card img{height:130px}
-  .news-info{padding:10px}
-  .news-info h3{font-size:15px}
-  .news-info p{font-size:11px}
+nav{justify-content:flex-start}
+nav a{padding:14px 10px;font-size:10px}
+.hero{height:370px}
+.hero-content{padding:20px}
+.hero-controls{right:12px;bottom:12px}
+.news-layout{grid-template-columns:1fr}
+.news-grid{grid-template-columns:1fr 1fr;gap:10px}
+.news-card img{height:130px}
+.news-info{padding:10px}
+.news-info h3{font-size:15px}
+.news-info p{font-size:11px}
+.video-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+.video-info{padding:10px}
+.video-info h3{font-size:15px}
 }
 
-@media(max-width:400px){
-  .news-grid{grid-template-columns:1fr}
+@media(max-width:450px){
+.news-grid{grid-template-columns:1fr}
+.video-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -371,416 +213,482 @@ footer{
 <body>
 
 <div class="topbar">
-  PEOPLE'S CHOICE MAGAZINE | YOUR DAILY NEWS SOURCE
+PEOPLE'S CHOICE MAGAZINE | YOUR DAILY NEWS SOURCE
 </div>
 
 <header class="masthead">
-  <div class="logo">PEOPLE'S <span>CHOICE</span></div>
-  <div class="tagline">MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.</div>
+<div class="logo">PEOPLE'S <span>CHOICE</span></div>
+<div class="tagline">MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.</div>
 </header>
 
 <nav>
-  <a href="#home">HOME</a>
-  <a href="#local">LOCAL NEWS</a>
-  <a href="#national">NATIONAL NEWS</a>
-  <a href="#contact">CONTACT US</a>
+<a href="#home">HOME</a>
+<a href="#local">LOCAL NEWS</a>
+<a href="#national">NATIONAL NEWS</a>
+<a href="#creators">VIDEOS & SKITS</a>
+<a href="#contact">CONTACT US</a>
 </nav>
 
 <main class="container" id="home">
 
-  <!-- DYNAMIC HOMEPAGE BANNERS -->
+<!-- DYNAMIC BANNERS -->
 
-  <div class="hero" id="hero">
-    <img class="hero-image" id="hero-image"
-      src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600"
-      alt="Featured magazine story">
+<div class="hero" id="hero">
 
-    <div class="hero-content">
-      <a href="#local" class="hero-link" id="hero-link">
-        <span class="category" id="hero-label">EDITOR'S PICK</span>
-        <h1 id="hero-title">Your Stories. Your People. Your Magazine.</h1>
-        <p id="hero-subtitle">
-          Discover the latest stories shaping entertainment,
-          music and culture in Zimbabwe.
-        </p>
-        <span class="read-more" id="hero-button">EXPLORE STORIES →</span>
-      </a>
-    </div>
+<img class="hero-image" id="hero-image"
+src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600"
+alt="Featured magazine story">
 
-    <div class="hero-controls" id="hero-controls" hidden>
-      <div class="hero-dots" id="hero-dots"></div>
-      <button class="hero-arrow" id="hero-prev"
-        type="button" aria-label="Previous banner">‹</button>
-      <button class="hero-arrow" id="hero-next"
-        type="button" aria-label="Next banner">›</button>
-    </div>
-  </div>
+<div class="hero-content">
+<a href="#local" class="hero-link" id="hero-link">
+<span class="category" id="hero-label">EDITOR'S PICK</span>
+<h1 id="hero-title">Your Stories. Your People. Your Magazine.</h1>
+<p id="hero-subtitle">Discover the latest stories shaping entertainment, music and culture in Zimbabwe.</p>
+<span class="read-more" id="hero-button">EXPLORE STORIES →</span>
+</a>
+</div>
 
-  <div class="news-layout">
+<div class="hero-controls" id="hero-controls" hidden>
+<div class="hero-dots" id="hero-dots"></div>
+<button class="hero-arrow" id="hero-prev" type="button">‹</button>
+<button class="hero-arrow" id="hero-next" type="button">›</button>
+</div>
 
-    <section>
-      <h2 class="section-title">LATEST STORIES</h2>
-      <div class="news-grid" id="latest-news">
-        <p>Loading latest stories...</p>
-      </div>
-    </section>
+</div>
 
-    <aside class="sidebar">
-      <h2>Top Stories</h2>
-      <div id="top-stories">
-        <p>Loading stories...</p>
-      </div>
-    </aside>
+<!-- LATEST NEWS -->
 
-  </div>
+<div class="news-layout">
 
-  <section class="category-section" id="local">
-    <div class="category-banner">
-      <h2>Local News</h2>
-      <p>Entertainment and music stories from our communities.</p>
-    </div>
-    <div class="news-grid" id="local-news"></div>
-  </section>
+<section>
+<h2 class="section-title">LATEST STORIES</h2>
+<div class="news-grid" id="latest-news">
+<p>Loading latest stories...</p>
+</div>
+</section>
 
-  <section class="category-section" id="national">
-    <div class="category-banner">
-      <h2>National News</h2>
-      <p>Entertainment and music developments from across Zimbabwe.</p>
-    </div>
-    <div class="news-grid" id="national-news"></div>
-  </section>
+<aside class="sidebar">
+<h2>Top Stories</h2>
+<div id="top-stories">Loading stories...</div>
+</aside>
+
+</div>
+
+<!-- CREATORS CORNER -->
+
+<section id="creators" class="category-section">
+
+<div class="creator-heading">
+<h2>🎬 CREATORS' CORNER</h2>
+<p>Discover local content creators, comedy skits, entertainment videos and emerging talent.</p>
+</div>
+
+<div class="video-grid" id="video-grid">
+<div class="video-loading">Loading videos and skits...</div>
+</div>
+
+</section>
+
+<!-- LOCAL NEWS -->
+
+<section class="category-section" id="local">
+
+<div class="category-banner">
+<h2>Local News</h2>
+<p>Stories and developments from our communities.</p>
+</div>
+
+<div class="news-grid" id="local-news"></div>
+
+</section>
+
+<!-- NATIONAL NEWS -->
+
+<section class="category-section" id="national">
+
+<div class="category-banner">
+<h2>National News</h2>
+<p>News and developments from across Zimbabwe.</p>
+</div>
+
+<div class="news-grid" id="national-news"></div>
+
+</section>
 
 </main>
 
 <section class="contact" id="contact">
-  <h2>Contact People's Choice Magazine</h2>
-  <p>Have a story, news tip or collaboration proposal?</p>
-  <p>Get in touch with our editorial team.</p>
-  <p>
-    <a href="mailto:peopleschoicemagazine@gmail.com">
-      Email Our Editorial Team
-    </a>
-  </p>
+<h2>Contact People's Choice Magazine</h2>
+<p>Have a story, news tip or collaboration proposal?</p>
+<p>Get in touch with our editorial team.</p>
+<p>
+<a href="mailto:peopleschoicemagazine@gmail.com">
+Email Our Editorial Team
+</a>
+</p>
 </section>
 
 <footer>
-  © 2026 People's Choice Magazine. All Rights Reserved.
+© 2026 People's Choice Magazine. All Rights Reserved.
 </footer>
 
 <script>
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
+
+const db=window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
 );
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  })[char]);
+function escapeHTML(value){
+return String(value??"").replace(/[&<>"']/g,char=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+})[char]);
 }
 
-// Only allow safe web links and local page links.
-function safeLink(value, fallback = "#") {
-  const url = String(value || "").trim();
+function safeLink(value,fallback="#"){
+const url=String(value||"").trim();
 
-  if (/^https?:\/\//i.test(url)) return url;
-  if (url.startsWith("#")) return url;
-  if (url.startsWith("/") && !url.startsWith("//")) return url;
+if(/^https?:\/\//i.test(url))return url;
+if(url.startsWith("#"))return url;
+if(url.startsWith("/")&&!url.startsWith("//"))return url;
 
-  if (
-    url &&
-    !url.startsWith("//") &&
-    !url.includes(":") &&
-    !url.startsWith("\\")
-  ) return url;
+if(url&&!url.startsWith("//")&&!url.includes(":")&&!url.startsWith("\\"))return url;
 
-  return fallback;
+return fallback;
 }
 
-function safeImage(value) {
-  const url = String(value || "").trim();
+function safeImage(value){
+const url=String(value||"").trim();
 
-  if (/^https?:\/\//i.test(url)) return url;
+if(/^https?:\/\//i.test(url))return url;
 
-  return "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
+return "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
 }
 
-/* ==============================
-   HOMEPAGE BANNER MANAGEMENT
-============================== */
+/* =========================
+   HOMEPAGE BANNERS
+========================= */
 
-let banners = [];
-let activeBanner = 0;
-let bannerTimer = null;
+let banners=[];
+let activeBanner=0;
+let bannerTimer=null;
 
-const defaultBanner = {
-  title: "Your Stories. Your People. Your Magazine.",
-  subtitle: "Discover the latest stories shaping entertainment, music and culture in Zimbabwe.",
-  label: "EDITOR'S PICK",
-  image_url: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600",
-  link_url: "#local"
+const defaultBanner={
+title:"Your Stories. Your People. Your Magazine.",
+subtitle:"Discover the latest stories shaping entertainment, music and culture in Zimbabwe.",
+label:"EDITOR'S PICK",
+image_url:"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600",
+link_url:"#local"
 };
 
-function displayBanner(index) {
-  if (!banners.length) return;
+function displayBanner(index){
 
-  activeBanner = index;
+if(!banners.length)return;
 
-  const banner = banners[index];
+activeBanner=index;
 
-  document.getElementById("hero-image").src =
-    safeImage(banner.image_url);
+const banner=banners[index];
 
-  document.getElementById("hero-image").alt =
-    banner.title || "Featured story";
+document.getElementById("hero-image").src=safeImage(banner.image_url);
 
-  document.getElementById("hero-title").textContent =
-    banner.title || "";
+document.getElementById("hero-image").alt=banner.title||"Featured story";
 
-  document.getElementById("hero-subtitle").textContent =
-    banner.subtitle || "";
+document.getElementById("hero-title").textContent=banner.title||"";
 
-  document.getElementById("hero-label").textContent =
-    banner.label || "FEATURED";
+document.getElementById("hero-subtitle").textContent=banner.subtitle||"";
 
-  document.getElementById("hero-link").href =
-    safeLink(banner.link_url);
+document.getElementById("hero-label").textContent=banner.label||"FEATURED";
 
-  document.getElementById("hero-button").textContent =
-    banner.link_url && banner.link_url !== "#"
-      ? "READ MORE →"
-      : "EXPLORE STORIES →";
+document.getElementById("hero-link").href=safeLink(banner.link_url);
 
-  document.querySelectorAll(".hero-dot").forEach((dot, i) => {
-    dot.classList.toggle("active", i === index);
-    dot.setAttribute("aria-current", i === index ? "true" : "false");
-  });
+document.getElementById("hero-button").textContent=
+banner.link_url&&banner.link_url!=="#"
+?"READ MORE →":"EXPLORE STORIES →";
+
+document.querySelectorAll(".hero-dot").forEach((dot,i)=>{
+dot.classList.toggle("active",i===index);
+});
 }
 
-function renderBannerDots() {
-  const dots = document.getElementById("hero-dots");
+function renderBannerDots(){
 
-  dots.innerHTML = banners.map((banner, index) => `
-    <button
-      class="hero-dot ${index === activeBanner ? "active" : ""}"
-      type="button"
-      aria-label="Show banner ${index + 1}"
-      data-banner-index="${index}">
-    </button>
-  `).join("");
+const dots=document.getElementById("hero-dots");
 
-  dots.querySelectorAll("button").forEach(button => {
-    button.addEventListener("click", () => {
-      displayBanner(Number(button.dataset.bannerIndex));
-      restartBannerTimer();
-    });
-  });
+dots.innerHTML=banners.map((banner,index)=>`
+<button class="hero-dot ${index===activeBanner?"active":""}"
+type="button" aria-label="Show banner ${index+1}"
+data-index="${index}"></button>
+`).join("");
+
+dots.querySelectorAll("button").forEach(button=>{
+button.addEventListener("click",()=>{
+displayBanner(Number(button.dataset.index));
+restartBannerTimer();
+});
+});
 }
 
-function nextBanner() {
-  if (banners.length < 2) return;
-
-  displayBanner((activeBanner + 1) % banners.length);
+function nextBanner(){
+if(banners.length<2)return;
+displayBanner((activeBanner+1)%banners.length);
 }
 
-function previousBanner() {
-  if (banners.length < 2) return;
-
-  displayBanner(
-    (activeBanner - 1 + banners.length) % banners.length
-  );
+function previousBanner(){
+if(banners.length<2)return;
+displayBanner((activeBanner-1+banners.length)%banners.length);
 }
 
-function startBannerTimer() {
-  clearInterval(bannerTimer);
+function startBannerTimer(){
 
-  if (banners.length > 1) {
-    bannerTimer = setInterval(nextBanner, 5000);
-  }
+clearInterval(bannerTimer);
+
+if(banners.length>1){
+bannerTimer=setInterval(nextBanner,5000);
+}
 }
 
-function restartBannerTimer() {
-  startBannerTimer();
+function restartBannerTimer(){
+startBannerTimer();
 }
 
-async function loadBanners() {
-  const hero = document.getElementById("hero");
+async function loadBanners(){
 
-  const { data, error } = await db
-    .from("banners")
-    .select("id,title,subtitle,label,image_url,link_url,sort_order")
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false });
+const {data,error}=await db
+.from("banners")
+.select("id,title,subtitle,label,image_url,link_url,sort_order")
+.eq("is_active",true)
+.order("sort_order",{ascending:true})
+.order("created_at",{ascending:false});
 
-  if (error) {
-    console.error("Banner loading error:", error);
-    banners = [defaultBanner];
-  } else {
-    banners = data && data.length ? data : [defaultBanner];
-  }
+banners=error||!data||!data.length?[defaultBanner]:data;
 
-  activeBanner = 0;
+activeBanner=0;
 
-  displayBanner(0);
-  renderBannerDots();
+displayBanner(0);
+renderBannerDots();
 
-  const controls = document.getElementById("hero-controls");
+document.getElementById("hero-controls").hidden=banners.length<2;
 
-  controls.hidden = banners.length < 2;
-
-  if (banners.length > 1) {
-    startBannerTimer();
-  } else {
-    clearInterval(bannerTimer);
-  }
-
-  hero.addEventListener("mouseenter", () => {
-    clearInterval(bannerTimer);
-  });
-
-  hero.addEventListener("mouseleave", startBannerTimer);
-
-  document.getElementById("hero-next").onclick = () => {
-    nextBanner();
-    restartBannerTimer();
-  };
-
-  document.getElementById("hero-prev").onclick = () => {
-    previousBanner();
-    restartBannerTimer();
-  };
+startBannerTimer();
 }
 
-/* ==============================
-   ARTICLE MANAGEMENT
-============================== */
+document.getElementById("hero-next").onclick=()=>{
+nextBanner();
+restartBannerTimer();
+};
 
-function articleCard(article) {
-  const image = safeImage(article.image_url);
+document.getElementById("hero-prev").onclick=()=>{
+previousBanner();
+restartBannerTimer();
+};
 
-  const articleLink = "article.html?id=" +
-    encodeURIComponent(article.id);
+document.getElementById("hero").addEventListener("mouseenter",()=>{
+clearInterval(bannerTimer);
+});
 
-  return `
-    <article class="news-card">
+document.getElementById("hero").addEventListener("mouseleave",()=>{
+startBannerTimer();
+});
 
-      <a href="${articleLink}">
-        <img src="${escapeHTML(image)}"
-             alt="${escapeHTML(article.title)}"
-             loading="lazy">
-      </a>
+/* =========================
+   ARTICLES
+========================= */
 
-      <div class="news-info">
+function articleCard(article){
 
-        <small>
-          ${escapeHTML(article.category)} ·
-          ${escapeHTML(article.section)}
-        </small>
+const image=safeImage(article.image_url);
 
-        <h3>
-          <a href="${articleLink}">
-            ${escapeHTML(article.title)}
-          </a>
-        </h3>
+const link="article.html?id="+encodeURIComponent(article.id);
 
-        <p>${escapeHTML(article.excerpt)}</p>
+return `
+<article class="news-card">
 
-        <a href="${articleLink}" class="read-more"
-           style="color:#e7549b;border-color:#e7549b;margin-top:12px">
-          READ FULL STORY →
-        </a>
+<a href="${link}">
+<img src="${escapeHTML(image)}"
+alt="${escapeHTML(article.title)}" loading="lazy">
+</a>
 
-      </div>
-    </article>
-  `;
+<div class="news-info">
+
+<small>
+${escapeHTML(article.category)} · ${escapeHTML(article.section)}
+</small>
+
+<h3>
+<a href="${link}">${escapeHTML(article.title)}</a>
+</h3>
+
+<p>${escapeHTML(article.excerpt)}</p>
+
+<a href="${link}" class="read-more"
+style="color:#e7549b;border-color:#e7549b;margin-top:12px">
+READ FULL STORY →
+</a>
+
+</div>
+</article>
+`;
 }
 
-async function loadArticles() {
+async function loadArticles(){
 
-  const { data, error } = await db
-    .from("articles")
-    .select("id,title,excerpt,content,image_url,category,section,status,published_at,created_at")
-    .eq("status", "published")
-    .order("published_at", { ascending: false });
+const {data,error}=await db
+.from("articles")
+.select("id,title,excerpt,image_url,category,section,status,published_at,created_at")
+.eq("status","published")
+.order("published_at",{ascending:false});
 
-  if (error) {
-    console.error("Article loading error:", error);
+if(error){
 
-    document.getElementById("latest-news").innerHTML =
-      "<p>Unable to load stories. Please try again later.</p>";
+console.error("Article loading error:",error);
 
-    document.getElementById("top-stories").innerHTML =
-      "<p>Unable to load stories.</p>";
+document.getElementById("latest-news").innerHTML="<p>Unable to load stories.</p>";
+document.getElementById("top-stories").innerHTML="<p>Unable to load stories.</p>";
 
-    return;
-  }
-
-  const articles = data || [];
-
-  // Latest stories
-  document.getElementById("latest-news").innerHTML =
-    articles.length
-      ? articles.slice(0, 4).map(articleCard).join("")
-      : "<p>No published stories yet.</p>";
-
-  // Top stories
-  document.getElementById("top-stories").innerHTML =
-    articles.length
-      ? articles.slice(0, 5).map(article => `
-          <div class="top-story">
-            <a href="article.html?id=${encodeURIComponent(article.id)}">
-              <span>${escapeHTML(article.category)}</span>
-              ${escapeHTML(article.title)}
-            </a>
-          </div>
-        `).join("")
-      : "<p>No published stories yet.</p>";
-
-  // Local stories
-  const local = articles.filter(a =>
-    String(a.category || "").toLowerCase() === "local"
-  );
-
-  document.getElementById("local-news").innerHTML =
-    local.length
-      ? local.map(articleCard).join("")
-      : "<p>No local stories published yet.</p>";
-
-  // National stories
-  const national = articles.filter(a =>
-    String(a.category || "").toLowerCase() === "national"
-  );
-
-  document.getElementById("national-news").innerHTML =
-    national.length
-      ? national.map(articleCard).join("")
-      : "<p>No national stories published yet.</p>";
+return;
 }
 
-/* ==============================
+const articles=data||[];
+
+document.getElementById("latest-news").innerHTML=
+articles.length?articles.slice(0,4).map(articleCard).join(""):"<p>No published stories yet.</p>";
+
+document.getElementById("top-stories").innerHTML=
+articles.length?articles.slice(0,5).map(article=>`
+<div class="top-story">
+<a href="article.html?id=${encodeURIComponent(article.id)}">
+<span>${escapeHTML(article.category)}</span>
+${escapeHTML(article.title)}
+</a>
+</div>
+`).join(""):"<p>No published stories yet.</p>";
+
+const local=articles.filter(a=>String(a.category||"").toLowerCase()==="local");
+
+document.getElementById("local-news").innerHTML=
+local.length?local.map(articleCard).join(""):"<p>No local stories published yet.</p>";
+
+const national=articles.filter(a=>String(a.category||"").toLowerCase()==="national");
+
+document.getElementById("national-news").innerHTML=
+national.length?national.map(articleCard).join(""):"<p>No national stories published yet.</p>";
+}
+
+/* =========================
+   CREATORS' CORNER
+========================= */
+
+async function loadVideos(){
+
+const grid=document.getElementById("video-grid");
+
+const {data,error}=await db
+.from("videos")
+.select("id,title,description,creator_name,category,video_url,thumbnail_url,is_featured,created_at")
+.eq("status","published")
+.order("is_featured",{ascending:false})
+.order("created_at",{ascending:false})
+.limit(12);
+
+if(error){
+
+console.error("Video loading error:",error);
+
+grid.innerHTML=`
+<div class="video-empty">
+Unable to load videos right now. Please try again later.
+</div>`;
+
+return;
+}
+
+const videos=data||[];
+
+if(!videos.length){
+
+grid.innerHTML=`
+<div class="video-empty">
+<h3>No videos published yet.</h3>
+<p>Our creators will be appearing here soon. Stay tuned!</p>
+</div>`;
+
+return;
+}
+
+grid.innerHTML=videos.map(video=>{
+
+const videoUrl=String(video.video_url||"").trim();
+const thumbnail=video.thumbnail_url?String(video.thumbnail_url).trim():"";
+
+if(!/^https?:\/\//i.test(videoUrl))return "";
+
+const safeVideoUrl=escapeHTML(videoUrl);
+
+const poster=/^https?:\/\//i.test(thumbnail)
+?escapeHTML(thumbnail):"";
+
+return `
+<article class="video-card">
+
+<video
+controls
+playsinline
+preload="metadata"
+${poster?`poster="${poster}"`:""}
+aria-label="${escapeHTML(video.title)}">
+
+<source src="${safeVideoUrl}" type="${
+/\.webm(\?|$)/i.test(videoUrl)?"video/webm":"video/mp4"
+}">
+
+Your browser does not support HTML5 video.
+</video>
+
+<div class="video-info">
+
+${video.is_featured?'<span class="featured-tag">★ FEATURED VIDEO</span>':""}
+
+<div class="video-category">
+${escapeHTML(video.category||"Entertainment")}
+</div>
+
+<h3>${escapeHTML(video.title)}</h3>
+
+<p class="creator-name">
+By ${escapeHTML(video.creator_name)}
+</p>
+
+<p>${escapeHTML(video.description||"Watch this video on People's Choice Magazine.")}</p>
+
+</div>
+</article>
+`;
+
+}).filter(Boolean).join("")||`
+<div class="video-empty">No playable videos are available.</div>
+`;
+}
+
+/* =========================
    INITIALISE HOMEPAGE
-============================== */
+========================= */
 
-async function initialiseHomepage() {
-  await Promise.all([
-    loadBanners(),
-    loadArticles()
-  ]);
+async function initialiseHomepage(){
+
+await Promise.all([
+loadBanners(),
+loadArticles(),
+loadVideos()
+]);
+
 }
 
 initialiseHomepage();
 
-// Refresh banner content when visitors return to the page.
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) {
-    loadBanners();
-  }
-});
 </script>
 
 </body>
