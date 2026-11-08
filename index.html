@@ -444,7 +444,7 @@
         <h2>Local News</h2>
         <p>Entertainment and music stories from our communities.</p>
       </div>
-      <p>Our local news stories will appear here once connected to Supabase.</p>
+      <p><div class="news-grid" id="local-news"></div>.</p>
     </section>
 
     <section class="category-section" id="national">
@@ -452,7 +452,7 @@
         <h2>National News</h2>
         <p>Entertainment and music developments from across Zimbabwe.</p>
       </div>
-      <p>Our national news stories will appear here once connected to Supabase.</p>
+      <p><div class="news-grid" id="national-news"></div>.</p>
     </section>
 
   </main>
@@ -467,6 +467,89 @@
   <footer>
     © 2026 People's Choice Magazine. All Rights Reserved.
   </footer>
+  
+<script>
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+function escapeHTML(value) {
+  return String(value || "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
+
+function articleCard(article) {
+  const image = article.image_url ||
+    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
+
+  return `
+    <article class="news-card">
+      <img src="${escapeHTML(image)}"
+           alt="${escapeHTML(article.title)}"
+           onerror="this.src='https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700'">
+      <div class="news-info">
+        <small>${escapeHTML(article.category)} · ${escapeHTML(article.section)}</small>
+        <h3>${escapeHTML(article.title)}</h3>
+        <p>${escapeHTML(article.excerpt)}</p>
+      </div>
+    </article>
+  `;
+}
+
+async function loadArticles() {
+  const { data, error } = await db
+    .from("articles")
+    .select("id,title,excerpt,content,image_url,category,section,status,published_at,created_at")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    console.error("Article loading error:", error);
+    document.querySelector(".news-grid").innerHTML =
+      "<p>Unable to load stories. Please try again later.</p>";
+    return;
+  }
+
+  const articles = data || [];
+
+  // Latest stories
+  document.querySelector(".news-grid").innerHTML =
+    articles.length
+      ? articles.slice(0, 4).map(articleCard).join("")
+      : "<p>No published stories yet.</p>";
+
+  // Local stories
+  const local = articles.filter(a =>
+    String(a.category).toLowerCase() === "local"
+  );
+
+  document.getElementById("local-news").innerHTML =
+    local.length
+      ? local.map(articleCard).join("")
+      : "<p>No local stories published yet.</p>";
+
+  // National stories
+  const national = articles.filter(a =>
+    String(a.category).toLowerCase() === "national"
+  );
+
+  document.getElementById("national-news").innerHTML =
+    national.length
+      ? national.map(articleCard).join("")
+      : "<p>No national stories published yet.</p>";
+}
+
+loadArticles();
+</script>
+</body>
+</html>
+
 
 </body>
 </html>
