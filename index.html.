@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="People's Choice Magazine - Your voice. Your stories. Your choice.">
+  <title>People's Choice Magazine | Latest News</title>
+
+  <style>
+    :root {
+      --pink: #e7549b;
+      --dark: #171717;
+      --light: #fff1f7;
+      --white: #ffffff;
+      --gray: #777;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: var(--dark);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .topbar {
+      background: var(--dark);
+      color: white;
+      padding: 9px 5%;
+      font-size: 12px;
+    }
+
+    .masthead {
+      background: white;
+      padding: 22px 5%;
+      text-align: center;
+      border-bottom: 3px solid var(--pink);
+    }
+
+    .logo {
+      font-family: Georgia, serif;
+      font-size: clamp(25px, 5vw, 42px);
+      font-weight: bold;
+      letter-spacing: -1.5px;
+    }
+
+    .logo span {
+      color: var(--pink);
+    }
+
+    .tagline {
+      font-size: 10px;
+      letter-spacing: 3px;
+      margin-top: 7px;
+      color: var(--gray);
+    }
+
+    nav {
+      background: var(--dark);
+      color: white;
+      padding: 0 5%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      padding: 17px 22px;
+      font-size: 13px;
+      font-weight: bold;
+      transition: .2s;
+    }
+
+    nav a:hover {
+      background: var(--pink);
+    }
+
+    .container {
+      max-width: 1250px;
+      margin: 25px auto;
+      padding: 0 18px;
+    }
+
+    .section-title {
+      border-left: 5px solid var(--pink);
+      padding-left: 12px;
+      margin-bottom: 18px;
+      font-size: 19px;
+    }
+
+    .hero {
+      position: relative;
+      height: 440px;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.8), transparent),
+        url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600") center/cover;
+      display: flex;
+      align-items: end;
+      color: white;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      padding: 35px;
+      max-width: 650px;
+    }
+
+    .category {
+      display: inline-block;
+      background: var(--pink);
+      color: white;
+      padding: 7px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 13px;
+    }
+
+    .hero h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(28px, 4vw, 43px);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      color: #eee;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .read-more {
+      display: inline-block;
+      border: 1px solid white;
+      padding: 11px 22px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .read-more:hover {
+      background: var(--pink);
+      border-color: var(--pink);
+    }
+
+    .news-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 25px;
+      margin-top: 35px;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .news-card {
+      background: white;
+      overflow: hidden;
+      border: 1px solid #eee;
+    }
+
+    .news-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .news-info {
+      padding: 16px;
+    }
+
+    .news-info small {
+      color: var(--pink);
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    .news-info h3 {
+      font-family: Georgia, serif;
+      font-size: 19px;
+      margin: 9px 0;
+      line-height: 1.3;
+    }
+
+    .news-info p {
+      color: var(--gray);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      background: white;
+      padding: 20px;
+      height: fit-content;
+    }
+
+    .sidebar h2 {
+      font-family: Georgia, serif;
+      font-size: 21px;
+      border-bottom: 2px solid var(--pink);
+      padding-bottom: 12px;
+      margin-bottom: 15px;
+    }
+
+    .top-story {
+      padding: 13px 0;
+      border-bottom: 1px solid #eee;
+      font-family: Georgia, serif;
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .top-story span {
+      display: block;
+      color: var(--pink);
+      font: bold 10px Arial;
+      margin-bottom: 6px;
+    }
+
+    .category-section {
+      margin-top: 40px;
+    }
+
+    .category-banner {
+      background: var(--light);
+      padding: 20px;
+      border-left: 5px solid var(--pink);
+      margin-bottom: 20px;
+    }
+
+    .category-banner h2 {
+      font-family: Georgia, serif;
+      font-size: 25px;
+    }
+
+    .category-banner p {
+      color: var(--gray);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .contact {
+      margin-top: 45px;
+      background: var(--dark);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .contact h2 {
+      font-family: Georgia, serif;
+      font-size: 27px;
+      margin-bottom: 12px;
+    }
+
+    .contact p {
+      color: #ccc;
+      margin: 10px 0;
+    }
+
+    .contact a {
+      color: var(--pink);
+    }
+
+    footer {
+      background: #0d0d0d;
+      color: #aaa;
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+    }
+
+    @media(max-width: 750px) {
+      nav {
+        justify-content: flex-start;
+      }
+
+      nav a {
+        padding: 14px 11px;
+        font-size: 11px;
+      }
+
+      .hero {
+        height: 370px;
+      }
+
+      .hero-content {
+        padding: 20px;
+      }
+
+      .news-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .news-card img {
+        height: 130px;
+      }
+
+      .news-info {
+        padding: 10px;
+      }
+
+      .news-info h3 {
+        font-size: 15px;
+      }
+
+      .news-info p {
+        font-size: 11px;
+      }
+    }
+
+    @media(max-width: 400px) {
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    PEOPLE'S CHOICE MAGAZINE | YOUR DAILY NEWS SOURCE
+  </div>
+
+  <header class="masthead">
+    <div class="logo">PEOPLE'S <span>CHOICE</span></div>
+    <div class="tagline">MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.</div>
+  </header>
+
+  <nav>
+    <a href="#home">HOME</a>
+    <a href="#local">LOCAL NEWS</a>
+    <a href="#national">NATIONAL NEWS</a>
+    <a href="#contact">CONTACT US</a>
+  </nav>
+
+  <main class="container" id="home">
+
+    <div class="hero">
+      <div class="hero-content">
+        <span class="category">Editor's Pick</span>
+        <h1>Your Stories. Your People. Your Magazine.</h1>
+        <p>Discover the latest stories shaping entertainment, music and culture in Zimbabwe.</p>
+        <a href="#local" class="read-more">EXPLORE STORIES →</a>
+      </div>
+    </div>
+
+    <div class="news-layout">
+      <section>
+        <h2 class="section-title">LATEST STORIES</h2>
+
+        <div class="news-grid">
+          <article class="news-card">
+            <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=700" alt="Live music">
+            <div class="news-info">
+              <small>Music</small>
+              <h3>Zimbabwe's Music Scene Continues to Grow</h3>
+              <p>Discover the artists and sounds making waves.</p>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700" alt="Entertainment event">
+            <div class="news-info">
+              <small>Entertainment</small>
+              <h3>Inside Zimbabwe's Entertainment Industry</h3>
+              <p>Events, personalities and stories worth following.</p>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=700" alt="Concert">
+            <div class="news-info">
+              <small>Local News</small>
+              <h3>Celebrating Local Creative Talent</h3>
+              <p>Giving a platform to emerging creative voices.</p>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=700" alt="Singer performing">
+            <div class="news-info">
+              <small>Artists</small>
+              <h3>Meet the Voices Shaping Our Culture</h3>
+              <p>Stories behind the people making a difference.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <h2>Top Stories</h2>
+
+        <div class="top-story">
+          <span>ENTERTAINMENT</span>
+          Zimbabwe's entertainment industry
+        </div>
+
+        <div class="top-story">
+          <span>MUSIC</span>
+          New sounds and emerging artists
+        </div>
+
+        <div class="top-story">
+          <span>LOCAL NEWS</span>
+          Creative talent making headlines
+        </div>
+
+        <div class="top-story">
+          <span>NATIONAL NEWS</span>
+          Stories from across Zimbabwe
+        </div>
+      </aside>
+    </div>
+
+    <section class="category-section" id="local">
+      <div class="category-banner">
+        <h2>Local News</h2>
+        <p>Entertainment and music stories from our communities.</p>
+      </div>
+      <p>Our local news stories will appear here once connected to Supabase.</p>
+    </section>
+
+    <section class="category-section" id="national">
+      <div class="category-banner">
+        <h2>National News</h2>
+        <p>Entertainment and music developments from across Zimbabwe.</p>
+      </div>
+      <p>Our national news stories will appear here once connected to Supabase.</p>
+    </section>
+
+  </main>
+
+  <section class="contact" id="contact">
+    <h2>Contact People's Choice Magazine</h2>
+    <p>Have a story, news tip or collaboration proposal?</p>
+    <p>Get in touch with our editorial team.</p>
+    <p><a href="mailto:peopleschoicemagazine@gmail.com">Email Our Editorial Team</a></p>
+  </section>
+
+  <footer>
+    © 2026 People's Choice Magazine. All Rights Reserved.
+  </footer>
+
+</body>
+</html>
