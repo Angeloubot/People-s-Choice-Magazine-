@@ -484,23 +484,44 @@ function escapeHTML(value) {
   })[char]);
 }
 
+
 function articleCard(article) {
   const image = article.image_url ||
     "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
 
+  const articleLink = "article.html?id=" +
+    encodeURIComponent(article.id);
+
   return `
     <article class="news-card">
-      <img src="${escapeHTML(image)}"
-           alt="${escapeHTML(article.title)}"
-           onerror="this.src='https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700'">
+      <a href="${articleLink}">
+        <img src="${escapeHTML(image)}"
+             alt="${escapeHTML(article.title)}">
+      </a>
+
       <div class="news-info">
-        <small>${escapeHTML(article.category)} · ${escapeHTML(article.section)}</small>
-        <h3>${escapeHTML(article.title)}</h3>
+        <small>
+          ${escapeHTML(article.category)} ·
+          ${escapeHTML(article.section)}
+        </small>
+
+        <h3>
+          <a href="${articleLink}">
+            ${escapeHTML(article.title)}
+          </a>
+        </h3>
+
         <p>${escapeHTML(article.excerpt)}</p>
+
+        <a href="${articleLink}" class="read-more"
+           style="color:#e7549b;border-color:#e7549b;margin-top:12px">
+          READ FULL STORY →
+        </a>
       </div>
     </article>
   `;
 }
+
 
 async function loadArticles() {
   const { data, error } = await db
