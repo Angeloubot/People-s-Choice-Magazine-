@@ -5,7 +5,7 @@ const path = require("path");
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
-const SITE_URL = "https://peopleschoicemagazine.com";
+const SITE_URL = "https://angeloubot.github.io/People-s-Choice-Magazine-";
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
   throw new Error("Missing Supabase environment variables.");
