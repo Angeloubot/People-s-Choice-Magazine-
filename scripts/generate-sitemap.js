@@ -1,10 +1,9 @@
 
-const { createClient } = await import("@supabase/supabase-js");
+const { createClient } = require("@supabase/supabase-js");
 const fs = require("fs");
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
-
 const SITE_URL = "https://peopleschoicemagazine.com";
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
@@ -14,7 +13,7 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function escapeXML(value) {
-  return String(value).replace(/[<>&'"]/g, (char) => ({
+  return String(value).replace(/[<>&'"]/g, char => ({
     "<": "&lt;",
     ">": "&gt;",
     "&": "&amp;",
@@ -23,7 +22,9 @@ function escapeXML(value) {
   })[char]);
 }
 
-async function getPublishedArticles() {
+async function generateSitemap() {
+  console.log("Fetching published articles...");
+
   let articles = [];
   let start = 0;
   const pageSize = 1000;
@@ -38,28 +39,21 @@ async function getPublishedArticles() {
 
     if (error) throw error;
 
-    articles = articles.concat(data);
+    articles.push(...data);
 
     if (data.length < pageSize) break;
 
     start += pageSize;
   }
 
-  return articles;
-}
-
-async function generateSitemap() {
-  console.log("Fetching published magazine articles...");
-
-  const articles = await getPublishedArticles();
-
   const urls = [
     {
-      loc: `${SITE_URL}/`,
+      loc: SITE_URL + "/",
       lastmod: new Date().toISOString()
     },
     ...articles.map(article => ({
-      loc: `${SITE_URL}/article.html?id=${encodeURIComponent(article.id)}`,
+      loc: SITE_URL + "/article.html?id=" +
+        encodeURIComponent(article.id),
       lastmod: article.published_at || article.created_at
     }))
   ];
@@ -74,10 +68,10 @@ ${urls.map(item => `  <url>
 
   fs.writeFileSync("sitemap.xml", xml, "utf8");
 
-  console.log(`Successfully generated sitemap with ${articles.length} articles.`);
+  console.log(`Sitemap generated: ${articles.length} articles.`);
 }
 
 generateSitemap().catch(error => {
-  console.error("Sitemap generation failed:", error);
+  console.error("Sitemap error:", error);
   process.exit(1);
 });
