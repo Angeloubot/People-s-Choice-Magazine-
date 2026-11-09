@@ -6,6 +6,9 @@ on:
   schedule:
     - cron: '0 */6 * * *'
 
+permissions:
+  contents: write
+
 jobs:
   update-sitemap:
     runs-on: ubuntu-latest
@@ -22,16 +25,16 @@ jobs:
       - name: Install Supabase
         run: npm install @supabase/supabase-js
 
-      - name: Generate sitemap
+      - name: Generate sitemap and social previews
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
-        run: node generate-sitemap.js
+        run: node scripts/generate-sitemap.js
 
-      - name: Commit and push sitemap
+      - name: Commit and push generated files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sitemap.xml
-          git diff --cached --quiet || git commit -m "Update magazine sitemap"
+          git add sitemap.xml articles/
+          git diff --cached --quiet || git commit -m "Update sitemap and social previews"
           git push
