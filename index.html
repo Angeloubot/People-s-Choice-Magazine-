@@ -3,776 +3,127 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="description" content="People's Choice Magazine brings you the latest Zimbabwean entertainment news, music, artists, celebrity interviews, local stories, events and emerging talent. Your voice. Your stories. Your choice.">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="People's Choice Magazine brings you Zimbabwean entertainment news, music, artists, interviews and community stories.">
+<meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://peopleschoicemagazine.co.zw/">
-
 <meta property="og:type" content="website">
 <meta property="og:title" content="People's Choice Magazine | Zimbabwe Entertainment & News">
 <meta property="og:description" content="Discover Zimbabwean artists, entertainment, interviews, music and community stories.">
-<meta property="og:url" content="https://peopleschoicemagazine.co.za/">
+<meta property="og:url" content="https://peopleschoicemagazine.co.zw/">
 <meta property="og:site_name" content="People's Choice Magazine">
-
 <meta name="twitter:card" content="summary_large_image">
-
+<meta property="og:image" content="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200">
 <title>People's Choice Magazine | Zimbabwe News, Music & Entertainment</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
-
 <style>
-:root{
---pink:#e7549b;
---dark:#171717;
---light:#fff1f7;
---white:#fff;
---gray:#777;
---background:#f5f5f5;
---text:#171717;
---primary:var(--pink);
---font:Arial,Helvetica,sans-serif;
-}
-
+:root{--pink:#e7549b;--dark:#171717;--light:#fff1f7;--white:#fff;--gray:#777;--page:#f5f5f5}
 *{box-sizing:border-box;margin:0;padding:0}
-
-body{
-font-family:var(--font);
-background:var(--background);
-color:var(--text);
-}
-
+body{font-family:Arial,Helvetica,sans-serif;background:var(--page);color:var(--dark)}
 a{text-decoration:none;color:inherit}
-button,input{font-family:inherit}
-
-.topbar{
-background:var(--dark);
-color:white;
-padding:9px 5%;
-font-size:12px;
-}
-
-.masthead{
-background:white;
-padding:22px 5%;
-text-align:center;
-border-bottom:3px solid var(--primary);
-}
-
-.logo{
-font-family:Georgia,serif;
-font-size:clamp(25px,5vw,42px);
-font-weight:bold;
-letter-spacing:-1.5px;
-}
-
-.logo span{color:var(--primary)}
-
-.logo-image{
-max-height:85px;
-max-width:260px;
-width:auto;
-object-fit:contain;
-display:none;
-margin:0 auto 8px;
-}
-
-.tagline{
-font-size:10px;
-letter-spacing:3px;
-margin-top:7px;
-color:var(--gray);
-}
-
-nav{
-background:var(--dark);
-color:white;
-padding:0 5%;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-wrap:wrap;
-}
-
-nav a{
-padding:17px 18px;
-font-size:12px;
-font-weight:bold;
-transition:.2s;
-}
-
-nav a:hover{background:var(--primary)}
-
-.container{
-max-width:1250px;
-margin:25px auto;
-padding:0 18px;
-}
-
-.homepage-sections{
-display:grid;
-grid-template-columns:minmax(0,2fr) minmax(250px,1fr);
-gap:25px;
-align-items:start;
-}
-
-.homepage-sections>.full-width{grid-column:1/-1}
-#hero{grid-column:1/-1}
-#latest-section{grid-column:1;min-width:0}
-#top-stories-section{grid-column:2}
-
-.section-title{
-border-left:5px solid var(--primary);
-padding-left:12px;
-margin-bottom:18px;
-font-size:19px;
-}
-
-.section-hidden{display:none!important}
-
-.hero{
-position:relative;
-height:440px;
-background:#222;
-display:flex;
-align-items:end;
-color:white;
-overflow:hidden;
-border-radius:3px;
-}
-
-.hero-image{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.hero::after{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(90deg,rgba(0,0,0,.85),rgba(0,0,0,.25));
-}
-
-.hero-content{
-position:relative;
-z-index:2;
-padding:35px;
-max-width:700px;
-}
-
-.category{
-display:inline-block;
-background:var(--primary);
-color:white;
-padding:7px 12px;
-font-size:11px;
-font-weight:bold;
-text-transform:uppercase;
-margin-bottom:13px;
-}
-
-.hero h1{
-font-family:Georgia,serif;
-font-size:clamp(28px,4vw,43px);
-line-height:1.15;
-margin-bottom:14px;
-}
-
-.hero p{
-color:#eee;
-line-height:1.6;
-margin-bottom:20px;
-}
-
-.read-more{
-display:inline-block;
-border:1px solid white;
-padding:11px 22px;
-border-radius:3px;
-font-size:12px;
-font-weight:bold;
-}
-
-.read-more:hover{
-background:var(--primary);
-border-color:var(--primary);
-}
-
+.topbar{background:var(--dark);color:white;padding:9px 5%;font-size:12px}
+.masthead{background:white;padding:22px 5%;text-align:center;border-bottom:3px solid var(--pink)}
+.logo{font:bold clamp(25px,5vw,42px) Georgia,serif;letter-spacing:-1.5px}
+.logo span{color:var(--pink)}
+.logo-image{max-height:85px;max-width:260px;width:auto;object-fit:contain;display:none;margin:0 auto 8px}
+.tagline{font-size:10px;letter-spacing:3px;margin-top:7px;color:var(--gray)}
+nav{background:var(--dark);color:white;padding:0 5%;display:flex;justify-content:center;align-items:center;flex-wrap:wrap}
+nav a{padding:17px 18px;font-size:12px;font-weight:bold}
+nav a:hover{background:var(--pink)}
+.container{max-width:1250px;margin:25px auto;padding:0 18px}
+.section-title{border-left:5px solid var(--pink);padding-left:12px;margin-bottom:18px;font-size:19px}
+.hero{position:relative;height:440px;background:#222;display:flex;align-items:end;color:white;overflow:hidden;border-radius:3px}
+.hero-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.85),rgba(0,0,0,.25))}
+.hero-content{position:relative;z-index:2;padding:35px;max-width:700px}
+.category{display:inline-block;background:var(--pink);color:white;padding:7px 12px;font-size:11px;font-weight:bold;text-transform:uppercase;margin-bottom:13px}
+.hero h1{font:clamp(28px,4vw,43px)/1.15 Georgia,serif;margin-bottom:14px}
+.hero p{color:#eee;line-height:1.6;margin-bottom:20px}
+.read-more{display:inline-block;border:1px solid white;padding:11px 22px;border-radius:3px;font-size:12px;font-weight:bold}
+.read-more:hover{background:var(--pink);border-color:var(--pink)}
 .hero-link{display:block;color:white}
-
-.hero-controls{
-position:absolute;
-z-index:4;
-right:20px;
-bottom:20px;
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.hero-arrow{
-width:38px;
-height:38px;
-border:1px solid white;
-background:rgba(0,0,0,.5);
-color:white;
-border-radius:50%;
-cursor:pointer;
-font-size:20px;
-}
-
-.hero-arrow:hover{background:var(--primary)}
-.hero-dots{display:flex;gap:7px;align-items:center}
-
-.hero-dot{
-width:9px;
-height:9px;
-border:0;
-border-radius:50%;
-background:rgba(255,255,255,.6);
-cursor:pointer;
-}
-
-.hero-dot.active{
-background:var(--primary);
-width:23px;
-border-radius:10px;
-}
-
-.news-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:20px;
-}
-
-.news-card{
-background:white;
-overflow:hidden;
-border:1px solid #eee;
-min-width:0;
-}
-
-.news-card img{
-width:100%;
-height:190px;
-object-fit:cover;
-display:block;
-}
-
+.hero-controls{position:absolute;z-index:4;right:20px;bottom:20px;display:flex;align-items:center;gap:10px}
+.hero-arrow{width:38px;height:38px;border:1px solid white;background:#0008;color:white;border-radius:50%;cursor:pointer;font-size:20px}
+.hero-dots{display:flex;gap:7px}
+.hero-dot{width:9px;height:9px;border:0;border-radius:50%;background:#ffffff99;cursor:pointer}
+.hero-dot.active{background:var(--pink);width:23px;border-radius:10px}
+.news-layout{display:grid;grid-template-columns:2fr 1fr;gap:25px;margin-top:35px}
+.news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.news-card{background:white;overflow:hidden;border:1px solid #eee}
+.news-card img{width:100%;height:190px;object-fit:cover;display:block}
 .news-info{padding:16px}
-
-.news-info small{
-color:var(--primary);
-font-weight:bold;
-text-transform:uppercase;
-font-size:10px;
-}
-
-.news-info h3{
-font-family:Georgia,serif;
-font-size:19px;
-margin:9px 0;
-line-height:1.3;
-}
-
-.news-info p{
-color:var(--gray);
-font-size:13px;
-line-height:1.6;
-}
-
-.sidebar{
-background:white;
-padding:20px;
-height:fit-content;
-}
-
-.sidebar h2{
-font-family:Georgia,serif;
-font-size:21px;
-border-bottom:2px solid var(--primary);
-padding-bottom:12px;
-margin-bottom:15px;
-}
-
-.top-story{
-padding:13px 0;
-border-bottom:1px solid #eee;
-font-family:Georgia,serif;
-font-weight:bold;
-font-size:15px;
-line-height:1.4;
-}
-
-.top-story span{
-display:block;
-color:var(--primary);
-font:bold 10px Arial;
-margin-bottom:6px;
-}
-
+.news-info small{color:var(--pink);font-weight:bold;text-transform:uppercase;font-size:10px}
+.news-info h3{font:19px/1.3 Georgia,serif;margin:9px 0}
+.news-info p{color:var(--gray);font-size:13px;line-height:1.6}
+.share-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;margin-top:11px;padding:9px 12px;border:1px solid var(--pink);border-radius:3px;background:#fff;color:var(--pink);font-size:11px;font-weight:bold;cursor:pointer}
+.share-button:hover{background:var(--pink);color:#fff}
+.sidebar{background:white;padding:20px;height:fit-content}
+.sidebar h2{font:21px Georgia,serif;border-bottom:2px solid var(--pink);padding-bottom:12px;margin-bottom:15px}
+.top-story{padding:13px 0;border-bottom:1px solid #eee;font:bold 15px/1.4 Georgia,serif}
+.top-story span{display:block;color:var(--pink);font:bold 10px Arial;margin-bottom:6px}
 .category-section{margin-top:40px}
-
-.category-banner{
-background:var(--light);
-padding:20px;
-border-left:5px solid var(--primary);
-margin-bottom:20px;
-}
-
-.category-banner h2{
-font-family:Georgia,serif;
-font-size:25px;
-}
-
-.category-banner p{
-color:var(--gray);
-font-size:13px;
-margin-top:6px;
-}
-
-/* TOP 5 MUSIC CHART */
-
-#music-chart{margin-top:20px}
-
-.chart-heading{
-background:var(--dark);
-color:white;
-padding:25px;
-border-left:5px solid var(--primary);
-margin-bottom:20px;
-}
-
-.chart-heading h2{
-font-family:Georgia,serif;
-font-size:27px;
-}
-
-.chart-heading p{
-color:#ddd;
-font-size:13px;
-margin-top:8px;
-line-height:1.6;
-}
-
-.chart-auth{
-background:white;
-border:1px solid #eee;
-padding:20px;
-margin-bottom:20px;
-}
-
-.chart-auth h3{
-font-family:Georgia,serif;
-font-size:19px;
-margin-bottom:8px;
-}
-
-.chart-auth p{
-font-size:13px;
-color:var(--gray);
-line-height:1.5;
-margin-bottom:12px;
-}
-
-.chart-user-status{
-font-size:12px;
-color:#555;
-margin-top:10px;
-}
-
-.chart-message{
-font-size:12px;
-margin-top:12px;
-color:#555;
-line-height:1.5;
-}
-
-.chart-grid{
-display:grid;
-grid-template-columns:repeat(5,minmax(0,1fr));
-gap:15px;
-}
-
-.chart-card{
-background:white;
-border:1px solid #eee;
-overflow:hidden;
-position:relative;
-min-width:0;
-transition:box-shadow .2s,outline .2s;
-scroll-margin-top:25px;
-}
-
+.category-banner{background:var(--light);padding:20px;border-left:5px solid var(--pink);margin-bottom:20px}
+.category-banner h2{font:25px Georgia,serif}
+.category-banner p{color:var(--gray);font-size:13px;margin-top:6px}
+#music-chart,#creators{margin-top:45px}
+.chart-heading,.creator-heading{background:var(--dark);color:white;padding:25px;border-left:5px solid var(--pink);margin-bottom:20px}
+.chart-heading h2,.creator-heading h2{font:27px Georgia,serif}
+.chart-heading p,.creator-heading p{color:#ddd;font-size:13px;margin-top:8px;line-height:1.6}
+.chart-auth{background:white;border:1px solid #eee;padding:20px;margin-bottom:20px}
+.chart-auth h3{font:19px Georgia,serif;margin-bottom:8px}
+.chart-auth p{font-size:13px;color:var(--gray);line-height:1.5;margin-bottom:12px}
+.chart-auth-fields{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:center}
+.chart-auth input{width:100%;min-width:0;padding:12px;border:1px solid #ddd;border-radius:3px;font-size:13px}
+.chart-button{border:0;background:var(--pink);color:white;padding:12px 17px;border-radius:3px;font-weight:bold;font-size:12px;cursor:pointer}
+.chart-button:disabled{opacity:.6;cursor:not-allowed}
+.chart-secondary{background:var(--dark)}
+.chart-message,.chart-user-status{font-size:12px;margin-top:12px;color:#555;line-height:1.5}
+.chart-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px}
+.chart-card{background:white;border:1px solid #eee;overflow:hidden}
 .chart-cover-wrap{position:relative}
-
-.chart-cover{
-width:100%;
-aspect-ratio:1/1;
-object-fit:cover;
-display:block;
-background:#eee;
-}
-
-.chart-rank{
-position:absolute;
-top:10px;
-left:10px;
-background:var(--primary);
-color:white;
-font-weight:bold;
-font-size:15px;
-width:34px;
-height:34px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:50%;
-}
-
+.chart-cover{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#eee}
+.chart-rank{position:absolute;top:10px;left:10px;background:var(--pink);color:white;font-weight:bold;font-size:15px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%}
 .chart-info{padding:13px}
-
-.chart-info h3{
-font-family:Georgia,serif;
-font-size:16px;
-line-height:1.3;
-margin-bottom:6px;
-}
-
-.chart-info p{
-font-size:12px;
-color:var(--gray);
-margin-bottom:12px;
-}
-
-.chart-card-actions{
-display:flex;
-flex-direction:column;
-gap:8px;
-}
-
-.chart-vote{
-width:100%;
-border:0;
-background:var(--primary);
-color:white;
-padding:11px 8px;
-font-size:11px;
-font-weight:bold;
-border-radius:3px;
-cursor:pointer;
-}
-
-.chart-vote:hover{opacity:.85}
-
-.chart-vote:disabled{
-opacity:.6;
-cursor:not-allowed;
-}
-
-.chart-stream{
-display:block;
-text-align:center;
-border:1px solid #ddd;
-padding:9px 6px;
-font-size:10px;
-font-weight:bold;
-border-radius:3px;
-}
-
-.chart-stream:hover{
-border-color:var(--primary);
-color:var(--primary);
-}
-
-.chart-audio{
-width:100%;
-height:36px;
-}
-
-.chart-movement{
-display:inline-block;
-font-size:10px;
-font-weight:bold;
-padding:5px 7px;
-border-radius:3px;
-margin:0 0 9px;
-}
-
-.movement-up{background:#e5f7ec;color:#168342}
-.movement-down{background:#fde8e8;color:#bb3030}
-.movement-same{background:#eee;color:#555}
-.movement-new{background:#e8efff;color:#315bb5}
-
-.chart-peak{
-display:inline-block;
-font-size:9px;
-font-weight:bold;
-padding:4px 6px;
-border-radius:3px;
-background:#fff2cf;
-color:#8a6200;
-margin:0 0 9px 4px;
-}
-
-.chart-share-actions{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:6px;
-}
-
-.chart-share-button{
-width:100%;
-border:1px solid #ddd;
-background:white;
-color:#333;
-padding:10px 5px;
-font-size:10px;
-font-weight:bold;
-border-radius:3px;
-cursor:pointer;
-}
-
-.chart-share-button:hover{
-border-color:var(--primary);
-color:var(--primary);
-}
-
-.chart-share-button.share-primary{
-background:var(--dark);
-color:white;
-border-color:var(--dark);
-}
-
-.chart-share-button:disabled{
-opacity:.6;
-cursor:not-allowed;
-}
-
-.chart-card.song-highlight{
-outline:3px solid var(--primary);
-box-shadow:0 0 15px rgba(231,84,155,.25);
-}
-
-.chart-empty{
-background:white;
-padding:25px;
-text-align:center;
-color:#777;
-grid-column:1/-1;
-line-height:1.6;
-}
-
-.chart-note{
-font-size:11px;
-color:#777;
-margin-top:15px;
-line-height:1.5;
-}
-
-/* CREATORS CORNER */
-
-#creators{margin-top:20px}
-
-.creator-heading{
-background:var(--dark);
-color:white;
-padding:25px;
-border-left:5px solid var(--primary);
-margin-bottom:20px;
-}
-
-.creator-heading h2{
-font-family:Georgia,serif;
-font-size:27px;
-}
-
-.creator-heading p{
-color:#ddd;
-font-size:13px;
-margin-top:8px;
-}
-
-.video-grid{
-display:grid;
-grid-template-columns:repeat(3,minmax(0,1fr));
-gap:20px;
-}
-
-.video-card{
-background:white;
-border:1px solid #eee;
-overflow:hidden;
-border-radius:4px;
-min-width:0;
-}
-
-.video-card video{
-width:100%;
-aspect-ratio:16/9;
-display:block;
-background:#111;
-object-fit:contain;
-}
-
+.chart-info h3{font:16px/1.3 Georgia,serif;margin-bottom:6px}
+.chart-info p{font-size:12px;color:var(--gray);margin-bottom:12px}
+.chart-card-actions{display:flex;flex-direction:column;gap:8px}
+.chart-vote{width:100%;border:0;background:var(--pink);color:white;padding:11px 8px;font-size:11px;font-weight:bold;border-radius:3px;cursor:pointer}
+.chart-stream{display:block;text-align:center;border:1px solid #ddd;padding:9px 6px;font-size:10px;font-weight:bold;border-radius:3px}
+.chart-empty,.video-empty,.video-loading{background:white;padding:25px;text-align:center;color:#777;grid-column:1/-1;line-height:1.6}
+.chart-note{font-size:11px;color:#777;margin-top:15px;line-height:1.5}
+.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.video-card{background:white;border:1px solid #eee;overflow:hidden;border-radius:4px}
+.video-card video{width:100%;aspect-ratio:16/9;display:block;background:#111;object-fit:contain}
 .video-info{padding:15px}
-
-.video-category{
-color:var(--primary);
-font-size:10px;
-font-weight:bold;
-text-transform:uppercase;
-}
-
-.video-info h3{
-font-family:Georgia,serif;
-font-size:18px;
-line-height:1.3;
-margin:8px 0;
-}
-
-.video-info p{
-font-size:12px;
-color:var(--gray);
-line-height:1.5;
-margin-top:6px;
-}
-
-.creator-name{
-font-weight:bold;
-color:#333!important;
-}
-
-.featured-tag{
-display:inline-block;
-background:var(--light);
-color:var(--primary);
-font-size:10px;
-font-weight:bold;
-padding:5px 8px;
-margin-bottom:8px;
-}
-
-.video-empty,.video-loading{
-background:white;
-padding:25px;
-text-align:center;
-color:#777;
-grid-column:1/-1;
-}
-
-.contact{
-grid-column:1/-1;
-width:100vw;
-margin-left:calc(50% - 50vw);
-background:var(--dark);
-color:white;
-padding:40px 20px;
-text-align:center;
-}
-
-.contact h2{
-font-family:Georgia,serif;
-font-size:27px;
-margin-bottom:12px;
-}
-
+.video-category{color:var(--pink);font-size:10px;font-weight:bold;text-transform:uppercase}
+.video-info h3{font:18px/1.3 Georgia,serif;margin:8px 0}
+.video-info p{font-size:12px;color:var(--gray);line-height:1.5;margin-top:6px}
+.creator-name{font-weight:bold;color:#333!important}
+.featured-tag{display:inline-block;background:var(--light);color:var(--pink);font-size:10px;font-weight:bold;padding:5px 8px;margin-bottom:8px}
+.contact{margin-top:45px;background:var(--dark);color:white;padding:40px 20px;text-align:center}
+.contact h2{font:27px Georgia,serif;margin-bottom:12px}
 .contact p{color:#ccc;margin:10px 0}
-.contact a{color:var(--primary)}
-
-footer{
-background:#0d0d0d;
-color:#aaa;
-text-align:center;
-padding:20px;
-font-size:12px;
-}
-
-@media(max-width:900px){
-.homepage-sections{
-grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-}
-.chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-
-@media(max-width:750px){
-nav{justify-content:flex-start}
-nav a{padding:14px 10px;font-size:10px}
-
-.homepage-sections{
-grid-template-columns:1fr;
-gap:25px;
-}
-
-#hero,#latest-section,#top-stories-section,
-.homepage-sections>.full-width{
-grid-column:1/-1;
-}
-
-.hero{height:370px}
-.hero-content{padding:20px}
-
-.hero-controls{right:12px;bottom:12px}
-
-.news-grid{
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-.news-card img{height:130px}
-.news-info{padding:10px}
-.news-info h3{font-size:15px}
-.news-info p{font-size:11px}
-
-.video-grid{
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-}
-
-.video-info{padding:10px}
-.video-info h3{font-size:15px}
-
-.chart-grid{
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-}
-
-.chart-info{padding:10px}
-.chart-info h3{font-size:14px}
-}
-
-@media(max-width:450px){
-.news-grid{grid-template-columns:1fr}
-.video-grid{grid-template-columns:1fr}
-.chart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.chart-heading h2{font-size:23px}
-}
+.contact a{color:var(--pink)}
+footer{background:#0d0d0d;color:#aaa;text-align:center;padding:20px;font-size:12px}
+[hidden],.section-hidden{display:none!important}
+@media(max-width:900px){.chart-grid{grid-template-columns:repeat(3,1fr)}.chart-auth-fields{grid-template-columns:1fr 1fr}}
+@media(max-width:750px){nav{justify-content:flex-start}nav a{padding:14px 10px;font-size:10px}.hero{height:370px}.hero-content{padding:20px}.news-layout{grid-template-columns:1fr}.news-grid{gap:10px}.news-card img{height:130px}.news-info{padding:10px}.news-info h3{font-size:15px}.news-info p{font-size:11px}.video-grid{grid-template-columns:repeat(2,1fr);gap:10px}.video-info{padding:10px}.video-info h3{font-size:15px}.chart-grid{grid-template-columns:repeat(2,1fr);gap:10px}.chart-info{padding:10px}.chart-info h3{font-size:14px}}
+@media(max-width:450px){.news-grid,.video-grid{grid-template-columns:1fr}.chart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.chart-auth-fields{grid-template-columns:1fr}.chart-heading h2{font-size:23px}}
 </style>
 </head>
-
 <body>
 
-<div class="topbar" id="site-topbar">
-PEOPLE'S CHOICE MAGAZINE | YOUR DAILY NEWS SOURCE
-</div>
+<div class="topbar" id="site-topbar">PEOPLE'S CHOICE MAGAZINE | YOUR DAILY NEWS SOURCE</div>
 
 <header class="masthead">
 <img id="site-logo" class="logo-image" alt="Magazine logo">
-
-<div class="logo" id="site-name">
-PEOPLE'S <span>CHOICE</span>
-</div>
-
-<div class="tagline" id="site-tagline">
-MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.
-</div>
+<div class="logo" id="site-name">PEOPLE'S <span>CHOICE</span></div>
+<div class="tagline" id="site-tagline">MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.</div>
 </header>
 
-<nav id="main-navigation">
+<nav id="main-nav">
 <a href="#home">HOME</a>
 <a href="#local">LOCAL NEWS</a>
 <a href="#national">NATIONAL NEWS</a>
@@ -783,1168 +134,526 @@ MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.
 
 <main class="container" id="home">
 
-<div class="homepage-sections" id="homepage-sections">
-
 <div class="hero" id="hero">
-
-<img class="hero-image" id="hero-image"
-src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600"
-alt="Featured magazine story">
-
+<img class="hero-image" id="hero-image" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600" alt="Featured story">
 <div class="hero-content">
 <a href="#local" class="hero-link" id="hero-link">
 <span class="category" id="hero-label">EDITOR'S PICK</span>
-
 <h1 id="hero-title">Your Stories. Your People. Your Magazine.</h1>
-
-<p id="hero-subtitle">
-Discover the latest stories shaping entertainment, music and culture in Zimbabwe.
-</p>
-
+<p id="hero-subtitle">Discover the latest stories shaping entertainment, music and culture in Zimbabwe.</p>
 <span class="read-more" id="hero-button">EXPLORE STORIES →</span>
 </a>
 </div>
-
 <div class="hero-controls" id="hero-controls" hidden>
 <div class="hero-dots" id="hero-dots"></div>
 <button class="hero-arrow" id="hero-prev" type="button">‹</button>
 <button class="hero-arrow" id="hero-next" type="button">›</button>
 </div>
-
 </div>
 
-<section id="latest-section">
+<div class="news-layout" id="latest-section">
+<section>
 <h2 class="section-title" id="latest-heading">LATEST STORIES</h2>
-<div class="news-grid" id="latest-news">
-<p>Loading latest stories...</p>
-</div>
+<div class="news-grid" id="latest-news"><p>Loading latest stories...</p></div>
 </section>
-
 <aside class="sidebar" id="top-stories-section">
-<h2 id="top-stories-heading">Top Stories</h2>
+<h2>Top Stories</h2>
 <div id="top-stories">Loading stories...</div>
 </aside>
+</div>
 
-<section id="music-chart" class="full-width">
-
+<section id="music-chart">
 <div class="chart-heading">
 <h2 id="chart-heading">🏆 PEOPLE'S CHOICE TOP 5</h2>
-
-<p id="chart-description">
-Your favourite music. Your choice.
-Discover this week's top five songs and vote for the music you love.
-</p>
+<p id="chart-description">Your favourite music. Your choice. Discover this week's top five songs and vote for the music you love.</p>
 </div>
-
 <div class="chart-auth">
-
-<h3>Cast Your Vote</h3>
-
-<p>
-Support your favourite song. Each eligible visitor can vote once per chart week.
-</p>
-
-<p id="chart-user-status" class="chart-user-status">
-Preparing voting session...
-</p>
-
-<p id="chart-auth-message" class="chart-message" aria-live="polite">
-Loading voting system...
-</p>
-
+<h3>Join the People's Choice Chart</h3>
+<p>Vote once per chart week. A private anonymous session is used to help prevent repeat votes. Vote totals are never displayed publicly.</p>
+<div class="chart-message" id="chart-auth-message" aria-live="polite">Preparing voting...</div>
+<div class="chart-user-status" id="chart-user-status">Connecting...</div>
 </div>
-
-<div class="chart-grid" id="chart-grid"></div>
-
-<p class="chart-note">
-Rankings are based on votes received during the current chart week.
-Vote totals are not displayed publicly.
-</p>
-
+<div class="chart-grid" id="chart-grid"><div class="chart-empty">Loading this week's Top 5 songs...</div></div>
+<p class="chart-note">Rankings are based on votes received during the current chart week. Vote totals are not displayed publicly.</p>
 </section>
 
-<section id="creators" class="category-section full-width">
-
+<section id="creators" class="category-section">
 <div class="creator-heading">
 <h2 id="creators-heading">🎬 CREATORS' CORNER</h2>
-
-<p id="creators-description">
-Discover local content creators, comedy skits, entertainment videos and emerging talent.
-</p>
+<p id="creators-description">Discover local content creators, comedy skits, entertainment videos and emerging talent.</p>
 </div>
-
-<div class="video-grid" id="video-grid">
-<div class="video-loading">Loading videos and skits...</div>
-</div>
-
+<div class="video-grid" id="video-grid"><div class="video-loading">Loading videos and skits...</div></div>
 </section>
 
-<section class="category-section full-width" id="local">
-
+<section class="category-section" id="local">
 <div class="category-banner">
 <h2 id="local-heading">Local News</h2>
 <p id="local-description">Stories and developments from our communities.</p>
 </div>
-
 <div class="news-grid" id="local-news"></div>
-
 </section>
 
-<section class="category-section full-width" id="national">
-
+<section class="category-section" id="national">
 <div class="category-banner">
 <h2 id="national-heading">National News</h2>
 <p id="national-description">News and developments from across Zimbabwe.</p>
 </div>
-
 <div class="news-grid" id="national-news"></div>
-
 </section>
 
-<section class="contact" id="contact">
-
-<h2 id="contact-heading">Contact People's Choice Magazine</h2>
-
-<p id="contact-intro">
-Have a story, news tip or collaboration proposal?
-</p>
-
-<p id="contact-description">
-Get in touch with our editorial team.
-</p>
-
-<p>
-<a id="contact-email" href="mailto:peopleschoicemagazine@gmail.com">
-Email Our Editorial Team
-</a>
-</p>
-
-</section>
-
-</div>
 </main>
 
-<footer id="site-footer">
-© 2026 People's Choice Magazine. All Rights Reserved.
-</footer>
+<section class="contact" id="contact">
+<h2 id="contact-heading">Contact People's Choice Magazine</h2>
+<p id="contact-intro">Have a story, news tip or collaboration proposal?</p>
+<p id="contact-description">Get in touch with our editorial team.</p>
+<p><a id="contact-email" href="mailto:peopleschoicemagazine@gmail.com">Email Our Editorial Team</a></p>
+</section>
+
+<footer id="site-footer">© 2026 People's Choice Magazine. All Rights Reserved.</footer>
 
 <script>
 "use strict";
 
-/* SUPABASE CONNECTION */
-
-if(!window.supabase){
-throw new Error("Supabase library failed to load.");
+if(!window.supabase||typeof SUPABASE_URL==="undefined"||typeof SUPABASE_PUBLISHABLE_KEY==="undefined"){
+throw new Error("Supabase or config.js is missing.");
 }
 
-if(typeof SUPABASE_URL==="undefined" ||
-typeof SUPABASE_PUBLISHABLE_KEY==="undefined"){
-throw new Error("Supabase configuration is missing. Check config.js.");
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const $=id=>document.getElementById(id);
+const fallbackImage="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
+
+function esc(v){
+return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 }
 
-const db=window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY
-);
-
-function escapeHTML(value){
-return String(value??"").replace(/[&<>"']/g,char=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#039;"
-})[char]);
+function safeUrl(v,fallback="#"){
+try{
+const u=new URL(String(v||""),location.href);
+return ["http:","https:"].includes(u.protocol)?u.href:fallback;
+}catch{return fallback;}
 }
 
-function safeLink(value,fallback="#"){
-const url=String(value||"").trim();
-
-if(/^https?:\/\//i.test(url))return url;
-if(url.startsWith("#"))return url;
-if(url.startsWith("/")&&!url.startsWith("//"))return url;
-
-if(url&&!url.startsWith("//")&&!url.includes(":")&&!url.startsWith("\\"))return url;
-
-return fallback;
+function safeImage(v){
+return /^https?:\/\//i.test(String(v||""))?String(v):fallbackImage;
 }
 
-function safeHttpUrl(value){
-const url=String(value||"").trim();
-return /^https?:\/\//i.test(url)?url:"";
+/* CLEAN SHARING LINKS
+   These routes require the Cloudflare Worker to be configured.
+*/
+const SITE_ORIGIN="https://peopleschoicemagazine.co.zw";
+
+function makeSlug(value){
+return String(value||"content")
+.toLowerCase()
+.normalize("NFKD")
+.replace(/[\u0300-\u036f]/g,"")
+.replace(/[^a-z0-9]+/g,"-")
+.replace(/^-+|-+$/g,"")
+.slice(0,70)||"content";
 }
 
-function safeImage(value){
-const url=String(value||"").trim();
-
-if(/^https?:\/\//i.test(url))return url;
-
-return "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
+function makeShareUrl(type,item){
+return SITE_ORIGIN+"/share/"+type+"/"+makeSlug(item.title)+"-"+encodeURIComponent(String(item.id||""));
 }
 
-/* WEBSITE SETTINGS */
+async function shareContent(button){
+const id=button.dataset.shareId;
+const title=button.dataset.shareTitle||"People's Choice Magazine";
+const description=button.dataset.shareDescription||"Discover this on People's Choice Magazine.";
+const url=makeShareUrl(button.dataset.shareType,{id,title});
 
-let currentSiteSettings={};
-
-const allowedFonts={
-"Arial":"Arial,Helvetica,sans-serif",
-"Georgia":"Georgia,serif",
-"Verdana":"Verdana,Geneva,sans-serif",
-"Tahoma":"Tahoma,Geneva,sans-serif",
-"Trebuchet MS":"'Trebuchet MS',sans-serif",
-"Times New Roman":"'Times New Roman',serif"
+const payload={
+title,
+text:description+" | People's Choice Magazine",
+url
 };
 
-function validColour(value,fallback){
-if(typeof value!=="string")return fallback;
-
-const colour=value.trim();
-
-if(/^#[0-9a-f]{3,8}$/i.test(colour))return colour;
-if(/^rgba?\([\d\s.,%]+\)$/i.test(colour))return colour;
-if(/^hsla?\([\d\s.,%]+\)$/i.test(colour))return colour;
-
-return fallback;
+try{
+if(navigator.share){
+await navigator.share(payload);
+return;
 }
+
+if(navigator.clipboard&&window.isSecureContext){
+await navigator.clipboard.writeText(url);
+const old=button.textContent;
+button.textContent="LINK COPIED";
+setTimeout(()=>button.textContent=old,1800);
+return;
+}
+
+window.open("https://wa.me/?text="+encodeURIComponent(payload.text+" "+url),"_blank","noopener,noreferrer");
+
+}catch(error){
+if(error&&error.name!=="AbortError"){
+window.open("https://wa.me/?text="+encodeURIComponent(payload.text+" "+url),"_blank","noopener,noreferrer");
+}
+}
+}
+
+document.addEventListener("click",event=>{
+const button=event.target.closest("[data-share-type]");
+if(button){
+event.preventDefault();
+shareContent(button);
+}
+});
+
+const sectionMap={
+latest:"latest-section",
+"top-stories":"top-stories-section",
+chart:"music-chart",
+creators:"creators",
+local:"local",
+national:"national",
+contact:"contact",
+hero:"hero"
+};
+
+let siteSettings={};
+let banners=[];
+let activeBanner=0;
+let bannerTimer=null;
+let chartSongs=[];
+let chartUser=null;
 
 function setText(id,value){
-const element=document.getElementById(id);
-
-if(element && typeof value==="string" && value.trim()){
-element.textContent=value;
+if(typeof value==="string"&&value.trim()&&$(id)){
+$(id).textContent=value;
 }
-}
-
-function applyAppearance(settings){
-
-const root=document.documentElement;
-
-root.style.setProperty("--pink",validColour(settings.theme_primary,"#e7549b"));
-root.style.setProperty("--primary",validColour(settings.theme_primary,"#e7549b"));
-root.style.setProperty("--dark",validColour(settings.theme_dark,"#171717"));
-root.style.setProperty("--light",validColour(settings.theme_light,"#fff1f7"));
-root.style.setProperty("--background",validColour(settings.theme_background,"#f5f5f5"));
-root.style.setProperty("--text",validColour(settings.theme_text,"#171717"));
-
-const selectedFont=allowedFonts[settings.font_family];
-
-if(selectedFont){
-root.style.setProperty("--font",selectedFont);
-}
-
-}
-
-function applySectionVisibility(settings){
-
-const visibility=settings.section_visibility||{};
-
-const sectionMap={
-"hero":document.getElementById("hero"),
-"latest":document.getElementById("latest-section"),
-"top-stories":document.getElementById("top-stories-section"),
-"chart":document.getElementById("music-chart"),
-"creators":document.getElementById("creators"),
-"local":document.getElementById("local"),
-"national":document.getElementById("national"),
-"contact":document.getElementById("contact")
-};
-
-Object.entries(sectionMap).forEach(([key,element])=>{
-if(!element)return;
-element.classList.toggle("section-hidden",visibility[key]===false);
-});
-
-const nav=document.getElementById("main-navigation");
-
-if(nav){
-nav.querySelectorAll("a").forEach(link=>{
-
-const navMap={
-"#local":"local",
-"#national":"national",
-"#music-chart":"chart",
-"#creators":"creators",
-"#contact":"contact"
-};
-
-const key=navMap[link.getAttribute("href")];
-
-link.classList.toggle(
-"section-hidden",
-!!key && visibility[key]===false
-);
-
-});
-}
-
-}
-
-function applySectionOrder(settings){
-
-const container=document.getElementById("homepage-sections");
-if(!container)return;
-
-const sectionMap={
-"hero":document.getElementById("hero"),
-"latest":document.getElementById("latest-section"),
-"top-stories":document.getElementById("top-stories-section"),
-"chart":document.getElementById("music-chart"),
-"creators":document.getElementById("creators"),
-"local":document.getElementById("local"),
-"national":document.getElementById("national"),
-"contact":document.getElementById("contact")
-};
-
-const defaultOrder=[
-"hero","latest","top-stories","chart",
-"creators","local","national","contact"
-];
-
-let order=Array.isArray(settings.section_order)
-?settings.section_order:defaultOrder;
-
-order=order.map(item=>
-typeof item==="string"?item:item?.id||item?.key||""
-).filter(key=>sectionMap[key]);
-
-const completedOrder=[
-...order,
-...defaultOrder.filter(key=>!order.includes(key))
-];
-
-completedOrder.forEach(key=>{
-if(sectionMap[key])container.appendChild(sectionMap[key]);
-});
-
 }
 
 async function loadSiteSettings(){
-
-const {data,error}=await db
-.from("site_settings")
+const {data,error}=await db.from("site_settings")
 .select("settings")
 .eq("id","main")
 .maybeSingle();
 
 if(error){
-console.error("Website settings error:",error);
+console.warn("Settings:",error.message);
 return;
 }
 
-const settings=data?.settings||{};
+siteSettings=data?.settings||{};
+const s=siteSettings;
 
-currentSiteSettings=settings;
+setText("site-name",s.site_name);
+setText("site-tagline",s.tagline);
+setText("site-topbar",s.topbar_text);
+setText("latest-heading",s.latest_heading);
+setText("creators-heading",s.creators_heading);
+setText("local-heading",s.local_heading);
+setText("national-heading",s.national_heading);
+setText("chart-heading",s.chart_heading);
+setText("chart-description",s.chart_description);
+setText("creators-description",s.creators_description);
+setText("local-description",s.local_description);
+setText("national-description",s.national_description);
+setText("contact-heading",s.contact_heading);
+setText("contact-intro",s.contact_intro);
+setText("contact-description",s.contact_description);
+setText("site-footer",s.footer_text);
 
-applyAppearance(settings);
+if(s.contact_email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.contact_email)){
+$("contact-email").href="mailto:"+s.contact_email;
+$("contact-email").textContent=s.contact_email;
+}
 
-setText("site-name",settings.site_name);
-setText("site-tagline",settings.tagline);
-setText("site-topbar",settings.topbar_text);
+const logo=$("site-logo");
+const name=$("site-name");
 
-const logo=document.getElementById("site-logo");
-const name=document.getElementById("site-name");
-const logoUrl=safeHttpUrl(settings.logo_url);
-
-if(logo&&name&&logoUrl){
-logo.src=logoUrl;
+if(s.logo_url&&/^https?:\/\//i.test(s.logo_url)){
+logo.src=s.logo_url;
 logo.style.display="block";
 name.style.display="none";
-
-logo.onerror=()=>{
-logo.style.display="none";
-name.style.display="";
-};
 }
 
-setText("contact-heading",settings.contact_heading);
-setText("contact-intro",settings.contact_intro);
-setText("contact-description",settings.contact_description);
-setText("site-footer",settings.footer_text);
-setText("latest-heading",settings.latest_heading);
-setText("creators-heading",settings.creators_heading);
-setText("local-heading",settings.local_heading);
-setText("national-heading",settings.national_heading);
-setText("chart-heading",settings.chart_heading);
-setText("chart-description",settings.chart_description);
-setText("creators-description",settings.creators_description);
-setText("local-description",settings.local_description);
-setText("national-description",settings.national_description);
-setText("top-stories-heading",settings.top_stories_heading);
+const root=document.documentElement;
 
-const email=document.getElementById("contact-email");
+if(/^#[0-9a-f]{3,8}$/i.test(s.theme_primary||""))root.style.setProperty("--pink",s.theme_primary);
+if(/^#[0-9a-f]{3,8}$/i.test(s.theme_dark||""))root.style.setProperty("--dark",s.theme_dark);
+if(/^#[0-9a-f]{3,8}$/i.test(s.theme_light||""))root.style.setProperty("--light",s.theme_light);
+if(/^#[0-9a-f]{3,8}$/i.test(s.theme_background||""))root.style.setProperty("--page",s.theme_background);
+if(/^#[0-9a-f]{3,8}$/i.test(s.theme_text||""))root.style.setProperty("--dark",s.theme_text);
 
-if(email&&settings.contact_email&&
-/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(settings.contact_email)){
-email.href="mailto:"+settings.contact_email;
-email.textContent=settings.contact_email;
+if(s.font_family&&["Arial","Georgia","Verdana","Tahoma","Trebuchet MS"].includes(s.font_family)){
+document.body.style.fontFamily=s.font_family+",sans-serif";
 }
 
-applySectionVisibility(settings);
-applySectionOrder(settings);
+const visibility=s.section_visibility||{};
 
+Object.entries(sectionMap).forEach(([key,id])=>{
+if(visibility[key]===false&&$(id)){
+$(id).classList.add("section-hidden");
+}
+});
+
+const order=Array.isArray(s.section_order)?s.section_order:[];
+const main=$("home");
+
+order.forEach(key=>{
+const el=$(sectionMap[key]);
+if(el&&el.parentElement===main){
+main.appendChild(el);
+}
+});
 }
 
-/* HOMEPAGE BANNERS */
-
-let banners=[];
-let activeBanner=0;
-let bannerTimer=null;
-
-const defaultBanner={
-title:"Your Stories. Your People. Your Magazine.",
-subtitle:"Discover the latest stories shaping entertainment, music and culture in Zimbabwe.",
-label:"EDITOR'S PICK",
-image_url:"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600",
-link_url:"#local"
-};
-
-function displayBanner(index){
-
+function displayBanner(i){
 if(!banners.length)return;
 
-activeBanner=index;
+activeBanner=i;
+const b=banners[i];
 
-const banner=banners[index];
+$("hero-image").src=safeImage(b.image_url);
+$("hero-image").alt=b.title||"Featured story";
+$("hero-title").textContent=b.title||"";
+$("hero-subtitle").textContent=b.subtitle||"";
+$("hero-label").textContent=b.label||"FEATURED";
+$("hero-link").href=safeUrl(b.link_url,"#local");
+$("hero-button").textContent=b.link_url&&b.link_url!=="#"?"READ MORE →":"EXPLORE STORIES →";
 
-document.getElementById("hero-image").src=safeImage(banner.image_url);
-document.getElementById("hero-image").alt=banner.title||"Featured story";
-document.getElementById("hero-title").textContent=banner.title||"";
-document.getElementById("hero-subtitle").textContent=banner.subtitle||"";
-document.getElementById("hero-label").textContent=banner.label||"FEATURED";
-document.getElementById("hero-link").href=safeLink(banner.link_url);
-
-document.getElementById("hero-button").textContent=
-banner.link_url&&banner.link_url!=="#"
-?"READ MORE →":"EXPLORE STORIES →";
-
-document.querySelectorAll(".hero-dot").forEach((dot,i)=>{
-dot.classList.toggle("active",i===index);
+document.querySelectorAll(".hero-dot").forEach((d,n)=>{
+d.classList.toggle("active",n===i);
 });
-
 }
 
-function renderBannerDots(){
+function renderDots(){
+$("hero-dots").innerHTML=banners.map((b,i)=>
+`<button class="hero-dot ${i===activeBanner?"active":""}" aria-label="Show banner ${i+1}" data-index="${i}"></button>`
+).join("");
 
-const dots=document.getElementById("hero-dots");
-
-dots.innerHTML=banners.map((banner,index)=>`
-<button class="hero-dot ${index===activeBanner?"active":""}"
-type="button"
-aria-label="Show banner ${index+1}"
-data-index="${index}"></button>
-`).join("");
-
-dots.querySelectorAll("button").forEach(button=>{
-button.addEventListener("click",()=>{
-displayBanner(Number(button.dataset.index));
-restartBannerTimer();
+$("hero-dots").querySelectorAll("button").forEach(b=>{
+b.onclick=()=>{
+displayBanner(+b.dataset.index);
+startBannerTimer();
+};
 });
-});
-
-}
-
-function nextBanner(){
-if(banners.length<2)return;
-displayBanner((activeBanner+1)%banners.length);
-}
-
-function previousBanner(){
-if(banners.length<2)return;
-displayBanner((activeBanner-1+banners.length)%banners.length);
 }
 
 function startBannerTimer(){
 clearInterval(bannerTimer);
 if(banners.length>1){
-bannerTimer=setInterval(nextBanner,5000);
+bannerTimer=setInterval(()=>displayBanner((activeBanner+1)%banners.length),5000);
 }
-}
-
-function restartBannerTimer(){
-startBannerTimer();
 }
 
 async function loadBanners(){
-
-const {data,error}=await db
-.from("banners")
+const {data,error}=await db.from("banners")
 .select("id,title,subtitle,label,image_url,link_url,sort_order")
 .eq("is_active",true)
-.order("sort_order",{ascending:true})
+.order("sort_order")
 .order("created_at",{ascending:false});
 
-if(error){
-console.error("Banner loading error:",error);
-banners=[defaultBanner];
-}else{
-banners=data&&data.length?data:[defaultBanner];
-}
+banners=!error&&data?.length?data:[{
+title:"Your Stories. Your People. Your Magazine.",
+subtitle:"Discover the latest stories shaping entertainment, music and culture in Zimbabwe.",
+label:"EDITOR'S PICK",
+image_url:fallbackImage,
+link_url:"#local"
+}];
 
-activeBanner=0;
 displayBanner(0);
-renderBannerDots();
-
-document.getElementById("hero-controls").hidden=banners.length<2;
-
+renderDots();
+$("hero-controls").hidden=banners.length<2;
 startBannerTimer();
-
 }
 
-document.getElementById("hero-next").onclick=()=>{
-nextBanner();
-restartBannerTimer();
-};
-
-document.getElementById("hero-prev").onclick=()=>{
-previousBanner();
-restartBannerTimer();
-};
-
-document.getElementById("hero").addEventListener("mouseenter",()=>{
-clearInterval(bannerTimer);
-});
-
-document.getElementById("hero").addEventListener("mouseleave",()=>{
+$("hero-next").onclick=()=>{
+displayBanner((activeBanner+1)%banners.length);
 startBannerTimer();
-});
+};
 
-/* ARTICLES */
+$("hero-prev").onclick=()=>{
+displayBanner((activeBanner-1+banners.length)%banners.length);
+startBannerTimer();
+};
 
-function articleCard(article){
+$("hero").addEventListener("mouseenter",()=>clearInterval(bannerTimer));
+$("hero").addEventListener("mouseleave",startBannerTimer);
 
-const image=safeImage(article.image_url);
-const link="article.html?id="+encodeURIComponent(article.id);
+function articleCard(a){
+const link="article.html?id="+encodeURIComponent(a.id);
 
 return `
 <article class="news-card">
 <a href="${link}">
-<img src="${escapeHTML(image)}"
-alt="${escapeHTML(article.title)}"
-loading="lazy">
+<img src="${esc(safeImage(a.image_url))}" alt="${esc(a.title)}" loading="lazy">
 </a>
-
 <div class="news-info">
-<small>${escapeHTML(article.category)} · ${escapeHTML(article.section)}</small>
-
-<h3><a href="${link}">${escapeHTML(article.title)}</a></h3>
-
-<p>${escapeHTML(article.excerpt)}</p>
-
-<a href="${link}" class="read-more"
-style="color:var(--primary);border-color:var(--primary);margin-top:12px">
-READ FULL STORY →
-</a>
+<small>${esc(a.category)} · ${esc(a.section)}</small>
+<h3><a href="${link}">${esc(a.title)}</a></h3>
+<p>${esc(a.excerpt)}</p>
+<a href="${link}" class="read-more" style="color:var(--pink);border-color:var(--pink);margin-top:12px">READ FULL STORY →</a>
+<button type="button" class="share-button"
+data-share-type="article"
+data-share-id="${esc(a.id)}"
+data-share-title="${esc(a.title)}"
+data-share-description="${esc(a.excerpt||"Read this story on People's Choice Magazine.")}"
+data-share-image="${esc(safeImage(a.image_url))}">SHARE ↗</button>
 </div>
-</article>
-`;
-
+</article>`;
 }
 
 async function loadArticles(){
-
-const {data,error}=await db
-.from("articles")
+const {data,error}=await db.from("articles")
 .select("id,title,excerpt,image_url,category,section,status,published_at,created_at")
 .eq("status","published")
 .order("published_at",{ascending:false});
 
 if(error){
-console.error("Article loading error:",error);
-document.getElementById("latest-news").innerHTML="<p>Unable to load stories.</p>";
-document.getElementById("top-stories").innerHTML="<p>Unable to load stories.</p>";
+console.error(error);
+$("latest-news").textContent="Unable to load stories.";
+$("top-stories").textContent="Unable to load stories.";
 return;
 }
 
-const articles=data||[];
+const a=data||[];
 
-document.getElementById("latest-news").innerHTML=
-articles.length?articles.slice(0,4).map(articleCard).join("")
+$("latest-news").innerHTML=a.length
+?a.slice(0,4).map(articleCard).join("")
 :"<p>No published stories yet.</p>";
 
-document.getElementById("top-stories").innerHTML=
-articles.length?articles.slice(0,5).map(article=>`
+$("top-stories").innerHTML=a.length
+?a.slice(0,5).map(x=>`
 <div class="top-story">
-<a href="article.html?id=${encodeURIComponent(article.id)}">
-<span>${escapeHTML(article.category)}</span>
-${escapeHTML(article.title)}
+<a href="article.html?id=${encodeURIComponent(x.id)}">
+<span>${esc(x.category)}</span>${esc(x.title)}
 </a>
-</div>
-`).join("")
+<button type="button" class="share-button"
+data-share-type="article"
+data-share-id="${esc(x.id)}"
+data-share-title="${esc(x.title)}"
+data-share-description="${esc(x.excerpt||"Read this story on People's Choice Magazine.")}"
+data-share-image="${esc(safeImage(x.image_url))}">SHARE ↗</button>
+</div>`).join("")
 :"<p>No published stories yet.</p>";
 
-const local=articles.filter(a=>
-String(a.category||"").toLowerCase()==="local"
-);
+const local=a.filter(x=>String(x.category||"").toLowerCase()==="local");
+const national=a.filter(x=>String(x.category||"").toLowerCase()==="national");
 
-document.getElementById("local-news").innerHTML=
-local.length?local.map(articleCard).join("")
+$("local-news").innerHTML=local.length
+?local.map(articleCard).join("")
 :"<p>No local stories published yet.</p>";
 
-const national=articles.filter(a=>
-String(a.category||"").toLowerCase()==="national"
-);
-
-document.getElementById("national-news").innerHTML=
-national.length?national.map(articleCard).join("")
+$("national-news").innerHTML=national.length
+?national.map(articleCard).join("")
 :"<p>No national stories published yet.</p>";
-
 }
 
-/* ANONYMOUS CHART VOTING */
-
-let chartSongs=[];
-let chartUser=null;
-let anonymousAuthPromise=null;
-let chartAuthListenerRegistered=false;
-
-const chartGrid=document.getElementById("chart-grid");
-const chartAuthMessage=document.getElementById("chart-auth-message");
-
-function setChartMessage(message){
-chartAuthMessage.textContent=message;
-}
-
-function updateChartAuthUI(){
-
-const status=document.getElementById("chart-user-status");
-
-if(chartUser){
-status.textContent=chartUser.is_anonymous
-?"Anonymous voting session ready."
-:"Voting session ready.";
-}else{
-status.textContent="Voting session is not available.";
-}
-
-renderMusicChart();
-
-}
-
-async function ensureAnonymousUser(){
-
-if(chartUser)return chartUser;
-if(anonymousAuthPromise)return anonymousAuthPromise;
-
-anonymousAuthPromise=(async()=>{
-
-const {data:sessionData,error:sessionError}=await db.auth.getSession();
-
-if(sessionError)throw sessionError;
-
-if(sessionData?.session?.user){
-chartUser=sessionData.session.user;
-updateChartAuthUI();
-return chartUser;
-}
-
-const {data,error}=await db.auth.signInAnonymously();
-
-if(error)throw error;
-
-chartUser=data.user;
-updateChartAuthUI();
-
-return chartUser;
-
-})();
-
-try{
-return await anonymousAuthPromise;
-}finally{
-anonymousAuthPromise=null;
-}
-
-}
-
-function getMovementInfo(song){
-
-const movement=String(song.movement||"").toUpperCase();
-
-if(movement==="NEW"){
-return '<span class="chart-movement movement-new">NEW ENTRY</span>';
-}
-
-if(movement==="UP"){
-const places=Number(song.previous_position)-Number(song.rank_position||song.rank);
-return `<span class="chart-movement movement-up">↑ UP${places>0?" "+places:""}</span>`;
-}
-
-if(movement==="DOWN"){
-const places=Number(song.rank_position||song.rank)-Number(song.previous_position);
-return `<span class="chart-movement movement-down">↓ DOWN${places>0?" "+places:""}</span>`;
-}
-
-if(movement==="SAME"){
-return '<span class="chart-movement movement-same">— NO CHANGE</span>';
-}
-
-return "";
-
-}
-
-function isDirectAudio(url){
-
-if(!url)return false;
-
-try{
-const parsed=new URL(url);
-return /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(parsed.pathname);
-}catch(error){
-return false;
-}
-
-}
-
-/* SONG-SPECIFIC SHARING */
-
-function getSongVoteLink(song){
-
-const url=new URL(window.location.href);
-
-url.searchParams.set("vote",String(song.id));
-url.hash="song-"+String(song.id);
-
-return url.toString();
-
-}
-
-async function copySongVoteLink(song){
-
-const link=getSongVoteLink(song);
-
-try{
-
-if(navigator.clipboard&&window.isSecureContext){
-
-await navigator.clipboard.writeText(link);
-
-}else{
-
-const temporary=document.createElement("textarea");
-
-temporary.value=link;
-temporary.style.position="fixed";
-temporary.style.opacity="0";
-
-document.body.appendChild(temporary);
-temporary.select();
-
-const copied=document.execCommand("copy");
-
-temporary.remove();
-
-if(!copied)throw new Error("Copy failed");
-
-}
-
-setChartMessage("Song voting link copied! Share it with friends.");
-
-}catch(error){
-
-console.error("Copy link error:",error);
-
-setChartMessage("Unable to copy automatically. Please copy the page address manually.");
-
-}
-
-}
-
-async function shareSong(song){
-
-const link=getSongVoteLink(song);
-
-const shareData={
-title:"Vote for "+song.title+" | People's Choice Top 5",
-text:"Support "+song.title+" by "+song.artist+". Cast your vote on People's Choice Magazine Top 5!",
-url:link
-};
-
-try{
-
-if(navigator.share){
-
-await navigator.share(shareData);
-
-}else{
-
-await copySongVoteLink(song);
-
-}
-
-}catch(error){
-
-if(error.name!=="AbortError"){
-console.error("Song sharing error:",error);
-setChartMessage("Unable to open sharing menu. Please copy the song link instead.");
-}
-
-}
-
-}
-
-function focusSharedSong(){
-
-const params=new URLSearchParams(window.location.search);
-const songId=params.get("vote");
-
-if(!songId)return;
-
-const song=chartSongs.find(item=>
-String(item.id)===songId
-);
-
-if(!song)return;
-
-setTimeout(()=>{
-
-const card=document.getElementById("song-"+songId);
-
-if(!card)return;
-
-card.scrollIntoView({
-behavior:"smooth",
-block:"center"
-});
-
-card.classList.add("song-highlight");
-
-setTimeout(()=>{
-card.classList.remove("song-highlight");
-},5000);
-
-},300);
-
+function setChartMessage(t){
+$("chart-auth-message").textContent=t;
 }
 
 function renderMusicChart(){
-
 if(!chartSongs.length){
-
-chartGrid.innerHTML=`
-<div class="chart-empty">
-<h3>No songs in the chart yet.</h3>
-<p>Check back soon for this week's People's Choice Top 5.</p>
-</div>`;
-
+$("chart-grid").innerHTML='<div class="chart-empty"><h3>No songs in the chart yet.</h3><p>Check back soon for this week’s Top 5.</p></div>';
 return;
-
 }
 
-chartGrid.innerHTML=chartSongs.map(song=>{
-
-const streamUrl=safeHttpUrl(song.stream_url);
-const cover=safeImage(song.cover_url);
-const rank=song.rank_position??song.rank??"";
-const movement=getMovementInfo(song);
-
-const peak=song.is_peak
-?'<span class="chart-peak">★ PERSONAL BEST</span>'
-:"";
-
-let listenControl="";
-
-if(streamUrl&&isDirectAudio(streamUrl)){
-
-listenControl=`
-<audio class="chart-audio"
-controls
-preload="none"
-aria-label="Preview ${escapeHTML(song.title)}">
-<source src="${escapeHTML(streamUrl)}">
-Your browser does not support audio playback.
-</audio>`;
-
-}else if(streamUrl){
-
-listenControl=`
-<a class="chart-stream"
-href="${escapeHTML(streamUrl)}"
-target="_blank"
-rel="noopener noreferrer">
-LISTEN TO SONG ↗
-</a>`;
-
-}
-
-return `
-<article class="chart-card" id="song-${escapeHTML(song.id)}">
-
+$("chart-grid").innerHTML=chartSongs.map(s=>`
+<article class="chart-card">
 <div class="chart-cover-wrap">
-
-<img
-class="chart-cover"
-src="${escapeHTML(cover)}"
-alt="${escapeHTML(song.title)} cover artwork"
-loading="lazy">
-
-<div class="chart-rank">#${escapeHTML(rank)}</div>
-
+<img class="chart-cover" src="${esc(safeImage(s.cover_url))}" alt="${esc(s.title)} cover artwork" loading="lazy">
+<div class="chart-rank">#${esc(s.rank_position??"")}</div>
 </div>
-
 <div class="chart-info">
-
-${movement}
-${peak}
-
-<h3>${escapeHTML(song.title)}</h3>
-
-<p>${escapeHTML(song.artist)}</p>
-
+<h3>${esc(s.title)}</h3>
+<p>${esc(s.artist)}</p>
 <div class="chart-card-actions">
-
-<button
-class="chart-vote"
-type="button"
-data-vote-song="${escapeHTML(song.id)}"
-data-vote-week="${escapeHTML(song.chart_week)}">
-VOTE FOR THIS SONG
+<button class="chart-vote" data-vote="${esc(s.id)}" data-week="${esc(s.chart_week)}" ${!chartUser?"disabled":""}>
+${chartUser?"VOTE FOR THIS SONG":"CONNECTING..."}
 </button>
-
-${listenControl}
-
-<div class="chart-share-actions">
-
-<button
-class="chart-share-button"
-type="button"
-data-copy-song="${escapeHTML(song.id)}">
-▣ COPY LINK
-</button>
-
-<button
-class="chart-share-button share-primary"
-type="button"
-data-share-song="${escapeHTML(song.id)}">
-↗ SHARE SONG
-</button>
-
-</div>
-
+${s.stream_url&&/^https?:\/\//i.test(s.stream_url)
+?`<a class="chart-stream" href="${esc(s.stream_url)}" target="_blank" rel="noopener noreferrer">LISTEN TO SONG ↗</a>`
+:""}
+<button type="button" class="share-button"
+data-share-type="song"
+data-share-id="${esc(s.id)}"
+data-share-title="${esc(s.title+" - "+s.artist)}"
+data-share-description="Listen and vote on the People's Choice Top 5 chart."
+data-share-image="${esc(safeImage(s.cover_url))}">SHARE SONG ↗</button>
 </div>
 </div>
-</article>
-`;
-
-}).join("");
-
-focusSharedSong();
-
+</article>`).join("");
 }
 
 async function loadMusicChart(){
-
-chartGrid.innerHTML=`
-<div class="chart-empty">
-Loading this week's Top 5 songs...
-</div>`;
-
 const {data,error}=await db.rpc("get_public_top5");
 
 if(error){
-
-console.error("Music chart loading error:",error);
-
-chartGrid.innerHTML=`
-<div class="chart-empty">
-<p>Unable to load the music chart right now.</p>
-<p>Please try again later.</p>
-</div>`;
-
+console.error(error);
+$("chart-grid").innerHTML='<div class="chart-empty">Unable to load the chart right now.</div>';
 return;
-
 }
 
 chartSongs=data||[];
-
 renderMusicChart();
-
 }
-
-async function voteForSong(songId,chartWeek,button){
-
-const song=chartSongs.find(item=>
-String(item.id)===songId
-);
-
-if(!song){
-setChartMessage("This song is no longer available in the chart.");
-return;
-}
-
-button.disabled=true;
-button.textContent="PREPARING VOTE...";
-
-try{
-
-const user=await ensureAnonymousUser();
-
-button.textContent="SUBMITTING...";
-
-const {error}=await db
-.from("song_votes")
-.insert({
-song_id:songId,
-user_id:user.id,
-chart_week:chartWeek
-});
-
-if(error){
-
-console.error("Vote submission error:",error);
-
-if(error.code==="23505"||
-String(error.message||"").toLowerCase().includes("duplicate")){
-
-setChartMessage("You have already voted this chart week. Thank you for participating.");
-
-}else{
-
-setChartMessage("Your vote could not be submitted. Please try again.");
-
-}
-
-button.disabled=false;
-button.textContent="VOTE FOR THIS SONG";
-
-return;
-
-}
-
-setChartMessage("Your vote has been submitted successfully. Thank you for supporting your favourite music!");
-
-button.textContent="VOTE SUBMITTED";
-button.disabled=true;
-
-await loadMusicChart();
-
-}catch(error){
-
-console.error("Anonymous voting error:",error);
-
-setChartMessage(
-"Anonymous voting is unavailable. Please ask the website administrator to enable Anonymous Sign-Ins in Supabase Authentication settings."
-);
-
-button.disabled=false;
-button.textContent="TRY VOTING AGAIN";
-
-}
-
-}
-
-/* CHART BUTTON HANDLERS */
-
-chartGrid.addEventListener("click",async event=>{
-
-const copyButton=event.target.closest("[data-copy-song]");
-
-if(copyButton){
-
-const songId=copyButton.dataset.copySong;
-
-const song=chartSongs.find(item=>
-String(item.id)===songId
-);
-
-if(song){
-await copySongVoteLink(song);
-}
-
-return;
-
-}
-
-const shareButton=event.target.closest("[data-share-song]");
-
-if(shareButton){
-
-const songId=shareButton.dataset.shareSong;
-
-const song=chartSongs.find(item=>
-String(item.id)===songId
-);
-
-if(song){
-await shareSong(song);
-}
-
-return;
-
-}
-
-const voteButton=event.target.closest("[data-vote-song]");
-
-if(!voteButton)return;
-
-const songId=voteButton.dataset.voteSong;
-const chartWeek=voteButton.dataset.voteWeek;
-
-await voteForSong(songId,chartWeek,voteButton);
-
-});
 
 async function initialiseChartAuth(){
-
-if(chartAuthListenerRegistered)return;
-
-chartAuthListenerRegistered=true;
-
 const {data,error}=await db.auth.getSession();
-
-if(error){
-console.error("Chart session error:",error);
-}
+if(error)console.warn(error);
 
 chartUser=data?.session?.user||null;
 
+if(!chartUser){
+const result=await db.auth.signInAnonymously();
+
+if(result.error){
+setChartMessage("Voting is temporarily unavailable. Please try again later.");
+$("chart-user-status").textContent="Unable to start a private voting session.";
+return;
+}
+
+chartUser=result.data.user;
+}
+
+$("chart-user-status").textContent="Voting session ready. You can cast one vote this chart week.";
+setChartMessage("Choose your favourite song below.");
+renderMusicChart();
+
 db.auth.onAuthStateChange((event,session)=>{
-
 chartUser=session?.user||null;
+renderMusicChart();
+});
+}
 
-updateChartAuthUI();
+$("chart-grid").addEventListener("click",async e=>{
+const b=e.target.closest("[data-vote]");
+if(!b)return;
 
+if(!chartUser){
+setChartMessage("Voting session is not ready. Refresh the page and try again.");
+return;
+}
+
+b.disabled=true;
+b.textContent="SUBMITTING...";
+
+const {error}=await db.from("song_votes").insert({
+song_id:b.dataset.vote,
+user_id:chartUser.id,
+chart_week:b.dataset.week
 });
 
-if(chartUser){
-
-setChartMessage("Your voting session is ready.");
-updateChartAuthUI();
-
+if(error){
+console.error(error);
+setChartMessage(error.code==="23505"
+?"You have already voted this chart week. Thank you!"
+:"Your vote could not be submitted. Please try again.");
+b.disabled=false;
+b.textContent="VOTE FOR THIS SONG";
 return;
-
 }
 
-try{
-
-setChartMessage("Preparing anonymous voting...");
-
-await ensureAnonymousUser();
-
-setChartMessage("You can now vote for your favourite song.");
-
-}catch(error){
-
-console.error("Anonymous authentication setup error:",error);
-
-chartUser=null;
-updateChartAuthUI();
-
-setChartMessage(
-"Anonymous voting is not enabled yet. The website administrator must enable Anonymous Sign-Ins in Supabase Authentication settings."
-);
-
-}
-
-}
-
-/* CREATORS' CORNER */
+setChartMessage("Your vote has been submitted. Thank you for supporting your favourite music!");
+b.textContent="VOTE RECEIVED";
+});
 
 async function loadVideos(){
-
-const grid=document.getElementById("video-grid");
-
-const {data,error}=await db
-.from("videos")
+const {data,error}=await db.from("videos")
 .select("id,title,description,creator_name,category,video_url,thumbnail_url,is_featured,created_at")
 .eq("status","published")
 .order("is_featured",{ascending:false})
@@ -1952,110 +661,65 @@ const {data,error}=await db
 .limit(12);
 
 if(error){
-
-console.error("Video loading error:",error);
-
-grid.innerHTML=`
-<div class="video-empty">
-Unable to load videos right now. Please try again later.
-</div>`;
-
+console.error(error);
+$("video-grid").innerHTML='<div class="video-empty">Unable to load videos.</div>';
 return;
-
 }
 
 const videos=data||[];
 
 if(!videos.length){
-
-grid.innerHTML=`
-<div class="video-empty">
-<h3>No videos published yet.</h3>
-<p>Our creators will be appearing here soon. Stay tuned!</p>
-</div>`;
-
+$("video-grid").innerHTML='<div class="video-empty">No videos published yet. Stay tuned!</div>';
 return;
-
 }
 
-grid.innerHTML=videos.map(video=>{
+$("video-grid").innerHTML=videos.map(v=>{
+if(!/^https?:\/\//i.test(v.video_url||""))return "";
 
-const videoUrl=safeHttpUrl(video.video_url);
-const thumbnail=safeHttpUrl(video.thumbnail_url);
+const poster=/^https?:\/\//i.test(v.thumbnail_url||"")
+?`poster="${esc(v.thumbnail_url)}"`:"";
 
-if(!videoUrl)return "";
-
-const poster=thumbnail
-?`poster="${escapeHTML(thumbnail)}"`
-:"";
-
-const videoType=/\.webm(\?|$)/i.test(videoUrl)
-?"video/webm"
-:/\.ogg(\?|$)/i.test(videoUrl)
-?"video/ogg"
-:"video/mp4";
+const type=/\.webm(\?|$)/i.test(v.video_url)?"video/webm":"video/mp4";
 
 return `
 <article class="video-card">
-
-<video controls playsinline preload="metadata"
-${poster}
-aria-label="${escapeHTML(video.title)}">
-
-<source src="${escapeHTML(videoUrl)}" type="${videoType}">
-
-Your browser does not support HTML5 video.
-
+<video controls playsinline preload="metadata" ${poster}>
+<source src="${esc(v.video_url)}" type="${type}">
+Your browser does not support video.
 </video>
-
 <div class="video-info">
-
-${video.is_featured
-?'<span class="featured-tag">★ FEATURED VIDEO</span>'
-:""}
-
-<div class="video-category">
-${escapeHTML(video.category||"Entertainment")}
+${v.is_featured?'<span class="featured-tag">★ FEATURED VIDEO</span>':""}
+<div class="video-category">${esc(v.category||"Entertainment")}</div>
+<h3>${esc(v.title)}</h3>
+<p class="creator-name">By ${esc(v.creator_name)}</p>
+<p>${esc(v.description||"Watch this video on People's Choice Magazine.")}</p>
+<button type="button" class="share-button"
+data-share-type="video"
+data-share-id="${esc(v.id)}"
+data-share-title="${esc(v.title)}"
+data-share-description="${esc(v.description||"Watch this video on People's Choice Magazine.")}"
+data-share-image="${esc(safeImage(v.thumbnail_url))}">SHARE VIDEO ↗</button>
 </div>
-
-<h3>${escapeHTML(video.title)}</h3>
-
-<p class="creator-name">
-By ${escapeHTML(video.creator_name)}
-</p>
-
-<p>
-${escapeHTML(video.description||"Watch this video on People's Choice Magazine.")}
-</p>
-
-</div>
-</article>
-`;
-
-}).filter(Boolean).join("")||`
-<div class="video-empty">
-No playable videos are available.
-</div>`;
-
+</article>`;
+}).filter(Boolean).join("")||'<div class="video-empty">No playable videos are available.</div>';
 }
 
-/* INITIALISE HOMEPAGE */
-
 async function initialiseHomepage(){
+await loadSiteSettings();
 
 await Promise.all([
-loadSiteSettings(),
 loadBanners(),
 loadArticles(),
 loadVideos(),
 loadMusicChart(),
 initialiseChartAuth()
 ]);
-
 }
 
-initialiseHomepage();
-
+initialiseHomepage().catch(err=>{
+console.error(err);
+setChartMessage("Some homepage content could not be loaded.");
+});
 </script>
 
 </body>
