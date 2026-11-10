@@ -44,7 +44,6 @@ color:var(--text);
 }
 
 a{text-decoration:none;color:inherit}
-
 button,input{font-family:inherit}
 
 .topbar{
@@ -111,8 +110,6 @@ margin:25px auto;
 padding:0 18px;
 }
 
-/* HOMEPAGE SECTION LAYOUT */
-
 .homepage-sections{
 display:grid;
 grid-template-columns:minmax(0,2fr) minmax(250px,1fr);
@@ -120,22 +117,10 @@ gap:25px;
 align-items:start;
 }
 
-.homepage-sections>.full-width{
-grid-column:1/-1;
-}
-
-#hero{
-grid-column:1/-1;
-}
-
-#latest-section{
-grid-column:1;
-min-width:0;
-}
-
-#top-stories-section{
-grid-column:2;
-}
+.homepage-sections>.full-width{grid-column:1/-1}
+#hero{grid-column:1/-1}
+#latest-section{grid-column:1;min-width:0}
+#top-stories-section{grid-column:2}
 
 .section-title{
 border-left:5px solid var(--primary);
@@ -144,11 +129,7 @@ margin-bottom:18px;
 font-size:19px;
 }
 
-.section-hidden{
-display:none!important;
-}
-
-/* HERO */
+.section-hidden{display:none!important}
 
 .hero{
 position:relative;
@@ -221,10 +202,7 @@ background:var(--primary);
 border-color:var(--primary);
 }
 
-.hero-link{
-display:block;
-color:white;
-}
+.hero-link{display:block;color:white}
 
 .hero-controls{
 position:absolute;
@@ -248,12 +226,7 @@ font-size:20px;
 }
 
 .hero-arrow:hover{background:var(--primary)}
-
-.hero-dots{
-display:flex;
-gap:7px;
-align-items:center;
-}
+.hero-dots{display:flex;gap:7px;align-items:center}
 
 .hero-dot{
 width:9px;
@@ -269,8 +242,6 @@ background:var(--primary);
 width:23px;
 border-radius:10px;
 }
-
-/* NEWS */
 
 .news-grid{
 display:grid;
@@ -364,11 +335,9 @@ font-size:13px;
 margin-top:6px;
 }
 
-/* MUSIC CHART */
+/* TOP 5 MUSIC CHART */
 
-#music-chart{
-margin-top:20px;
-}
+#music-chart{margin-top:20px}
 
 .chart-heading{
 background:var(--dark);
@@ -410,22 +379,10 @@ line-height:1.5;
 margin-bottom:12px;
 }
 
-.chart-button{
-border:0;
-background:var(--primary);
-color:white;
-padding:12px 17px;
-border-radius:3px;
-font-weight:bold;
+.chart-user-status{
 font-size:12px;
-cursor:pointer;
-}
-
-.chart-button:hover{opacity:.85}
-
-.chart-button:disabled{
-opacity:.6;
-cursor:not-allowed;
+color:#555;
+margin-top:10px;
 }
 
 .chart-message{
@@ -433,12 +390,6 @@ font-size:12px;
 margin-top:12px;
 color:#555;
 line-height:1.5;
-}
-
-.chart-user-status{
-font-size:12px;
-color:#555;
-margin-top:10px;
 }
 
 .chart-grid{
@@ -453,6 +404,8 @@ border:1px solid #eee;
 overflow:hidden;
 position:relative;
 min-width:0;
+transition:box-shadow .2s,outline .2s;
+scroll-margin-top:25px;
 }
 
 .chart-cover-wrap{position:relative}
@@ -550,25 +503,10 @@ border-radius:3px;
 margin:0 0 9px;
 }
 
-.movement-up{
-background:#e5f7ec;
-color:#168342;
-}
-
-.movement-down{
-background:#fde8e8;
-color:#bb3030;
-}
-
-.movement-same{
-background:#eee;
-color:#555;
-}
-
-.movement-new{
-background:#e8efff;
-color:#315bb5;
-}
+.movement-up{background:#e5f7ec;color:#168342}
+.movement-down{background:#fde8e8;color:#bb3030}
+.movement-same{background:#eee;color:#555}
+.movement-new{background:#e8efff;color:#315bb5}
 
 .chart-peak{
 display:inline-block;
@@ -579,6 +517,45 @@ border-radius:3px;
 background:#fff2cf;
 color:#8a6200;
 margin:0 0 9px 4px;
+}
+
+.chart-share-actions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:6px;
+}
+
+.chart-share-button{
+width:100%;
+border:1px solid #ddd;
+background:white;
+color:#333;
+padding:10px 5px;
+font-size:10px;
+font-weight:bold;
+border-radius:3px;
+cursor:pointer;
+}
+
+.chart-share-button:hover{
+border-color:var(--primary);
+color:var(--primary);
+}
+
+.chart-share-button.share-primary{
+background:var(--dark);
+color:white;
+border-color:var(--dark);
+}
+
+.chart-share-button:disabled{
+opacity:.6;
+cursor:not-allowed;
+}
+
+.chart-card.song-highlight{
+outline:3px solid var(--primary);
+box-shadow:0 0 15px rgba(231,84,155,.25);
 }
 
 .chart-empty{
@@ -688,8 +665,6 @@ color:#777;
 grid-column:1/-1;
 }
 
-/* CONTACT AND FOOTER */
-
 .contact{
 grid-column:1/-1;
 width:100vw;
@@ -718,23 +693,15 @@ font-size:12px;
 }
 
 @media(max-width:900px){
-
 .homepage-sections{
 grid-template-columns:minmax(0,1fr) minmax(0,1fr);
 }
-
 .chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-
 }
 
 @media(max-width:750px){
-
 nav{justify-content:flex-start}
-
-nav a{
-padding:14px 10px;
-font-size:10px;
-}
+nav a{padding:14px 10px;font-size:10px}
 
 .homepage-sections{
 grid-template-columns:1fr;
@@ -749,10 +716,7 @@ grid-column:1/-1;
 .hero{height:370px}
 .hero-content{padding:20px}
 
-.hero-controls{
-right:12px;
-bottom:12px;
-}
+.hero-controls{right:12px;bottom:12px}
 
 .news-grid{
 grid-template-columns:1fr 1fr;
@@ -779,20 +743,13 @@ gap:10px;
 
 .chart-info{padding:10px}
 .chart-info h3{font-size:14px}
-
 }
 
 @media(max-width:450px){
-
 .news-grid{grid-template-columns:1fr}
 .video-grid{grid-template-columns:1fr}
-
-.chart-grid{
-grid-template-columns:repeat(2,minmax(0,1fr));
-}
-
+.chart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .chart-heading h2{font-size:23px}
-
 }
 </style>
 </head>
@@ -804,7 +761,6 @@ PEOPLE'S CHOICE MAGAZINE | YOUR DAILY NEWS SOURCE
 </div>
 
 <header class="masthead">
-
 <img id="site-logo" class="logo-image" alt="Magazine logo">
 
 <div class="logo" id="site-name">
@@ -814,7 +770,6 @@ PEOPLE'S <span>CHOICE</span>
 <div class="tagline" id="site-tagline">
 MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.
 </div>
-
 </header>
 
 <nav id="main-navigation">
@@ -830,8 +785,6 @@ MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.
 
 <div class="homepage-sections" id="homepage-sections">
 
-<!-- HERO BANNERS -->
-
 <div class="hero" id="hero">
 
 <img class="hero-image" id="hero-image"
@@ -839,9 +792,7 @@ src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600"
 alt="Featured magazine story">
 
 <div class="hero-content">
-
 <a href="#local" class="hero-link" id="hero-link">
-
 <span class="category" id="hero-label">EDITOR'S PICK</span>
 
 <h1 id="hero-title">Your Stories. Your People. Your Magazine.</h1>
@@ -851,64 +802,59 @@ Discover the latest stories shaping entertainment, music and culture in Zimbabwe
 </p>
 
 <span class="read-more" id="hero-button">EXPLORE STORIES →</span>
-
 </a>
-
 </div>
 
 <div class="hero-controls" id="hero-controls" hidden>
-
 <div class="hero-dots" id="hero-dots"></div>
-
 <button class="hero-arrow" id="hero-prev" type="button">‹</button>
 <button class="hero-arrow" id="hero-next" type="button">›</button>
-
 </div>
 
 </div>
-
-<!-- LATEST STORIES -->
 
 <section id="latest-section">
-
 <h2 class="section-title" id="latest-heading">LATEST STORIES</h2>
-
 <div class="news-grid" id="latest-news">
 <p>Loading latest stories...</p>
 </div>
-
 </section>
 
-<!-- TOP STORIES -->
-
 <aside class="sidebar" id="top-stories-section">
-
 <h2 id="top-stories-heading">Top Stories</h2>
-
 <div id="top-stories">Loading stories...</div>
-
 </aside>
-
-<!-- MUSIC CHART -->
 
 <section id="music-chart" class="full-width">
 
 <div class="chart-heading">
-
 <h2 id="chart-heading">🏆 PEOPLE'S CHOICE TOP 5</h2>
 
 <p id="chart-description">
 Your favourite music. Your choice.
 Discover this week's top five songs and vote for the music you love.
 </p>
-
 </div>
 
 <div class="chart-auth">
 
-<div class="chart-grid" id="chart-grid">
+<h3>Cast Your Vote</h3>
+
+<p>
+Support your favourite song. Each eligible visitor can vote once per chart week.
+</p>
+
+<p id="chart-user-status" class="chart-user-status">
+Preparing voting session...
+</p>
+
+<p id="chart-auth-message" class="chart-message" aria-live="polite">
+Loading voting system...
+</p>
 
 </div>
+
+<div class="chart-grid" id="chart-grid"></div>
 
 <p class="chart-note">
 Rankings are based on votes received during the current chart week.
@@ -917,61 +863,43 @@ Vote totals are not displayed publicly.
 
 </section>
 
-<!-- CREATORS CORNER -->
-
 <section id="creators" class="category-section full-width">
 
 <div class="creator-heading">
-
 <h2 id="creators-heading">🎬 CREATORS' CORNER</h2>
 
 <p id="creators-description">
 Discover local content creators, comedy skits, entertainment videos and emerging talent.
 </p>
-
 </div>
 
 <div class="video-grid" id="video-grid">
-
 <div class="video-loading">Loading videos and skits...</div>
-
 </div>
 
 </section>
 
-<!-- LOCAL NEWS -->
-
 <section class="category-section full-width" id="local">
 
 <div class="category-banner">
-
 <h2 id="local-heading">Local News</h2>
-
 <p id="local-description">Stories and developments from our communities.</p>
-
 </div>
 
 <div class="news-grid" id="local-news"></div>
 
 </section>
 
-<!-- NATIONAL NEWS -->
-
 <section class="category-section full-width" id="national">
 
 <div class="category-banner">
-
 <h2 id="national-heading">National News</h2>
-
 <p id="national-description">News and developments from across Zimbabwe.</p>
-
 </div>
 
 <div class="news-grid" id="national-news"></div>
 
 </section>
-
-<!-- CONTACT -->
 
 <section class="contact" id="contact">
 
@@ -1003,16 +931,14 @@ Email Our Editorial Team
 <script>
 "use strict";
 
-/* =========================
-   SUPABASE CONNECTION
-========================= */
+/* SUPABASE CONNECTION */
 
 if(!window.supabase){
 throw new Error("Supabase library failed to load.");
 }
 
 if(typeof SUPABASE_URL==="undefined" ||
-   typeof SUPABASE_PUBLISHABLE_KEY==="undefined"){
+typeof SUPABASE_PUBLISHABLE_KEY==="undefined"){
 throw new Error("Supabase configuration is missing. Check config.js.");
 }
 
@@ -1056,9 +982,7 @@ if(/^https?:\/\//i.test(url))return url;
 return "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
 }
 
-/* =========================
-   WEBSITE SETTINGS
-========================= */
+/* WEBSITE SETTINGS */
 
 let currentSiteSettings={};
 
@@ -1095,18 +1019,12 @@ function applyAppearance(settings){
 
 const root=document.documentElement;
 
-const primary=validColour(settings.theme_primary,"#e7549b");
-const dark=validColour(settings.theme_dark,"#171717");
-const light=validColour(settings.theme_light,"#fff1f7");
-const background=validColour(settings.theme_background,"#f5f5f5");
-const textColour=validColour(settings.theme_text,"#171717");
-
-root.style.setProperty("--pink",primary);
-root.style.setProperty("--primary",primary);
-root.style.setProperty("--dark",dark);
-root.style.setProperty("--light",light);
-root.style.setProperty("--background",background);
-root.style.setProperty("--text",textColour);
+root.style.setProperty("--pink",validColour(settings.theme_primary,"#e7549b"));
+root.style.setProperty("--primary",validColour(settings.theme_primary,"#e7549b"));
+root.style.setProperty("--dark",validColour(settings.theme_dark,"#171717"));
+root.style.setProperty("--light",validColour(settings.theme_light,"#fff1f7"));
+root.style.setProperty("--background",validColour(settings.theme_background,"#f5f5f5"));
+root.style.setProperty("--text",validColour(settings.theme_text,"#171717"));
 
 const selectedFont=allowedFonts[settings.font_family];
 
@@ -1132,22 +1050,14 @@ const sectionMap={
 };
 
 Object.entries(sectionMap).forEach(([key,element])=>{
-
 if(!element)return;
-
-const isVisible=visibility[key]!==false;
-
-element.classList.toggle("section-hidden",!isVisible);
-
+element.classList.toggle("section-hidden",visibility[key]===false);
 });
 
 const nav=document.getElementById("main-navigation");
 
 if(nav){
-
 nav.querySelectorAll("a").forEach(link=>{
-
-const target=link.getAttribute("href");
 
 const navMap={
 "#local":"local",
@@ -1157,16 +1067,14 @@ const navMap={
 "#contact":"contact"
 };
 
-const key=navMap[target];
+const key=navMap[link.getAttribute("href")];
 
-if(key && visibility[key]===false){
-link.classList.add("section-hidden");
-}else{
-link.classList.remove("section-hidden");
-}
+link.classList.toggle(
+"section-hidden",
+!!key && visibility[key]===false
+);
 
 });
-
 }
 
 }
@@ -1174,7 +1082,6 @@ link.classList.remove("section-hidden");
 function applySectionOrder(settings){
 
 const container=document.getElementById("homepage-sections");
-
 if(!container)return;
 
 const sectionMap={
@@ -1189,24 +1096,16 @@ const sectionMap={
 };
 
 const defaultOrder=[
-"hero",
-"latest",
-"top-stories",
-"chart",
-"creators",
-"local",
-"national",
-"contact"
+"hero","latest","top-stories","chart",
+"creators","local","national","contact"
 ];
 
 let order=Array.isArray(settings.section_order)
-?settings.section_order
-:defaultOrder;
+?settings.section_order:defaultOrder;
 
-order=order.map(item=>{
-if(typeof item==="string")return item;
-return item?.id||item?.key||"";
-}).filter(key=>sectionMap[key]);
+order=order.map(item=>
+typeof item==="string"?item:item?.id||item?.key||""
+).filter(key=>sectionMap[key]);
 
 const completedOrder=[
 ...order,
@@ -1214,8 +1113,7 @@ const completedOrder=[
 ];
 
 completedOrder.forEach(key=>{
-const element=sectionMap[key];
-if(element)container.appendChild(element);
+if(sectionMap[key])container.appendChild(sectionMap[key]);
 });
 
 }
@@ -1247,8 +1145,7 @@ const logo=document.getElementById("site-logo");
 const name=document.getElementById("site-name");
 const logoUrl=safeHttpUrl(settings.logo_url);
 
-if(logo && name && logoUrl){
-
+if(logo&&name&&logoUrl){
 logo.src=logoUrl;
 logo.style.display="block";
 name.style.display="none";
@@ -1257,35 +1154,29 @@ logo.onerror=()=>{
 logo.style.display="none";
 name.style.display="";
 };
-
 }
 
 setText("contact-heading",settings.contact_heading);
 setText("contact-intro",settings.contact_intro);
 setText("contact-description",settings.contact_description);
 setText("site-footer",settings.footer_text);
-
 setText("latest-heading",settings.latest_heading);
 setText("creators-heading",settings.creators_heading);
 setText("local-heading",settings.local_heading);
 setText("national-heading",settings.national_heading);
-
 setText("chart-heading",settings.chart_heading);
 setText("chart-description",settings.chart_description);
 setText("creators-description",settings.creators_description);
 setText("local-description",settings.local_description);
 setText("national-description",settings.national_description);
-
 setText("top-stories-heading",settings.top_stories_heading);
 
 const email=document.getElementById("contact-email");
 
-if(email && settings.contact_email &&
-   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(settings.contact_email)){
-
+if(email&&settings.contact_email&&
+/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(settings.contact_email)){
 email.href="mailto:"+settings.contact_email;
 email.textContent=settings.contact_email;
-
 }
 
 applySectionVisibility(settings);
@@ -1293,9 +1184,7 @@ applySectionOrder(settings);
 
 }
 
-/* =========================
-   HOMEPAGE BANNERS
-========================= */
+/* HOMEPAGE BANNERS */
 
 let banners=[];
 let activeBanner=0;
@@ -1318,13 +1207,10 @@ activeBanner=index;
 const banner=banners[index];
 
 document.getElementById("hero-image").src=safeImage(banner.image_url);
-
 document.getElementById("hero-image").alt=banner.title||"Featured story";
-
 document.getElementById("hero-title").textContent=banner.title||"";
 document.getElementById("hero-subtitle").textContent=banner.subtitle||"";
 document.getElementById("hero-label").textContent=banner.label||"FEATURED";
-
 document.getElementById("hero-link").href=safeLink(banner.link_url);
 
 document.getElementById("hero-button").textContent=
@@ -1349,40 +1235,29 @@ data-index="${index}"></button>
 `).join("");
 
 dots.querySelectorAll("button").forEach(button=>{
-
 button.addEventListener("click",()=>{
 displayBanner(Number(button.dataset.index));
 restartBannerTimer();
 });
-
 });
 
 }
 
 function nextBanner(){
-
 if(banners.length<2)return;
-
 displayBanner((activeBanner+1)%banners.length);
-
 }
 
 function previousBanner(){
-
 if(banners.length<2)return;
-
 displayBanner((activeBanner-1+banners.length)%banners.length);
-
 }
 
 function startBannerTimer(){
-
 clearInterval(bannerTimer);
-
 if(banners.length>1){
 bannerTimer=setInterval(nextBanner,5000);
 }
-
 }
 
 function restartBannerTimer(){
@@ -1406,7 +1281,6 @@ banners=data&&data.length?data:[defaultBanner];
 }
 
 activeBanner=0;
-
 displayBanner(0);
 renderBannerDots();
 
@@ -1434,9 +1308,7 @@ document.getElementById("hero").addEventListener("mouseleave",()=>{
 startBannerTimer();
 });
 
-/* =========================
-   ARTICLES
-========================= */
+/* ARTICLES */
 
 function articleCard(article){
 
@@ -1445,7 +1317,6 @@ const link="article.html?id="+encodeURIComponent(article.id);
 
 return `
 <article class="news-card">
-
 <a href="${link}">
 <img src="${escapeHTML(image)}"
 alt="${escapeHTML(article.title)}"
@@ -1453,14 +1324,9 @@ loading="lazy">
 </a>
 
 <div class="news-info">
+<small>${escapeHTML(article.category)} · ${escapeHTML(article.section)}</small>
 
-<small>
-${escapeHTML(article.category)} · ${escapeHTML(article.section)}
-</small>
-
-<h3>
-<a href="${link}">${escapeHTML(article.title)}</a>
-</h3>
+<h3><a href="${link}">${escapeHTML(article.title)}</a></h3>
 
 <p>${escapeHTML(article.excerpt)}</p>
 
@@ -1468,7 +1334,6 @@ ${escapeHTML(article.category)} · ${escapeHTML(article.section)}
 style="color:var(--primary);border-color:var(--primary);margin-top:12px">
 READ FULL STORY →
 </a>
-
 </div>
 </article>
 `;
@@ -1484,26 +1349,20 @@ const {data,error}=await db
 .order("published_at",{ascending:false});
 
 if(error){
-
 console.error("Article loading error:",error);
-
 document.getElementById("latest-news").innerHTML="<p>Unable to load stories.</p>";
 document.getElementById("top-stories").innerHTML="<p>Unable to load stories.</p>";
-
 return;
-
 }
 
 const articles=data||[];
 
 document.getElementById("latest-news").innerHTML=
-articles.length
-?articles.slice(0,4).map(articleCard).join("")
+articles.length?articles.slice(0,4).map(articleCard).join("")
 :"<p>No published stories yet.</p>";
 
 document.getElementById("top-stories").innerHTML=
-articles.length
-?articles.slice(0,5).map(article=>`
+articles.length?articles.slice(0,5).map(article=>`
 <div class="top-story">
 <a href="article.html?id=${encodeURIComponent(article.id)}">
 <span>${escapeHTML(article.category)}</span>
@@ -1518,8 +1377,7 @@ String(a.category||"").toLowerCase()==="local"
 );
 
 document.getElementById("local-news").innerHTML=
-local.length
-?local.map(articleCard).join("")
+local.length?local.map(articleCard).join("")
 :"<p>No local stories published yet.</p>";
 
 const national=articles.filter(a=>
@@ -1527,15 +1385,12 @@ String(a.category||"").toLowerCase()==="national"
 );
 
 document.getElementById("national-news").innerHTML=
-national.length
-?national.map(articleCard).join("")
+national.length?national.map(articleCard).join("")
 :"<p>No national stories published yet.</p>";
 
 }
 
-/* =========================
-   ANONYMOUS CHART VOTING
-========================= */
+/* ANONYMOUS CHART VOTING */
 
 let chartSongs=[];
 let chartUser=null;
@@ -1554,15 +1409,11 @@ function updateChartAuthUI(){
 const status=document.getElementById("chart-user-status");
 
 if(chartUser){
-
 status.textContent=chartUser.is_anonymous
 ?"Anonymous voting session ready."
 :"Voting session ready.";
-
 }else{
-
 status.textContent="Voting session is not available.";
-
 }
 
 renderMusicChart();
@@ -1572,34 +1423,25 @@ renderMusicChart();
 async function ensureAnonymousUser(){
 
 if(chartUser)return chartUser;
-
 if(anonymousAuthPromise)return anonymousAuthPromise;
 
 anonymousAuthPromise=(async()=>{
 
 const {data:sessionData,error:sessionError}=await db.auth.getSession();
 
-if(sessionError){
-throw sessionError;
-}
+if(sessionError)throw sessionError;
 
 if(sessionData?.session?.user){
-
 chartUser=sessionData.session.user;
 updateChartAuthUI();
-
 return chartUser;
-
 }
 
 const {data,error}=await db.auth.signInAnonymously();
 
-if(error){
-throw error;
-}
+if(error)throw error;
 
 chartUser=data.user;
-
 updateChartAuthUI();
 
 return chartUser;
@@ -1607,13 +1449,9 @@ return chartUser;
 })();
 
 try{
-
 return await anonymousAuthPromise;
-
 }finally{
-
 anonymousAuthPromise=null;
-
 }
 
 }
@@ -1623,31 +1461,21 @@ function getMovementInfo(song){
 const movement=String(song.movement||"").toUpperCase();
 
 if(movement==="NEW"){
-
 return '<span class="chart-movement movement-new">NEW ENTRY</span>';
-
 }
 
 if(movement==="UP"){
-
 const places=Number(song.previous_position)-Number(song.rank_position||song.rank);
-
 return `<span class="chart-movement movement-up">↑ UP${places>0?" "+places:""}</span>`;
-
 }
 
 if(movement==="DOWN"){
-
 const places=Number(song.rank_position||song.rank)-Number(song.previous_position);
-
 return `<span class="chart-movement movement-down">↓ DOWN${places>0?" "+places:""}</span>`;
-
 }
 
 if(movement==="SAME"){
-
 return '<span class="chart-movement movement-same">— NO CHANGE</span>';
-
 }
 
 return "";
@@ -1659,15 +1487,132 @@ function isDirectAudio(url){
 if(!url)return false;
 
 try{
-
 const parsed=new URL(url);
 return /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(parsed.pathname);
+}catch(error){
+return false;
+}
+
+}
+
+/* SONG-SPECIFIC SHARING */
+
+function getSongVoteLink(song){
+
+const url=new URL(window.location.href);
+
+url.searchParams.set("vote",String(song.id));
+url.hash="song-"+String(song.id);
+
+return url.toString();
+
+}
+
+async function copySongVoteLink(song){
+
+const link=getSongVoteLink(song);
+
+try{
+
+if(navigator.clipboard&&window.isSecureContext){
+
+await navigator.clipboard.writeText(link);
+
+}else{
+
+const temporary=document.createElement("textarea");
+
+temporary.value=link;
+temporary.style.position="fixed";
+temporary.style.opacity="0";
+
+document.body.appendChild(temporary);
+temporary.select();
+
+const copied=document.execCommand("copy");
+
+temporary.remove();
+
+if(!copied)throw new Error("Copy failed");
+
+}
+
+setChartMessage("Song voting link copied! Share it with friends.");
 
 }catch(error){
 
-return false;
+console.error("Copy link error:",error);
+
+setChartMessage("Unable to copy automatically. Please copy the page address manually.");
 
 }
+
+}
+
+async function shareSong(song){
+
+const link=getSongVoteLink(song);
+
+const shareData={
+title:"Vote for "+song.title+" | People's Choice Top 5",
+text:"Support "+song.title+" by "+song.artist+". Cast your vote on People's Choice Magazine Top 5!",
+url:link
+};
+
+try{
+
+if(navigator.share){
+
+await navigator.share(shareData);
+
+}else{
+
+await copySongVoteLink(song);
+
+}
+
+}catch(error){
+
+if(error.name!=="AbortError"){
+console.error("Song sharing error:",error);
+setChartMessage("Unable to open sharing menu. Please copy the song link instead.");
+}
+
+}
+
+}
+
+function focusSharedSong(){
+
+const params=new URLSearchParams(window.location.search);
+const songId=params.get("vote");
+
+if(!songId)return;
+
+const song=chartSongs.find(item=>
+String(item.id)===songId
+);
+
+if(!song)return;
+
+setTimeout(()=>{
+
+const card=document.getElementById("song-"+songId);
+
+if(!card)return;
+
+card.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+card.classList.add("song-highlight");
+
+setTimeout(()=>{
+card.classList.remove("song-highlight");
+},5000);
+
+},300);
 
 }
 
@@ -1698,7 +1643,7 @@ const peak=song.is_peak
 
 let listenControl="";
 
-if(streamUrl && isDirectAudio(streamUrl)){
+if(streamUrl&&isDirectAudio(streamUrl)){
 
 listenControl=`
 <audio class="chart-audio"
@@ -1722,7 +1667,7 @@ LISTEN TO SONG ↗
 }
 
 return `
-<article class="chart-card">
+<article class="chart-card" id="song-${escapeHTML(song.id)}">
 
 <div class="chart-cover-wrap">
 
@@ -1732,9 +1677,7 @@ src="${escapeHTML(cover)}"
 alt="${escapeHTML(song.title)} cover artwork"
 loading="lazy">
 
-<div class="chart-rank">
-#${escapeHTML(rank)}
-</div>
+<div class="chart-rank">#${escapeHTML(rank)}</div>
 
 </div>
 
@@ -1754,20 +1697,37 @@ class="chart-vote"
 type="button"
 data-vote-song="${escapeHTML(song.id)}"
 data-vote-week="${escapeHTML(song.chart_week)}">
-
 VOTE FOR THIS SONG
-
 </button>
 
 ${listenControl}
 
+<div class="chart-share-actions">
+
+<button
+class="chart-share-button"
+type="button"
+data-copy-song="${escapeHTML(song.id)}">
+▣ COPY LINK
+</button>
+
+<button
+class="chart-share-button share-primary"
+type="button"
+data-share-song="${escapeHTML(song.id)}">
+↗ SHARE SONG
+</button>
+
 </div>
 
+</div>
 </div>
 </article>
 `;
 
 }).join("");
+
+focusSharedSong();
 
 }
 
@@ -1802,7 +1762,9 @@ renderMusicChart();
 
 async function voteForSong(songId,chartWeek,button){
 
-const song=chartSongs.find(item=>item.id===songId);
+const song=chartSongs.find(item=>
+String(item.id)===songId
+);
 
 if(!song){
 setChartMessage("This song is no longer available in the chart.");
@@ -1830,8 +1792,8 @@ if(error){
 
 console.error("Vote submission error:",error);
 
-if(error.code==="23505" ||
-   String(error.message||"").toLowerCase().includes("duplicate")){
+if(error.code==="23505"||
+String(error.message||"").toLowerCase().includes("duplicate")){
 
 setChartMessage("You have already voted this chart week. Thank you for participating.");
 
@@ -1870,16 +1832,54 @@ button.textContent="TRY VOTING AGAIN";
 
 }
 
+/* CHART BUTTON HANDLERS */
+
 chartGrid.addEventListener("click",async event=>{
 
-const button=event.target.closest("[data-vote-song]");
+const copyButton=event.target.closest("[data-copy-song]");
 
-if(!button)return;
+if(copyButton){
 
-const songId=button.dataset.voteSong;
-const chartWeek=button.dataset.voteWeek;
+const songId=copyButton.dataset.copySong;
 
-await voteForSong(songId,chartWeek,button);
+const song=chartSongs.find(item=>
+String(item.id)===songId
+);
+
+if(song){
+await copySongVoteLink(song);
+}
+
+return;
+
+}
+
+const shareButton=event.target.closest("[data-share-song]");
+
+if(shareButton){
+
+const songId=shareButton.dataset.shareSong;
+
+const song=chartSongs.find(item=>
+String(item.id)===songId
+);
+
+if(song){
+await shareSong(song);
+}
+
+return;
+
+}
+
+const voteButton=event.target.closest("[data-vote-song]");
+
+if(!voteButton)return;
+
+const songId=voteButton.dataset.voteSong;
+const chartWeek=voteButton.dataset.voteWeek;
+
+await voteForSong(songId,chartWeek,voteButton);
 
 });
 
@@ -1897,10 +1897,17 @@ console.error("Chart session error:",error);
 
 chartUser=data?.session?.user||null;
 
+db.auth.onAuthStateChange((event,session)=>{
+
+chartUser=session?.user||null;
+
+updateChartAuthUI();
+
+});
+
 if(chartUser){
 
 setChartMessage("Your voting session is ready.");
-
 updateChartAuthUI();
 
 return;
@@ -1920,7 +1927,6 @@ setChartMessage("You can now vote for your favourite song.");
 console.error("Anonymous authentication setup error:",error);
 
 chartUser=null;
-
 updateChartAuthUI();
 
 setChartMessage(
@@ -1929,19 +1935,9 @@ setChartMessage(
 
 }
 
-db.auth.onAuthStateChange((event,session)=>{
-
-chartUser=session?.user||null;
-
-updateChartAuthUI();
-
-});
-
 }
 
-/* =========================
-   CREATORS' CORNER
-========================= */
+/* CREATORS' CORNER */
 
 async function loadVideos(){
 
@@ -1995,17 +1991,14 @@ const poster=thumbnail
 
 const videoType=/\.webm(\?|$)/i.test(videoUrl)
 ?"video/webm"
-:/\.ogg(\?|$)/i.test(videoUrl)
+/\.ogg(\?|$)/i.test(videoUrl)
 ?"video/ogg"
 :"video/mp4";
 
 return `
 <article class="video-card">
 
-<video
-controls
-playsinline
-preload="metadata"
+<video controls playsinline preload="metadata"
 ${poster}
 aria-label="${escapeHTML(video.title)}">
 
@@ -2046,9 +2039,7 @@ No playable videos are available.
 
 }
 
-/* =========================
-   INITIALISE HOMEPAGE
-========================= */
+/* INITIALISE HOMEPAGE */
 
 async function initialiseHomepage(){
 
