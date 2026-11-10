@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <meta name="description" content="People's Choice Magazine brings you the latest Zimbabwean entertainment news, music, artists, celebrity interviews, local stories, events and emerging talent. Your voice. Your stories. Your choice.">
-
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://peopleschoicemagazine.com/">
 
@@ -30,17 +29,23 @@
 --light:#fff1f7;
 --white:#fff;
 --gray:#777;
+--background:#f5f5f5;
+--text:#171717;
+--primary:var(--pink);
+--font:Arial,Helvetica,sans-serif;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 
 body{
-font-family:Arial,Helvetica,sans-serif;
-background:#f5f5f5;
-color:var(--dark);
+font-family:var(--font);
+background:var(--background);
+color:var(--text);
 }
 
 a{text-decoration:none;color:inherit}
+
+button,input{font-family:inherit}
 
 .topbar{
 background:var(--dark);
@@ -53,7 +58,7 @@ font-size:12px;
 background:white;
 padding:22px 5%;
 text-align:center;
-border-bottom:3px solid var(--pink);
+border-bottom:3px solid var(--primary);
 }
 
 .logo{
@@ -63,7 +68,7 @@ font-weight:bold;
 letter-spacing:-1.5px;
 }
 
-.logo span{color:var(--pink)}
+.logo span{color:var(--primary)}
 
 .logo-image{
 max-height:85px;
@@ -98,7 +103,7 @@ font-weight:bold;
 transition:.2s;
 }
 
-nav a:hover{background:var(--pink)}
+nav a:hover{background:var(--primary)}
 
 .container{
 max-width:1250px;
@@ -106,11 +111,41 @@ margin:25px auto;
 padding:0 18px;
 }
 
+/* HOMEPAGE SECTION LAYOUT */
+
+.homepage-sections{
+display:grid;
+grid-template-columns:minmax(0,2fr) minmax(250px,1fr);
+gap:25px;
+align-items:start;
+}
+
+.homepage-sections>.full-width{
+grid-column:1/-1;
+}
+
+#hero{
+grid-column:1/-1;
+}
+
+#latest-section{
+grid-column:1;
+min-width:0;
+}
+
+#top-stories-section{
+grid-column:2;
+}
+
 .section-title{
-border-left:5px solid var(--pink);
+border-left:5px solid var(--primary);
 padding-left:12px;
 margin-bottom:18px;
 font-size:19px;
+}
+
+.section-hidden{
+display:none!important;
 }
 
 /* HERO */
@@ -150,7 +185,7 @@ max-width:700px;
 
 .category{
 display:inline-block;
-background:var(--pink);
+background:var(--primary);
 color:white;
 padding:7px 12px;
 font-size:11px;
@@ -182,8 +217,8 @@ font-weight:bold;
 }
 
 .read-more:hover{
-background:var(--pink);
-border-color:var(--pink);
+background:var(--primary);
+border-color:var(--primary);
 }
 
 .hero-link{
@@ -212,7 +247,7 @@ cursor:pointer;
 font-size:20px;
 }
 
-.hero-arrow:hover{background:var(--pink)}
+.hero-arrow:hover{background:var(--primary)}
 
 .hero-dots{
 display:flex;
@@ -230,23 +265,16 @@ cursor:pointer;
 }
 
 .hero-dot.active{
-background:var(--pink);
+background:var(--primary);
 width:23px;
 border-radius:10px;
 }
 
 /* NEWS */
 
-.news-layout{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:25px;
-margin-top:35px;
-}
-
 .news-grid{
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,minmax(0,1fr));
 gap:20px;
 }
 
@@ -254,6 +282,7 @@ gap:20px;
 background:white;
 overflow:hidden;
 border:1px solid #eee;
+min-width:0;
 }
 
 .news-card img{
@@ -266,7 +295,7 @@ display:block;
 .news-info{padding:16px}
 
 .news-info small{
-color:var(--pink);
+color:var(--primary);
 font-weight:bold;
 text-transform:uppercase;
 font-size:10px;
@@ -294,7 +323,7 @@ height:fit-content;
 .sidebar h2{
 font-family:Georgia,serif;
 font-size:21px;
-border-bottom:2px solid var(--pink);
+border-bottom:2px solid var(--primary);
 padding-bottom:12px;
 margin-bottom:15px;
 }
@@ -310,7 +339,7 @@ line-height:1.4;
 
 .top-story span{
 display:block;
-color:var(--pink);
+color:var(--primary);
 font:bold 10px Arial;
 margin-bottom:6px;
 }
@@ -320,7 +349,7 @@ margin-bottom:6px;
 .category-banner{
 background:var(--light);
 padding:20px;
-border-left:5px solid var(--pink);
+border-left:5px solid var(--primary);
 margin-bottom:20px;
 }
 
@@ -335,17 +364,17 @@ font-size:13px;
 margin-top:6px;
 }
 
-/* PEOPLE'S CHOICE MUSIC CHART */
+/* MUSIC CHART */
 
 #music-chart{
-margin-top:45px;
+margin-top:20px;
 }
 
 .chart-heading{
 background:var(--dark);
 color:white;
 padding:25px;
-border-left:5px solid var(--pink);
+border-left:5px solid var(--primary);
 margin-bottom:20px;
 }
 
@@ -381,25 +410,9 @@ line-height:1.5;
 margin-bottom:12px;
 }
 
-.chart-auth-fields{
-display:grid;
-grid-template-columns:1fr 1fr auto auto;
-gap:10px;
-align-items:center;
-}
-
-.chart-auth input{
-width:100%;
-min-width:0;
-padding:12px;
-border:1px solid #ddd;
-border-radius:3px;
-font-size:13px;
-}
-
 .chart-button{
 border:0;
-background:var(--pink);
+background:var(--primary);
 color:white;
 padding:12px 17px;
 border-radius:3px;
@@ -408,17 +421,11 @@ font-size:12px;
 cursor:pointer;
 }
 
-.chart-button:hover{
-background:#c83d82;
-}
+.chart-button:hover{opacity:.85}
 
 .chart-button:disabled{
 opacity:.6;
 cursor:not-allowed;
-}
-
-.chart-secondary{
-background:var(--dark);
 }
 
 .chart-message{
@@ -436,7 +443,7 @@ margin-top:10px;
 
 .chart-grid{
 display:grid;
-grid-template-columns:repeat(5,1fr);
+grid-template-columns:repeat(5,minmax(0,1fr));
 gap:15px;
 }
 
@@ -445,11 +452,10 @@ background:white;
 border:1px solid #eee;
 overflow:hidden;
 position:relative;
+min-width:0;
 }
 
-.chart-cover-wrap{
-position:relative;
-}
+.chart-cover-wrap{position:relative}
 
 .chart-cover{
 width:100%;
@@ -463,7 +469,7 @@ background:#eee;
 position:absolute;
 top:10px;
 left:10px;
-background:var(--pink);
+background:var(--primary);
 color:white;
 font-weight:bold;
 font-size:15px;
@@ -475,9 +481,7 @@ justify-content:center;
 border-radius:50%;
 }
 
-.chart-info{
-padding:13px;
-}
+.chart-info{padding:13px}
 
 .chart-info h3{
 font-family:Georgia,serif;
@@ -501,7 +505,7 @@ gap:8px;
 .chart-vote{
 width:100%;
 border:0;
-background:var(--pink);
+background:var(--primary);
 color:white;
 padding:11px 8px;
 font-size:11px;
@@ -510,8 +514,11 @@ border-radius:3px;
 cursor:pointer;
 }
 
-.chart-vote:hover{
-background:#c83d82;
+.chart-vote:hover{opacity:.85}
+
+.chart-vote:disabled{
+opacity:.6;
+cursor:not-allowed;
 }
 
 .chart-stream{
@@ -525,8 +532,53 @@ border-radius:3px;
 }
 
 .chart-stream:hover{
-border-color:var(--pink);
-color:var(--pink);
+border-color:var(--primary);
+color:var(--primary);
+}
+
+.chart-audio{
+width:100%;
+height:36px;
+}
+
+.chart-movement{
+display:inline-block;
+font-size:10px;
+font-weight:bold;
+padding:5px 7px;
+border-radius:3px;
+margin:0 0 9px;
+}
+
+.movement-up{
+background:#e5f7ec;
+color:#168342;
+}
+
+.movement-down{
+background:#fde8e8;
+color:#bb3030;
+}
+
+.movement-same{
+background:#eee;
+color:#555;
+}
+
+.movement-new{
+background:#e8efff;
+color:#315bb5;
+}
+
+.chart-peak{
+display:inline-block;
+font-size:9px;
+font-weight:bold;
+padding:4px 6px;
+border-radius:3px;
+background:#fff2cf;
+color:#8a6200;
+margin:0 0 9px 4px;
 }
 
 .chart-empty{
@@ -547,13 +599,13 @@ line-height:1.5;
 
 /* CREATORS CORNER */
 
-#creators{margin-top:45px}
+#creators{margin-top:20px}
 
 .creator-heading{
 background:var(--dark);
 color:white;
 padding:25px;
-border-left:5px solid var(--pink);
+border-left:5px solid var(--primary);
 margin-bottom:20px;
 }
 
@@ -570,7 +622,7 @@ margin-top:8px;
 
 .video-grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(3,minmax(0,1fr));
 gap:20px;
 }
 
@@ -579,6 +631,7 @@ background:white;
 border:1px solid #eee;
 overflow:hidden;
 border-radius:4px;
+min-width:0;
 }
 
 .video-card video{
@@ -592,7 +645,7 @@ object-fit:contain;
 .video-info{padding:15px}
 
 .video-category{
-color:var(--pink);
+color:var(--primary);
 font-size:10px;
 font-weight:bold;
 text-transform:uppercase;
@@ -620,7 +673,7 @@ color:#333!important;
 .featured-tag{
 display:inline-block;
 background:var(--light);
-color:var(--pink);
+color:var(--primary);
 font-size:10px;
 font-weight:bold;
 padding:5px 8px;
@@ -635,10 +688,12 @@ color:#777;
 grid-column:1/-1;
 }
 
-/* FOOTER */
+/* CONTACT AND FOOTER */
 
 .contact{
-margin-top:45px;
+grid-column:1/-1;
+width:100vw;
+margin-left:calc(50% - 50vw);
 background:var(--dark);
 color:white;
 padding:40px 20px;
@@ -652,7 +707,7 @@ margin-bottom:12px;
 }
 
 .contact p{color:#ccc;margin:10px 0}
-.contact a{color:var(--pink)}
+.contact a{color:var(--primary)}
 
 footer{
 background:#0d0d0d;
@@ -663,12 +718,13 @@ font-size:12px;
 }
 
 @media(max-width:900px){
-.chart-grid{
-grid-template-columns:repeat(3,1fr);
+
+.homepage-sections{
+grid-template-columns:minmax(0,1fr) minmax(0,1fr);
 }
-.chart-auth-fields{
-grid-template-columns:1fr 1fr;
-}
+
+.chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+
 }
 
 @media(max-width:750px){
@@ -680,6 +736,16 @@ padding:14px 10px;
 font-size:10px;
 }
 
+.homepage-sections{
+grid-template-columns:1fr;
+gap:25px;
+}
+
+#hero,#latest-section,#top-stories-section,
+.homepage-sections>.full-width{
+grid-column:1/-1;
+}
+
 .hero{height:370px}
 .hero-content{padding:20px}
 
@@ -687,8 +753,6 @@ font-size:10px;
 right:12px;
 bottom:12px;
 }
-
-.news-layout{grid-template-columns:1fr}
 
 .news-grid{
 grid-template-columns:1fr 1fr;
@@ -701,7 +765,7 @@ gap:10px;
 .news-info p{font-size:11px}
 
 .video-grid{
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,minmax(0,1fr));
 gap:10px;
 }
 
@@ -709,7 +773,7 @@ gap:10px;
 .video-info h3{font-size:15px}
 
 .chart-grid{
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,minmax(0,1fr));
 gap:10px;
 }
 
@@ -725,10 +789,6 @@ gap:10px;
 
 .chart-grid{
 grid-template-columns:repeat(2,minmax(0,1fr));
-}
-
-.chart-auth-fields{
-grid-template-columns:1fr;
 }
 
 .chart-heading h2{font-size:23px}
@@ -757,7 +817,7 @@ MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.
 
 </header>
 
-<nav>
+<nav id="main-navigation">
 <a href="#home">HOME</a>
 <a href="#local">LOCAL NEWS</a>
 <a href="#national">NATIONAL NEWS</a>
@@ -767,6 +827,8 @@ MAGAZINE · YOUR VOICE. YOUR STORIES. YOUR CHOICE.
 </nav>
 
 <main class="container" id="home">
+
+<div class="homepage-sections" id="homepage-sections">
 
 <!-- HERO BANNERS -->
 
@@ -782,9 +844,7 @@ alt="Featured magazine story">
 
 <span class="category" id="hero-label">EDITOR'S PICK</span>
 
-<h1 id="hero-title">
-Your Stories. Your People. Your Magazine.
-</h1>
+<h1 id="hero-title">Your Stories. Your People. Your Magazine.</h1>
 
 <p id="hero-subtitle">
 Discover the latest stories shaping entertainment, music and culture in Zimbabwe.
@@ -807,11 +867,9 @@ Discover the latest stories shaping entertainment, music and culture in Zimbabwe
 
 </div>
 
-<!-- LATEST NEWS -->
+<!-- LATEST STORIES -->
 
-<div class="news-layout">
-
-<section>
+<section id="latest-section">
 
 <h2 class="section-title" id="latest-heading">LATEST STORIES</h2>
 
@@ -821,25 +879,25 @@ Discover the latest stories shaping entertainment, music and culture in Zimbabwe
 
 </section>
 
-<aside class="sidebar">
+<!-- TOP STORIES -->
 
-<h2>Top Stories</h2>
+<aside class="sidebar" id="top-stories-section">
+
+<h2 id="top-stories-heading">Top Stories</h2>
 
 <div id="top-stories">Loading stories...</div>
 
 </aside>
 
-</div>
+<!-- MUSIC CHART -->
 
-<!-- PEOPLE'S CHOICE TOP 5 MUSIC CHART -->
-
-<section id="music-chart">
+<section id="music-chart" class="full-width">
 
 <div class="chart-heading">
 
-<h2>🏆 PEOPLE'S CHOICE TOP 5</h2>
+<h2 id="chart-heading">🏆 PEOPLE'S CHOICE TOP 5</h2>
 
-<p>
+<p id="chart-description">
 Your favourite music. Your choice.
 Discover this week's top five songs and vote for the music you love.
 </p>
@@ -851,56 +909,17 @@ Discover this week's top five songs and vote for the music you love.
 <h3>Join the People's Choice Chart</h3>
 
 <p>
-Create an account or sign in to vote. Each registered account can vote once per chart week.
+Vote anonymously. No account or email registration is required.
+Each visitor can vote once per chart week on this browser.
 </p>
 
-<form id="chart-auth-form">
-
-<div class="chart-auth-fields">
-
-<input
-type="email"
-id="chart-email"
-placeholder="Your email address"
-autocomplete="email"
-required>
-
-<input
-type="password"
-id="chart-password"
-placeholder="Password (at least 6 characters)"
-autocomplete="current-password"
-minlength="6"
-required>
-
-<button class="chart-button" id="chart-login-button" type="submit">
-SIGN IN
-</button>
-
-<button class="chart-button chart-secondary"
-id="chart-signup-button"
-type="button">
-CREATE ACCOUNT
-</button>
-
+<div class="chart-message" id="chart-auth-message" aria-live="polite">
+Preparing anonymous voting...
 </div>
-
-</form>
-
-<div class="chart-message" id="chart-auth-message" aria-live="polite"></div>
 
 <div class="chart-user-status" id="chart-user-status">
-You are not signed in.
+Preparing your voting session...
 </div>
-
-<button
-class="chart-button chart-secondary"
-id="chart-logout-button"
-type="button"
-hidden
-style="margin-top:10px">
-SIGN OUT
-</button>
 
 </div>
 
@@ -921,13 +940,13 @@ Vote totals are not displayed publicly.
 
 <!-- CREATORS CORNER -->
 
-<section id="creators" class="category-section">
+<section id="creators" class="category-section full-width">
 
 <div class="creator-heading">
 
 <h2 id="creators-heading">🎬 CREATORS' CORNER</h2>
 
-<p>
+<p id="creators-description">
 Discover local content creators, comedy skits, entertainment videos and emerging talent.
 </p>
 
@@ -943,13 +962,13 @@ Discover local content creators, comedy skits, entertainment videos and emerging
 
 <!-- LOCAL NEWS -->
 
-<section class="category-section" id="local">
+<section class="category-section full-width" id="local">
 
 <div class="category-banner">
 
 <h2 id="local-heading">Local News</h2>
 
-<p>Stories and developments from our communities.</p>
+<p id="local-description">Stories and developments from our communities.</p>
 
 </div>
 
@@ -959,21 +978,19 @@ Discover local content creators, comedy skits, entertainment videos and emerging
 
 <!-- NATIONAL NEWS -->
 
-<section class="category-section" id="national">
+<section class="category-section full-width" id="national">
 
 <div class="category-banner">
 
 <h2 id="national-heading">National News</h2>
 
-<p>News and developments from across Zimbabwe.</p>
+<p id="national-description">News and developments from across Zimbabwe.</p>
 
 </div>
 
 <div class="news-grid" id="national-news"></div>
 
 </section>
-
-</main>
 
 <!-- CONTACT -->
 
@@ -997,12 +1014,19 @@ Email Our Editorial Team
 
 </section>
 
+</div>
+</main>
+
 <footer id="site-footer">
 © 2026 People's Choice Magazine. All Rights Reserved.
 </footer>
 
 <script>
 "use strict";
+
+/* =========================
+   SUPABASE CONNECTION
+========================= */
 
 if(!window.supabase){
 throw new Error("Supabase library failed to load.");
@@ -1040,6 +1064,11 @@ if(url&&!url.startsWith("//")&&!url.includes(":")&&!url.startsWith("\\"))return 
 return fallback;
 }
 
+function safeHttpUrl(value){
+const url=String(value||"").trim();
+return /^https?:\/\//i.test(url)?url:"";
+}
+
 function safeImage(value){
 const url=String(value||"").trim();
 
@@ -1051,6 +1080,166 @@ return "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=700";
 /* =========================
    WEBSITE SETTINGS
 ========================= */
+
+let currentSiteSettings={};
+
+const allowedFonts={
+"Arial":"Arial,Helvetica,sans-serif",
+"Georgia":"Georgia,serif",
+"Verdana":"Verdana,Geneva,sans-serif",
+"Tahoma":"Tahoma,Geneva,sans-serif",
+"Trebuchet MS":"'Trebuchet MS',sans-serif",
+"Times New Roman":"'Times New Roman',serif"
+};
+
+function validColour(value,fallback){
+if(typeof value!=="string")return fallback;
+
+const colour=value.trim();
+
+if(/^#[0-9a-f]{3,8}$/i.test(colour))return colour;
+if(/^rgba?\([\d\s.,%]+\)$/i.test(colour))return colour;
+if(/^hsla?\([\d\s.,%]+\)$/i.test(colour))return colour;
+
+return fallback;
+}
+
+function setText(id,value){
+const element=document.getElementById(id);
+
+if(element && typeof value==="string" && value.trim()){
+element.textContent=value;
+}
+}
+
+function applyAppearance(settings){
+
+const root=document.documentElement;
+
+const primary=validColour(settings.theme_primary,"#e7549b");
+const dark=validColour(settings.theme_dark,"#171717");
+const light=validColour(settings.theme_light,"#fff1f7");
+const background=validColour(settings.theme_background,"#f5f5f5");
+const textColour=validColour(settings.theme_text,"#171717");
+
+root.style.setProperty("--pink",primary);
+root.style.setProperty("--primary",primary);
+root.style.setProperty("--dark",dark);
+root.style.setProperty("--light",light);
+root.style.setProperty("--background",background);
+root.style.setProperty("--text",textColour);
+
+const selectedFont=allowedFonts[settings.font_family];
+
+if(selectedFont){
+root.style.setProperty("--font",selectedFont);
+}
+
+}
+
+function applySectionVisibility(settings){
+
+const visibility=settings.section_visibility||{};
+
+const sectionMap={
+"hero":document.getElementById("hero"),
+"latest":document.getElementById("latest-section"),
+"top-stories":document.getElementById("top-stories-section"),
+"chart":document.getElementById("music-chart"),
+"creators":document.getElementById("creators"),
+"local":document.getElementById("local"),
+"national":document.getElementById("national"),
+"contact":document.getElementById("contact")
+};
+
+Object.entries(sectionMap).forEach(([key,element])=>{
+
+if(!element)return;
+
+const isVisible=visibility[key]!==false;
+
+element.classList.toggle("section-hidden",!isVisible);
+
+});
+
+const nav=document.getElementById("main-navigation");
+
+if(nav){
+
+nav.querySelectorAll("a").forEach(link=>{
+
+const target=link.getAttribute("href");
+
+const navMap={
+"#local":"local",
+"#national":"national",
+"#music-chart":"chart",
+"#creators":"creators",
+"#contact":"contact"
+};
+
+const key=navMap[target];
+
+if(key && visibility[key]===false){
+link.classList.add("section-hidden");
+}else{
+link.classList.remove("section-hidden");
+}
+
+});
+
+}
+
+}
+
+function applySectionOrder(settings){
+
+const container=document.getElementById("homepage-sections");
+
+if(!container)return;
+
+const sectionMap={
+"hero":document.getElementById("hero"),
+"latest":document.getElementById("latest-section"),
+"top-stories":document.getElementById("top-stories-section"),
+"chart":document.getElementById("music-chart"),
+"creators":document.getElementById("creators"),
+"local":document.getElementById("local"),
+"national":document.getElementById("national"),
+"contact":document.getElementById("contact")
+};
+
+const defaultOrder=[
+"hero",
+"latest",
+"top-stories",
+"chart",
+"creators",
+"local",
+"national",
+"contact"
+];
+
+let order=Array.isArray(settings.section_order)
+?settings.section_order
+:defaultOrder;
+
+order=order.map(item=>{
+if(typeof item==="string")return item;
+return item?.id||item?.key||"";
+}).filter(key=>sectionMap[key]);
+
+const completedOrder=[
+...order,
+...defaultOrder.filter(key=>!order.includes(key))
+];
+
+completedOrder.forEach(key=>{
+const element=sectionMap[key];
+if(element)container.appendChild(element);
+});
+
+}
 
 async function loadSiteSettings(){
 
@@ -1067,15 +1256,9 @@ return;
 
 const settings=data?.settings||{};
 
-function setText(id,value){
+currentSiteSettings=settings;
 
-const element=document.getElementById(id);
-
-if(element && typeof value==="string" && value.trim()){
-element.textContent=value;
-}
-
-}
+applyAppearance(settings);
 
 setText("site-name",settings.site_name);
 setText("site-tagline",settings.tagline);
@@ -1083,19 +1266,38 @@ setText("site-topbar",settings.topbar_text);
 
 const logo=document.getElementById("site-logo");
 const name=document.getElementById("site-name");
+const logoUrl=safeHttpUrl(settings.logo_url);
 
-if(logo && name && settings.logo_url &&
-   /^https?:\/\//i.test(settings.logo_url)){
+if(logo && name && logoUrl){
 
-logo.src=settings.logo_url;
+logo.src=logoUrl;
 logo.style.display="block";
 name.style.display="none";
+
+logo.onerror=()=>{
+logo.style.display="none";
+name.style.display="";
+};
 
 }
 
 setText("contact-heading",settings.contact_heading);
 setText("contact-intro",settings.contact_intro);
 setText("contact-description",settings.contact_description);
+setText("site-footer",settings.footer_text);
+
+setText("latest-heading",settings.latest_heading);
+setText("creators-heading",settings.creators_heading);
+setText("local-heading",settings.local_heading);
+setText("national-heading",settings.national_heading);
+
+setText("chart-heading",settings.chart_heading);
+setText("chart-description",settings.chart_description);
+setText("creators-description",settings.creators_description);
+setText("local-description",settings.local_description);
+setText("national-description",settings.national_description);
+
+setText("top-stories-heading",settings.top_stories_heading);
 
 const email=document.getElementById("contact-email");
 
@@ -1107,12 +1309,8 @@ email.textContent=settings.contact_email;
 
 }
 
-setText("site-footer",settings.footer_text);
-
-setText("latest-heading",settings.latest_heading);
-setText("creators-heading",settings.creators_heading);
-setText("local-heading",settings.local_heading);
-setText("national-heading",settings.national_heading);
+applySectionVisibility(settings);
+applySectionOrder(settings);
 
 }
 
@@ -1145,9 +1343,7 @@ document.getElementById("hero-image").src=safeImage(banner.image_url);
 document.getElementById("hero-image").alt=banner.title||"Featured story";
 
 document.getElementById("hero-title").textContent=banner.title||"";
-
 document.getElementById("hero-subtitle").textContent=banner.subtitle||"";
-
 document.getElementById("hero-label").textContent=banner.label||"FEATURED";
 
 document.getElementById("hero-link").href=safeLink(banner.link_url);
@@ -1266,7 +1462,6 @@ startBannerTimer();
 function articleCard(article){
 
 const image=safeImage(article.image_url);
-
 const link="article.html?id="+encodeURIComponent(article.id);
 
 return `
@@ -1291,7 +1486,7 @@ ${escapeHTML(article.category)} · ${escapeHTML(article.section)}
 <p>${escapeHTML(article.excerpt)}</p>
 
 <a href="${link}" class="read-more"
-style="color:#e7549b;border-color:#e7549b;margin-top:12px">
+style="color:var(--primary);border-color:var(--primary);margin-top:12px">
 READ FULL STORY →
 </a>
 
@@ -1360,11 +1555,13 @@ national.length
 }
 
 /* =========================
-   PEOPLE'S CHOICE MUSIC CHART
+   ANONYMOUS CHART VOTING
 ========================= */
 
 let chartSongs=[];
 let chartUser=null;
+let anonymousAuthPromise=null;
+let chartAuthListenerRegistered=false;
 
 const chartGrid=document.getElementById("chart-grid");
 const chartAuthMessage=document.getElementById("chart-auth-message");
@@ -1376,27 +1573,122 @@ chartAuthMessage.textContent=message;
 function updateChartAuthUI(){
 
 const status=document.getElementById("chart-user-status");
-const logout=document.getElementById("chart-logout-button");
-const login=document.getElementById("chart-login-button");
-const signup=document.getElementById("chart-signup-button");
 
 if(chartUser){
 
-status.textContent="Signed in as "+chartUser.email;
-logout.hidden=false;
-login.hidden=true;
-signup.hidden=true;
+status.textContent=chartUser.is_anonymous
+?"Anonymous voting session ready."
+:"Voting session ready.";
 
 }else{
 
-status.textContent="You are not signed in.";
-logout.hidden=true;
-login.hidden=false;
-signup.hidden=false;
+status.textContent="Voting session is not available.";
 
 }
 
 renderMusicChart();
+
+}
+
+async function ensureAnonymousUser(){
+
+if(chartUser)return chartUser;
+
+if(anonymousAuthPromise)return anonymousAuthPromise;
+
+anonymousAuthPromise=(async()=>{
+
+const {data:sessionData,error:sessionError}=await db.auth.getSession();
+
+if(sessionError){
+throw sessionError;
+}
+
+if(sessionData?.session?.user){
+
+chartUser=sessionData.session.user;
+updateChartAuthUI();
+
+return chartUser;
+
+}
+
+const {data,error}=await db.auth.signInAnonymously();
+
+if(error){
+throw error;
+}
+
+chartUser=data.user;
+
+updateChartAuthUI();
+
+return chartUser;
+
+})();
+
+try{
+
+return await anonymousAuthPromise;
+
+}finally{
+
+anonymousAuthPromise=null;
+
+}
+
+}
+
+function getMovementInfo(song){
+
+const movement=String(song.movement||"").toUpperCase();
+
+if(movement==="NEW"){
+
+return '<span class="chart-movement movement-new">NEW ENTRY</span>';
+
+}
+
+if(movement==="UP"){
+
+const places=Number(song.previous_position)-Number(song.rank_position||song.rank);
+
+return `<span class="chart-movement movement-up">↑ UP${places>0?" "+places:""}</span>`;
+
+}
+
+if(movement==="DOWN"){
+
+const places=Number(song.rank_position||song.rank)-Number(song.previous_position);
+
+return `<span class="chart-movement movement-down">↓ DOWN${places>0?" "+places:""}</span>`;
+
+}
+
+if(movement==="SAME"){
+
+return '<span class="chart-movement movement-same">— NO CHANGE</span>';
+
+}
+
+return "";
+
+}
+
+function isDirectAudio(url){
+
+if(!url)return false;
+
+try{
+
+const parsed=new URL(url);
+return /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(parsed.pathname);
+
+}catch(error){
+
+return false;
+
+}
 
 }
 
@@ -1416,8 +1708,39 @@ return;
 
 chartGrid.innerHTML=chartSongs.map(song=>{
 
-const streamUrl=safeLink(song.stream_url,"");
+const streamUrl=safeHttpUrl(song.stream_url);
 const cover=safeImage(song.cover_url);
+const rank=song.rank_position??song.rank??"";
+const movement=getMovementInfo(song);
+
+const peak=song.is_peak
+?'<span class="chart-peak">★ PERSONAL BEST</span>'
+:"";
+
+let listenControl="";
+
+if(streamUrl && isDirectAudio(streamUrl)){
+
+listenControl=`
+<audio class="chart-audio"
+controls
+preload="none"
+aria-label="Preview ${escapeHTML(song.title)}">
+<source src="${escapeHTML(streamUrl)}">
+Your browser does not support audio playback.
+</audio>`;
+
+}else if(streamUrl){
+
+listenControl=`
+<a class="chart-stream"
+href="${escapeHTML(streamUrl)}"
+target="_blank"
+rel="noopener noreferrer">
+LISTEN TO SONG ↗
+</a>`;
+
+}
 
 return `
 <article class="chart-card">
@@ -1431,12 +1754,15 @@ alt="${escapeHTML(song.title)} cover artwork"
 loading="lazy">
 
 <div class="chart-rank">
-#${escapeHTML(song.rank_position)}
+#${escapeHTML(rank)}
 </div>
 
 </div>
 
 <div class="chart-info">
+
+${movement}
+${peak}
 
 <h3>${escapeHTML(song.title)}</h3>
 
@@ -1450,18 +1776,11 @@ type="button"
 data-vote-song="${escapeHTML(song.id)}"
 data-vote-week="${escapeHTML(song.chart_week)}">
 
-${chartUser?"VOTE FOR THIS SONG":"SIGN IN TO VOTE"}
+VOTE FOR THIS SONG
 
 </button>
 
-${streamUrl?`
-<a
-class="chart-stream"
-href="${escapeHTML(streamUrl)}"
-target="_blank"
-rel="noopener noreferrer">
-LISTEN TO SONG ↗
-</a>`:""}
+${listenControl}
 
 </div>
 
@@ -1502,135 +1821,7 @@ renderMusicChart();
 
 }
 
-async function createChartAccount(){
-
-const email=document.getElementById("chart-email").value.trim();
-const password=document.getElementById("chart-password").value;
-
-if(!email||!password){
-setChartMessage("Please enter your email address and password.");
-return;
-}
-
-if(password.length<6){
-setChartMessage("Your password must contain at least 6 characters.");
-return;
-}
-
-const button=document.getElementById("chart-signup-button");
-button.disabled=true;
-button.textContent="CREATING...";
-
-const {data,error}=await db.auth.signUp({
-email,
-password
-});
-
-button.disabled=false;
-button.textContent="CREATE ACCOUNT";
-
-if(error){
-
-console.error("Chart registration error:",error);
-setChartMessage(error.message);
-
-return;
-
-}
-
-if(data.session){
-
-chartUser=data.user;
-updateChartAuthUI();
-setChartMessage("Your account has been created. You can now vote.");
-
-}else{
-
-setChartMessage(
-"Registration received. Check your email for a confirmation link before signing in."
-);
-
-}
-
-}
-
-async function signInChartUser(){
-
-const email=document.getElementById("chart-email").value.trim();
-const password=document.getElementById("chart-password").value;
-
-if(!email||!password){
-setChartMessage("Please enter your email address and password.");
-return;
-}
-
-const button=document.getElementById("chart-login-button");
-button.disabled=true;
-button.textContent="SIGNING IN...";
-
-const {data,error}=await db.auth.signInWithPassword({
-email,
-password
-});
-
-button.disabled=false;
-button.textContent="SIGN IN";
-
-if(error){
-
-console.error("Chart sign-in error:",error);
-setChartMessage(error.message);
-
-return;
-
-}
-
-chartUser=data.user;
-updateChartAuthUI();
-setChartMessage("You are signed in. Choose a song to vote.");
-
-}
-
-document.getElementById("chart-auth-form").addEventListener("submit",async event=>{
-
-event.preventDefault();
-await signInChartUser();
-
-});
-
-document.getElementById("chart-signup-button").addEventListener("click",async()=>{
-
-await createChartAccount();
-
-});
-
-document.getElementById("chart-logout-button").addEventListener("click",async()=>{
-
-const {error}=await db.auth.signOut();
-
-if(error){
-
-setChartMessage("Unable to sign out. Please try again.");
-console.error(error);
-return;
-
-}
-
-chartUser=null;
-updateChartAuthUI();
-setChartMessage("You have signed out.");
-
-});
-
 async function voteForSong(songId,chartWeek,button){
-
-if(!chartUser){
-
-setChartMessage("Please sign in or create an account before voting.");
-document.getElementById("chart-email").focus();
-return;
-
-}
 
 const song=chartSongs.find(item=>item.id===songId);
 
@@ -1640,13 +1831,19 @@ return;
 }
 
 button.disabled=true;
+button.textContent="PREPARING VOTE...";
+
+try{
+
+const user=await ensureAnonymousUser();
+
 button.textContent="SUBMITTING...";
 
 const {error}=await db
 .from("song_votes")
 .insert({
 song_id:songId,
-user_id:chartUser.id,
+user_id:user.id,
 chart_week:chartWeek
 });
 
@@ -1674,7 +1871,23 @@ return;
 
 setChartMessage("Your vote has been submitted successfully. Thank you for supporting your favourite music!");
 
+button.textContent="VOTE SUBMITTED";
+button.disabled=true;
+
 await loadMusicChart();
+
+}catch(error){
+
+console.error("Anonymous voting error:",error);
+
+setChartMessage(
+"Anonymous voting is unavailable. Please ask the website administrator to enable Anonymous Sign-Ins in Supabase Authentication settings."
+);
+
+button.disabled=false;
+button.textContent="TRY VOTING AGAIN";
+
+}
 
 }
 
@@ -1693,6 +1906,10 @@ await voteForSong(songId,chartWeek,button);
 
 async function initialiseChartAuth(){
 
+if(chartAuthListenerRegistered)return;
+
+chartAuthListenerRegistered=true;
+
 const {data,error}=await db.auth.getSession();
 
 if(error){
@@ -1701,7 +1918,37 @@ console.error("Chart session error:",error);
 
 chartUser=data?.session?.user||null;
 
+if(chartUser){
+
+setChartMessage("Your voting session is ready.");
+
 updateChartAuthUI();
+
+return;
+
+}
+
+try{
+
+setChartMessage("Preparing anonymous voting...");
+
+await ensureAnonymousUser();
+
+setChartMessage("You can now vote for your favourite song.");
+
+}catch(error){
+
+console.error("Anonymous authentication setup error:",error);
+
+chartUser=null;
+
+updateChartAuthUI();
+
+setChartMessage(
+"Anonymous voting is not enabled yet. The website administrator must enable Anonymous Sign-Ins in Supabase Authentication settings."
+);
+
+}
 
 db.auth.onAuthStateChange((event,session)=>{
 
@@ -1758,18 +2005,20 @@ return;
 
 grid.innerHTML=videos.map(video=>{
 
-const videoUrl=String(video.video_url||"").trim();
-const thumbnail=video.thumbnail_url
-?String(video.thumbnail_url).trim()
+const videoUrl=safeHttpUrl(video.video_url);
+const thumbnail=safeHttpUrl(video.thumbnail_url);
+
+if(!videoUrl)return "";
+
+const poster=thumbnail
+?`poster="${escapeHTML(thumbnail)}"`
 :"";
 
-if(!/^https?:\/\//i.test(videoUrl))return "";
-
-const safeVideoUrl=escapeHTML(videoUrl);
-
-const poster=/^https?:\/\//i.test(thumbnail)
-?escapeHTML(thumbnail)
-:"";
+const videoType=/\.webm(\?|$)/i.test(videoUrl)
+?"video/webm"
+:/\.ogg(\?|$)/i.test(videoUrl)
+?"video/ogg"
+:"video/mp4";
 
 return `
 <article class="video-card">
@@ -1778,12 +2027,10 @@ return `
 controls
 playsinline
 preload="metadata"
-${poster?`poster="${poster}"`:""}
+${poster}
 aria-label="${escapeHTML(video.title)}">
 
-<source src="${safeVideoUrl}" type="${
-/\.webm(\?|$)/i.test(videoUrl)?"video/webm":"video/mp4"
-}">
+<source src="${escapeHTML(videoUrl)}" type="${videoType}">
 
 Your browser does not support HTML5 video.
 
