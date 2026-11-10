@@ -50,12 +50,34 @@ small{color:#777}
 .pill.inactive{background:#eee;color:#666}
 .preview{width:100%;max-height:220px;object-fit:cover;border-radius:7px;margin:10px 0;background:#eee}
 hr{border:0;border-top:1px solid #eee;margin:25px 0}
+
+.settings-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
+.settings-grid .full-width{grid-column:1/-1}
+.logo-preview{
+  display:block;
+  max-width:200px;
+  max-height:100px;
+  object-fit:contain;
+  margin:12px 0;
+  border:1px solid #eee;
+  border-radius:7px;
+  padding:8px;
+  background:#fafafa;
+}
+
 @media(max-width:600px){
- main{padding:10px}.panel{padding:17px}
+ main{padding:10px}
+ .panel{padding:17px}
  .stats{grid-template-columns:1fr 1fr}
  .article img{width:80px;height:65px}
  .banner-item,.video-item{grid-template-columns:1fr}
  .banner-item img,.video-item img,.video-item video{width:100%;height:190px}
+ .settings-grid{grid-template-columns:1fr}
+ .settings-grid .full-width{grid-column:auto}
 }
 </style>
 </head>
@@ -98,6 +120,123 @@ hr{border:0;border-top:1px solid #eee;margin:25px 0}
 <div class="stat"><strong id="publishedCount">0</strong><small>Published</small></div>
 <div class="stat"><strong id="draftCount">0</strong><small>Drafts</small></div>
 </div>
+</div>
+
+<!-- WEBSITE SETTINGS -->
+
+<div class="panel hidden" id="websiteSettings">
+<h2>Website Settings</h2>
+<p class="help-text">
+Manage your magazine branding, homepage text, contact information and footer.
+Changes are saved to Supabase and displayed on your public homepage.
+</p>
+
+<form id="settingsForm">
+
+<h3>Magazine Branding</h3>
+
+<div class="settings-grid">
+<div class="full-width">
+<label>Magazine Name</label>
+<input id="settingSiteName" placeholder="People's Choice Magazine">
+</div>
+
+<div class="full-width">
+<label>Magazine Tagline</label>
+<input id="settingTagline" placeholder="Your voice. Your stories. Your choice.">
+</div>
+
+<div class="full-width">
+<label>Top Announcement Bar</label>
+<input id="settingTopbar" placeholder="Welcome to People's Choice Magazine">
+</div>
+</div>
+
+<hr>
+
+<h3>Magazine Logo</h3>
+
+<label>Upload Logo</label>
+<input id="settingLogoFile" type="file" accept="image/*">
+
+<label>Or Enter Logo Image URL</label>
+<input id="settingLogoUrl" type="url" placeholder="https://example.com/logo.png">
+
+<img id="settingLogoPreview" class="logo-preview hidden" alt="Magazine logo preview">
+
+<button type="button" class="secondary" id="removeSettingLogo">Remove Logo</button>
+
+<p class="help-text">
+Maximum logo image size: 5MB. Upload a transparent PNG or another suitable image.
+</p>
+
+<hr>
+
+<h3>Homepage Section Headings</h3>
+
+<div class="settings-grid">
+<div>
+<label>Latest Stories Heading</label>
+<input id="settingLatestHeading" placeholder="Latest Stories">
+</div>
+
+<div>
+<label>Creators Corner Heading</label>
+<input id="settingCreatorsHeading" placeholder="Creators Corner">
+</div>
+
+<div>
+<label>Local News Heading</label>
+<input id="settingLocalHeading" placeholder="Local News">
+</div>
+
+<div>
+<label>National News Heading</label>
+<input id="settingNationalHeading" placeholder="National News">
+</div>
+</div>
+
+<hr>
+
+<h3>Contact Section</h3>
+
+<div class="settings-grid">
+<div>
+<label>Contact Heading</label>
+<input id="settingContactHeading" placeholder="Get In Touch">
+</div>
+
+<div>
+<label>Contact Email</label>
+<input id="settingContactEmail" type="email" placeholder="info@example.com">
+</div>
+
+<div class="full-width">
+<label>Contact Introduction</label>
+<textarea id="settingContactIntro" style="min-height:80px"
+placeholder="We would love to hear from you."></textarea>
+</div>
+
+<div class="full-width">
+<label>Contact Description</label>
+<textarea id="settingContactDescription"
+placeholder="Send us your stories, news tips and enquiries."></textarea>
+</div>
+</div>
+
+<hr>
+
+<h3>Footer</h3>
+
+<label>Footer Text</label>
+<textarea id="settingFooterText" style="min-height:80px"
+placeholder="Your voice. Your stories. Your choice."></textarea>
+
+<button type="submit" id="settingsSaveButton">Save Website Settings</button>
+
+<div id="settingsMessage" class="notice hidden"></div>
+
+</form>
 </div>
 
 <!-- HOMEPAGE BANNERS -->
@@ -146,8 +285,7 @@ hr{border:0;border-top:1px solid #eee;margin:25px 0}
 </div>
 
 <label>Image Preview</label>
-<img id="bannerPreview" class="preview"
-src="https://placehold.co/1000x400?text=Banner+Preview">
+<img id="bannerPreview" class="preview" src="https://placehold.co/1000x400?text=Banner+Preview">
 
 <button type="submit" id="bannerSaveButton">Save Banner</button>
 <button type="button" class="secondary hidden" id="cancelBannerEdit">Cancel Editing</button>
@@ -175,23 +313,19 @@ Upload local comedy skits, entertainment videos, creator interviews and other vi
 </div>
 
 <hr>
-
 <h3 id="videoFormHeading">Upload New Video</h3>
 
 <form id="videoForm">
 <input type="hidden" id="videoId">
 
 <label>Video Title</label>
-<input id="videoTitle" required maxlength="200"
-placeholder="Enter video title">
+<input id="videoTitle" required maxlength="200" placeholder="Enter video title">
 
 <label>Video Description</label>
-<textarea id="videoDescription"
-placeholder="Describe this video or skit"></textarea>
+<textarea id="videoDescription" placeholder="Describe this video or skit"></textarea>
 
 <label>Content Creator / Artist Name</label>
-<input id="creatorName" required
-placeholder="Enter creator's name">
+<input id="creatorName" required placeholder="Enter creator's name">
 
 <div class="row">
 <div>
@@ -326,6 +460,7 @@ Maximum file size: 50MB. Leave empty when editing to keep the existing video.
 </select>
 </div>
 </div>
+
 <div id="articles">Loading articles...</div>
 </div>
 
@@ -357,6 +492,9 @@ let editingVideoId=null;
 let existingVideoUrl=null;
 let existingThumbnailUrl=null;
 
+let currentSiteSettings={};
+let removeLogoRequested=false;
+
 function showMessage(id,text,error=false){
   $(id).textContent=text;
   $(id).style.color=error?'#b42318':'#222';
@@ -384,6 +522,7 @@ function makeSlug(title){
 async function uploadFile(bucket,path,file){
   const {error}=await db.storage.from(bucket)
     .upload(path,file,{upsert:false});
+
   if(error)throw error;
 
   return db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
@@ -392,6 +531,174 @@ async function uploadFile(bucket,path,file){
 function setPreview(id,url){
   $(id).src=url;
 }
+
+/* WEBSITE SETTINGS */
+
+const settingsFields={
+  site_name:'settingSiteName',
+  tagline:'settingTagline',
+  topbar_text:'settingTopbar',
+  latest_heading:'settingLatestHeading',
+  creators_heading:'settingCreatorsHeading',
+  local_heading:'settingLocalHeading',
+  national_heading:'settingNationalHeading',
+  contact_heading:'settingContactHeading',
+  contact_intro:'settingContactIntro',
+  contact_description:'settingContactDescription',
+  contact_email:'settingContactEmail',
+  footer_text:'settingFooterText'
+};
+
+function previewSettingsLogo(url){
+  const preview=$('settingLogoPreview');
+
+  if(url&&validUrl(url)){
+    preview.src=url;
+    preview.classList.remove('hidden');
+  }else{
+    preview.removeAttribute('src');
+    preview.classList.add('hidden');
+  }
+}
+
+$('settingLogoUrl').addEventListener('input',()=>{
+  const url=$('settingLogoUrl').value.trim();
+
+  if(!url){
+    previewSettingsLogo('');
+    return;
+  }
+
+  if(validUrl(url)){
+    previewSettingsLogo(url);
+  }
+});
+
+$('settingLogoFile').addEventListener('change',()=>{
+  const file=$('settingLogoFile').files[0];
+
+  if(!file)return;
+
+  if(!file.type.startsWith('image/')||file.size>5*1024*1024){
+    showMessage('settingsMessage','Please select an image smaller than 5MB.',true);
+    $('settingLogoFile').value='';
+    return;
+  }
+
+  previewSettingsLogo(URL.createObjectURL(file));
+});
+
+$('removeSettingLogo').addEventListener('click',()=>{
+  $('settingLogoFile').value='';
+  $('settingLogoUrl').value='';
+  previewSettingsLogo('');
+  removeLogoRequested=true;
+});
+
+async function loadWebsiteSettings(){
+  if(currentRole!=='admin')return;
+
+  $('settingsMessage').classList.add('hidden');
+
+  const {data,error}=await db
+    .from('site_settings')
+    .select('settings')
+    .eq('id','main')
+    .maybeSingle();
+
+  if(error){
+    showMessage('settingsMessage','Could not load website settings: '+error.message,true);
+    return;
+  }
+
+  currentSiteSettings=data?.settings||{};
+
+  Object.entries(settingsFields).forEach(([key,id])=>{
+    $(id).value=currentSiteSettings[key]||'';
+  });
+
+  $('settingLogoUrl').value=currentSiteSettings.logo_url||'';
+  previewSettingsLogo(currentSiteSettings.logo_url||'');
+
+  removeLogoRequested=false;
+}
+
+$('settingsForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  if(currentRole!=='admin'){
+    showMessage('settingsMessage','Administrator permission required.',true);
+    return;
+  }
+
+  const button=$('settingsSaveButton');
+  button.disabled=true;
+  button.textContent='Saving...';
+
+  try{
+    const updatedSettings={...currentSiteSettings};
+
+    Object.entries(settingsFields).forEach(([key,id])=>{
+      updatedSettings[key]=$(id).value.trim();
+    });
+
+    let logoUrl=currentSiteSettings.logo_url||'';
+    const logoFile=$('settingLogoFile').files[0];
+
+    if(logoFile){
+      if(!logoFile.type.startsWith('image/')||logoFile.size>5*1024*1024){
+        throw new Error('Logo must be an image smaller than 5MB.');
+      }
+
+      logoUrl=await uploadFile(
+        'article-images',
+        'site/'+currentUser.id+'/'+Date.now()+'-'+safeFileName(logoFile.name),
+        logoFile
+      );
+    }else if(removeLogoRequested){
+      logoUrl='';
+    }else if($('settingLogoUrl').value.trim()){
+      logoUrl=$('settingLogoUrl').value.trim();
+
+      if(!validUrl(logoUrl)){
+        throw new Error('Please enter a valid logo image URL.');
+      }
+    }else{
+      logoUrl='';
+    }
+
+    updatedSettings.logo_url=logoUrl;
+
+    const {error}=await db
+      .from('site_settings')
+      .upsert({
+        id:'main',
+        settings:updatedSettings,
+        updated_at:new Date().toISOString()
+      },{
+        onConflict:'id'
+      });
+
+    if(error)throw error;
+
+    currentSiteSettings=updatedSettings;
+    removeLogoRequested=false;
+    $('settingLogoFile').value='';
+
+    previewSettingsLogo(logoUrl);
+
+    showMessage(
+      'settingsMessage',
+      'Website settings saved successfully! Your homepage will use the updated settings.'
+    );
+
+  }catch(err){
+    showMessage('settingsMessage',err.message||'Could not save website settings.',true);
+  }finally{
+    button.disabled=false;
+    button.textContent='Save Website Settings';
+  }
+});
 
 /* LOGIN */
 
@@ -449,10 +756,17 @@ async function startDashboard(){
     (profile.full_name||user.email)+' · '+currentRole.toUpperCase();
 
   if(currentRole==='admin'){
+    $('websiteSettings').classList.remove('hidden');
     $('bannerManager').classList.remove('hidden');
     $('videoManager').classList.remove('hidden');
-    await Promise.all([loadBanners(),loadVideos()]);
+
+    await Promise.all([
+      loadWebsiteSettings(),
+      loadBanners(),
+      loadVideos()
+    ]);
   }else{
+    $('websiteSettings').classList.add('hidden');
     $('bannerManager').classList.add('hidden');
     $('videoManager').classList.add('hidden');
   }
@@ -467,7 +781,10 @@ async function loadJournalists(){
   const {data,error}=await db.from('journalists')
     .select('id,name').order('name');
 
-  if(error){console.error(error);return;}
+  if(error){
+    console.error(error);
+    return;
+  }
 
   $('journalist').innerHTML=
     '<option value="">No journalist selected</option>';
@@ -506,8 +823,9 @@ $('articleForm').addEventListener('submit',async e=>{
     const file=$('photo').files[0];
 
     if(file){
-      if(!file.type.startsWith('image/')||file.size>5*1024*1024)
+      if(!file.type.startsWith('image/')||file.size>5*1024*1024){
         throw new Error('Please select an image smaller than 5MB.');
+      }
 
       imageUrl=await uploadFile(
         'article-images',
@@ -541,8 +859,12 @@ $('articleForm').addEventListener('submit',async e=>{
 
     if(result.error)throw result.error;
 
-    showMessage('message',editingArticleId?'Article updated successfully!':
-      currentRole==='admin'?'Article published successfully!':'Draft saved! Awaiting administrator approval.');
+    showMessage(
+      'message',
+      editingArticleId?'Article updated successfully!':
+      currentRole==='admin'?'Article published successfully!':
+      'Draft saved! Awaiting administrator approval.'
+    );
 
     resetArticleForm();
     await loadArticles();
@@ -929,6 +1251,7 @@ $('refreshBanners').onclick=loadBanners;
 
 $('thumbnailUrl').addEventListener('input',()=>{
   const url=$('thumbnailUrl').value.trim();
+
   if(validUrl(url)){
     $('thumbnailPreview').src=url;
     $('thumbnailPreview').classList.remove('hidden');
@@ -1046,6 +1369,7 @@ function renderVideos(){
     preview.className='secondary';
     preview.onclick=()=>{
       const w=window.open('','_blank');
+
       if(w){
         const vdo=w.document.createElement('video');
         vdo.src=v.video_url;
