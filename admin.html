@@ -5,23 +5,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>People's Choice | Admin Dashboard</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
-
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f5f7;color:#222}
 header{background:#171717;color:white;padding:20px 5%}
-header strong{font-family:Georgia,serif;font-size:23px}
+header strong{font:23px Georgia,serif}
 header span{color:#e7549b}
 main{max-width:1100px;margin:30px auto;padding:15px}
 .panel{background:white;padding:24px;border-radius:10px;margin-bottom:20px;box-shadow:0 2px 12px #0000000b}
 h2{font-family:Georgia,serif}
 input,textarea,select{width:100%;padding:13px;margin:8px 0 16px;border:1px solid #ddd;border-radius:5px;font:inherit}
-textarea{min-height:130px;resize:vertical}
+textarea{min-height:110px;resize:vertical}
 label{font-size:13px;font-weight:bold}
-button{border:0;border-radius:5px;padding:12px 18px;background:#e7549b;color:white;font-weight:bold;cursor:pointer;margin:4px 2px}
+button{border:0;border-radius:5px;padding:11px 16px;background:#e7549b;color:white;font-weight:bold;cursor:pointer;margin:4px 2px}
 button.secondary{background:#222}
 button.danger{background:#b42318}
 button.success{background:#16834a}
@@ -29,80 +27,49 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .hidden{display:none!important}
 .row{display:flex;gap:12px;flex-wrap:wrap}
 .row>*{flex:1;min-width:180px}
-.article{border-bottom:1px solid #eee;padding:18px 0;overflow:hidden}
-.article img{width:110px;height:80px;object-fit:cover;float:right;border-radius:5px;margin-left:12px}
 .status{font-size:12px;color:#e7549b;font-weight:bold}
-small{color:#777}
-#message,#loginMessage,.notice{padding:12px;background:#fff1f7;border-radius:5px;margin:12px 0;white-space:pre-wrap}
+small,.help{color:#777}
+.help{font-size:12px;line-height:1.5}
+.notice{padding:12px;background:#fff1f7;border-radius:5px;margin:12px 0;white-space:pre-wrap}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
 .stat{background:#fff1f7;padding:18px;border-radius:8px;text-align:center}
 .stat strong{display:block;font-size:25px;color:#e7549b}
 .stat small{font-weight:bold}
-.help-text{font-size:12px;color:#777;line-height:1.5}
-.check-row{display:flex;align-items:center;gap:10px;margin:10px 0 18px}
-.check-row input{width:18px;margin:0}
-.banner-item,.video-item{border:1px solid #eee;border-radius:8px;padding:14px;margin:15px 0;display:grid;grid-template-columns:150px 1fr;gap:15px}
-.banner-item img,.video-item img{width:150px;height:110px;object-fit:cover;border-radius:5px;background:#eee}
-.video-item video{width:150px;max-height:110px;object-fit:cover;background:#111;border-radius:5px}
-.banner-details h3,.video-details h3{margin:3px 0 8px;font-family:Georgia,serif}
-.banner-details p,.video-details p{font-size:13px;color:#777;overflow-wrap:anywhere}
-.pill{display:inline-block;font-size:11px;font-weight:bold;padding:5px 9px;border-radius:20px;background:#e7f8ed;color:#16834a}
-.pill.inactive{background:#eee;color:#666}
-.preview{width:100%;max-height:220px;object-fit:cover;border-radius:7px;margin:10px 0;background:#eee}
-hr{border:0;border-top:1px solid #eee;margin:25px 0}
-
-.settings-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:15px;
-}
-.settings-grid .full-width{grid-column:1/-1}
-.logo-preview{
-  display:block;
-  max-width:200px;
-  max-height:100px;
-  object-fit:contain;
-  margin:12px 0;
-  border:1px solid #eee;
-  border-radius:7px;
-  padding:8px;
-  background:#fafafa;
-}
-
-.chart-song{
-  border:1px solid #eee;
-  border-radius:8px;
-  padding:15px;
-  margin:15px 0;
-  display:grid;
-  grid-template-columns:100px 1fr;
-  gap:15px;
-}
-.chart-song img{
-  width:100px;
-  height:100px;
-  object-fit:cover;
-  border-radius:7px;
-  background:#eee;
-}
-.chart-song h3{margin:3px 0 8px;font-family:Georgia,serif}
-.chart-actions{margin-top:10px}
-
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.full{grid-column:1/-1}
+.check{display:flex;align-items:center;gap:9px;margin:10px 0 15px}
+.check input{width:18px;margin:0}
+.item{border-bottom:1px solid #eee;padding:16px 0;overflow-wrap:anywhere}
+.item img{width:100px;height:80px;object-fit:cover;float:right;margin-left:12px;border-radius:5px}
+.media-item{border:1px solid #eee;border-radius:8px;padding:14px;margin:12px 0;display:grid;grid-template-columns:130px 1fr;gap:14px}
+.media-item img,.media-item video{width:130px;height:100px;object-fit:cover;background:#eee}
+.song{border:1px solid #eee;border-radius:8px;padding:13px;margin:12px 0;display:grid;grid-template-columns:85px 1fr;gap:13px}
+.song img{width:85px;height:85px;object-fit:cover}
+.preview{max-width:220px;max-height:110px;object-fit:contain;display:block;margin:8px 0}
+.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#e7f8ed;color:#16834a;font-size:11px;font-weight:bold}
+.inactive{background:#eee;color:#666}
+hr{border:0;border-top:1px solid #eee;margin:22px 0}
+.nav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:15px}
+.nav button{background:#222}
+.nav button.active{background:#e7549b}
+.tab{display:none}
+.tab.active{display:block}
+.order-row{display:flex;gap:10px;align-items:center;margin:8px 0}
+.order-row select{margin:0}
+.order-row button{min-width:42px}
 @media(max-width:600px){
- main{padding:10px}
- .panel{padding:17px}
- .stats{grid-template-columns:1fr 1fr}
- .article img{width:80px;height:65px}
- .banner-item,.video-item{grid-template-columns:1fr}
- .banner-item img,.video-item img,.video-item video{width:100%;height:190px}
- .settings-grid{grid-template-columns:1fr}
- .settings-grid .full-width{grid-column:auto}
- .chart-song{grid-template-columns:75px 1fr}
- .chart-song img{width:75px;height:75px}
+main{padding:10px}
+.panel{padding:16px}
+.stats{grid-template-columns:1fr 1fr}
+.grid{grid-template-columns:1fr}
+.full{grid-column:auto}
+.media-item{grid-template-columns:1fr}
+.media-item img,.media-item video{width:100%;height:180px}
+.song{grid-template-columns:65px 1fr}
+.song img{width:65px;height:65px}
 }
 </style>
 </head>
-
 <body>
 <header>
 <strong>PEOPLE'S <span>CHOICE</span> MAGAZINE</strong>
@@ -110,7 +77,6 @@ hr{border:0;border-top:1px solid #eee;margin:25px 0}
 </header>
 
 <main>
-
 <section id="login" class="panel">
 <h2>Admin & Editor Login</h2>
 <p>Sign in to manage your magazine.</p>
@@ -119,13 +85,12 @@ hr{border:0;border-top:1px solid #eee;margin:25px 0}
 <input id="email" type="email" required>
 <label>Password</label>
 <input id="password" type="password" required>
-<button type="submit">Sign In</button>
+<button>Sign In</button>
 </form>
-<div id="loginMessage"></div>
+<div id="loginMessage" class="notice"></div>
 </section>
 
 <section id="dashboard" class="hidden">
-
 <div class="panel">
 <div class="row">
 <div>
@@ -143,1897 +108,667 @@ hr{border:0;border-top:1px solid #eee;margin:25px 0}
 </div>
 </div>
 
-<!-- WEBSITE SETTINGS -->
+<div class="nav" id="adminNav">
+<button data-tab="website" class="active">Visual Website Builder</button>
+<button data-tab="banners">Banners</button>
+<button data-tab="videos">Videos</button>
+<button data-tab="chart">Top 5 Chart</button>
+<button data-tab="articles">Articles</button>
+</div>
 
-<div class="panel hidden" id="websiteSettings">
-<h2>Website Settings</h2>
-<p class="help-text">
-Manage your magazine branding, homepage text, contact information and footer.
-Changes are saved to Supabase and displayed on your public homepage.
-</p>
+<section class="panel tab active" id="tab-website">
+<h2>Visual Website Builder</h2>
+<p class="help">Edit your branding, colours, homepage text, section visibility and section order. These settings are saved in the existing site_settings.settings JSON field.</p>
 
 <form id="settingsForm">
-
-<h3>Magazine Branding</h3>
-
-<div class="settings-grid">
-<div class="full-width">
-<label>Magazine Name</label>
-<input id="settingSiteName" placeholder="People's Choice Magazine">
+<h3>Branding</h3>
+<div class="grid">
+<div class="full"><label>Magazine Name</label><input id="site_name" placeholder="People's Choice Magazine"></div>
+<div class="full"><label>Tagline</label><input id="tagline"></div>
+<div class="full"><label>Top Announcement Bar</label><input id="topbar_text"></div>
 </div>
-<div class="full-width">
-<label>Magazine Tagline</label>
-<input id="settingTagline" placeholder="Your voice. Your stories. Your choice.">
-</div>
-<div class="full-width">
-<label>Top Announcement Bar</label>
-<input id="settingTopbar" placeholder="Welcome to People's Choice Magazine">
+
+<label>Logo image URL</label>
+<input id="logo_url" type="url" placeholder="https://...">
+<label>Or upload logo (max 5MB)</label>
+<input id="logo_file" type="file" accept="image/*">
+<img id="logo_preview" class="preview hidden" alt="Logo preview">
+
+<hr>
+<h3>Website Colours</h3>
+<div class="grid">
+<div><label>Primary accent</label><input id="theme_primary" type="color" value="#e7549b"></div>
+<div><label>Dark / navigation</label><input id="theme_dark" type="color" value="#171717"></div>
+<div><label>Light accent background</label><input id="theme_light" type="color" value="#fff1f7"></div>
+<div><label>Page background</label><input id="theme_background" type="color" value="#f5f5f5"></div>
+<div><label>Main text colour</label><input id="theme_text" type="color" value="#171717"></div>
+<div>
+<label>Website font</label>
+<select id="font_family">
+<option>Arial</option>
+<option>Georgia</option>
+<option>Verdana</option>
+<option>Tahoma</option>
+<option>Trebuchet MS</option>
+</select>
 </div>
 </div>
 
 <hr>
-<h3>Magazine Logo</h3>
-
-<label>Upload Logo</label>
-<input id="settingLogoFile" type="file" accept="image/*">
-
-<label>Or Enter Logo Image URL</label>
-<input id="settingLogoUrl" type="url" placeholder="https://example.com/logo.png">
-
-<img id="settingLogoPreview" class="logo-preview hidden" alt="Magazine logo preview">
-
-<button type="button" class="secondary" id="removeSettingLogo">Remove Logo</button>
-
-<p class="help-text">
-Maximum logo image size: 5MB. Upload a transparent PNG or another suitable image.
-</p>
-
-<hr>
-<h3>Homepage Section Headings</h3>
-
-<div class="settings-grid">
-<div>
-<label>Latest Stories Heading</label>
-<input id="settingLatestHeading" placeholder="Latest Stories">
-</div>
-<div>
-<label>Creators Corner Heading</label>
-<input id="settingCreatorsHeading" placeholder="Creators Corner">
-</div>
-<div>
-<label>Local News Heading</label>
-<input id="settingLocalHeading" placeholder="Local News">
-</div>
-<div>
-<label>National News Heading</label>
-<input id="settingNationalHeading" placeholder="National News">
-</div>
+<h3>Homepage headings and descriptions</h3>
+<div class="grid">
+<div><label>Latest Stories Heading</label><input id="latest_heading"></div>
+<div><label>Creators Corner Heading</label><input id="creators_heading"></div>
+<div><label>Local News Heading</label><input id="local_heading"></div>
+<div><label>National News Heading</label><input id="national_heading"></div>
+<div><label>Top 5 Chart Heading</label><input id="chart_heading"></div>
+<div class="full"><label>Top 5 Chart Description</label><textarea id="chart_description"></textarea></div>
+<div class="full"><label>Creators Corner Description</label><textarea id="creators_description"></textarea></div>
+<div><label>Local News Description</label><textarea id="local_description"></textarea></div>
+<div><label>National News Description</label><textarea id="national_description"></textarea></div>
 </div>
 
 <hr>
-<h3>Contact Section</h3>
-
-<div class="settings-grid">
-<div>
-<label>Contact Heading</label>
-<input id="settingContactHeading" placeholder="Get In Touch">
-</div>
-<div>
-<label>Contact Email</label>
-<input id="settingContactEmail" type="email" placeholder="info@example.com">
-</div>
-<div class="full-width">
-<label>Contact Introduction</label>
-<textarea id="settingContactIntro" style="min-height:80px" placeholder="We would love to hear from you."></textarea>
-</div>
-<div class="full-width">
-<label>Contact Description</label>
-<textarea id="settingContactDescription" placeholder="Send us your stories, news tips and enquiries."></textarea>
-</div>
+<h3>Contact and Footer</h3>
+<div class="grid">
+<div><label>Contact Heading</label><input id="contact_heading"></div>
+<div><label>Contact Email</label><input id="contact_email" type="email"></div>
+<div class="full"><label>Contact Introduction</label><textarea id="contact_intro"></textarea></div>
+<div class="full"><label>Contact Description</label><textarea id="contact_description"></textarea></div>
+<div class="full"><label>Footer Text</label><textarea id="footer_text"></textarea></div>
 </div>
 
 <hr>
-<h3>Footer</h3>
+<h3>Show or hide homepage sections</h3>
+<div class="grid" id="visibilityControls"></div>
 
-<label>Footer Text</label>
-<textarea id="settingFooterText" style="min-height:80px" placeholder="Your voice. Your stories. Your choice."></textarea>
+<hr>
+<h3>Homepage section order</h3>
+<p class="help">Use the arrows to rearrange sections. The homepage follows this order.</p>
+<div id="sectionOrder"></div>
 
-<button type="submit" id="settingsSaveButton">Save Website Settings</button>
+<button type="submit" id="settingsSave">Save All Website Changes</button>
 <div id="settingsMessage" class="notice hidden"></div>
 </form>
-</div>
+</section>
 
-<!-- HOMEPAGE BANNERS -->
-
-<div class="panel hidden" id="bannerManager">
+<section class="panel tab" id="tab-banners">
 <h2>Homepage Banner Manager</h2>
-<p class="help-text">Manage the banners displayed on your public homepage.</p>
-
 <div class="stats">
 <div class="stat"><strong id="bannerCount">0</strong><small>Total Banners</small></div>
-<div class="stat"><strong id="activeBannerCount">0</strong><small>Active Banners</small></div>
-<div class="stat"><strong id="inactiveBannerCount">0</strong><small>Inactive Banners</small></div>
+<div class="stat"><strong id="activeBannerCount">0</strong><small>Active</small></div>
+<div class="stat"><strong id="inactiveBannerCount">0</strong><small>Inactive</small></div>
 </div>
-
-<hr>
-<h3 id="bannerFormHeading">Add New Banner</h3>
-
+<h3 id="bannerFormHeading">Add Banner</h3>
 <form id="bannerForm">
 <input type="hidden" id="bannerId">
-
-<label>Banner Headline</label>
-<input id="bannerTitle" required maxlength="200" placeholder="Enter banner headline">
-
-<label>Short Description</label>
-<textarea id="bannerSubtitle" style="min-height:80px" placeholder="Banner description"></textarea>
-
-<label>Category / Label</label>
-<input id="bannerLabel" value="FEATURED">
-
-<label>Banner Image URL (optional)</label>
-<input id="bannerImageUrl" type="url" placeholder="https://example.com/image.jpg">
-
-<label>Upload Banner Image</label>
-<input id="bannerImageFile" type="file" accept="image/*">
-<p class="help-text">Maximum image size: 5MB.</p>
-
-<label>Destination Link</label>
-<input id="bannerLink" placeholder="article.html?id=123 or https://example.com">
-
-<label>Display Order</label>
-<input id="bannerOrder" type="number" value="0" min="0">
-
-<div class="check-row">
-<input id="bannerActive" type="checkbox" checked>
-<label for="bannerActive">Display this banner on homepage</label>
+<label>Headline</label><input id="bannerTitle" required>
+<label>Description</label><textarea id="bannerSubtitle"></textarea>
+<label>Label</label><input id="bannerLabel" value="FEATURED">
+<label>Image URL</label><input id="bannerImageUrl" type="url">
+<label>Upload image (max 5MB)</label><input id="bannerImageFile" type="file" accept="image/*">
+<label>Destination link</label><input id="bannerLink" placeholder="#local or article.html?id=...">
+<div class="row">
+<div><label>Display order</label><input id="bannerOrder" type="number" value="0"></div>
+<div class="check"><input id="bannerActive" type="checkbox" checked><label for="bannerActive">Active</label></div>
 </div>
-
-<label>Image Preview</label>
-<img id="bannerPreview" class="preview" src="https://placehold.co/1000x400?text=Banner+Preview">
-
-<button type="submit" id="bannerSaveButton">Save Banner</button>
-<button type="button" class="secondary hidden" id="cancelBannerEdit">Cancel Editing</button>
+<img id="bannerPreview" class="preview hidden" alt="Banner preview">
+<button id="bannerSave">Save Banner</button>
+<button type="button" id="bannerCancel" class="secondary hidden">Cancel</button>
 <div id="bannerMessage" class="notice hidden"></div>
 </form>
-
 <hr>
-<h3>Manage Existing Banners</h3>
-<div id="bannerList">Loading banners...</div>
-<button type="button" class="secondary" id="refreshBanners">Refresh Banners</button>
-</div>
+<h3>Existing banners</h3>
+<div id="bannerList"></div>
+</section>
 
-<!-- VIDEO AND SKIT MANAGER -->
-
-<div class="panel hidden" id="videoManager">
-<h2>🎬 Videos & Skits Manager</h2>
-<p class="help-text">
-Upload local comedy skits, entertainment videos, creator interviews and other video content.
-</p>
-
+<section class="panel tab" id="tab-videos">
+<h2>Videos & Skits Manager</h2>
 <div class="stats">
-<div class="stat"><strong id="videoCount">0</strong><small>Total Videos</small></div>
+<div class="stat"><strong id="videoCount">0</strong><small>Total videos</small></div>
 <div class="stat"><strong id="publishedVideoCount">0</strong><small>Published</small></div>
 <div class="stat"><strong id="draftVideoCount">0</strong><small>Drafts</small></div>
 </div>
-
-<hr>
-<h3 id="videoFormHeading">Upload New Video</h3>
-
+<h3 id="videoFormHeading">Upload video</h3>
 <form id="videoForm">
 <input type="hidden" id="videoId">
-
-<label>Video Title</label>
-<input id="videoTitle" required maxlength="200" placeholder="Enter video title">
-
-<label>Video Description</label>
-<textarea id="videoDescription" placeholder="Describe this video or skit"></textarea>
-
-<label>Content Creator / Artist Name</label>
-<input id="creatorName" required placeholder="Enter creator's name">
-
+<label>Title</label><input id="videoTitle" required>
+<label>Description</label><textarea id="videoDescription"></textarea>
+<label>Creator name</label><input id="creatorName" required>
 <div class="row">
-<div>
-<label>Video Category</label>
-<select id="videoCategory">
-<option value="Comedy">Comedy & Skits</option>
-<option value="Drama">Drama</option>
-<option value="Lifestyle">Lifestyle</option>
-<option value="Music">Music</option>
-<option value="Interviews">Interviews</option>
-<option value="Entertainment">Entertainment</option>
-<option value="Other">Other</option>
-</select>
+<div><label>Category</label><select id="videoCategory"><option>Comedy</option><option>Drama</option><option>Lifestyle</option><option>Music</option><option>Interviews</option><option>Entertainment</option><option>Other</option></select></div>
+<div><label>Status</label><select id="videoStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
 </div>
-<div>
-<label>Publishing Status</label>
-<select id="videoStatus">
-<option value="draft">Save as Draft</option>
-<option value="published">Publish Video</option>
-</select>
-</div>
-</div>
-
-<label>Upload Video File (MP4 / WebM)</label>
-<input id="videoFile" type="file" accept="video/mp4,video/webm">
-
-<p class="help-text">
-Maximum file size: 50MB. Leave empty when editing to keep the existing video.
-</p>
-
-<label>Thumbnail Image (optional)</label>
-<input id="thumbnailFile" type="file" accept="image/*">
-
-<label>Or Thumbnail Image URL</label>
-<input id="thumbnailUrl" type="url" placeholder="https://example.com/thumbnail.jpg">
-
-<div class="check-row">
-<input id="videoFeatured" type="checkbox">
-<label for="videoFeatured">Feature this video on the homepage</label>
-</div>
-
-<label>Video Preview</label>
+<label>Video file (MP4/WebM, max 50MB)</label><input id="videoFile" type="file" accept="video/mp4,video/webm">
+<label>Thumbnail URL</label><input id="thumbnailUrl" type="url">
+<label>Upload thumbnail (max 5MB)</label><input id="thumbnailFile" type="file" accept="image/*">
+<div class="check"><input id="videoFeatured" type="checkbox"><label for="videoFeatured">Feature on homepage</label></div>
 <video id="videoPreview" class="preview hidden" controls></video>
-<img id="thumbnailPreview" class="preview hidden" alt="Thumbnail preview">
-
-<button type="submit" id="videoSaveButton">Upload Video</button>
-<button type="button" class="secondary hidden" id="cancelVideoEdit">Cancel Editing</button>
+<img id="thumbnailPreview" class="preview hidden" alt="Thumbnail">
+<button id="videoSave">Save Video</button>
+<button type="button" id="videoCancel" class="secondary hidden">Cancel</button>
 <div id="videoMessage" class="notice hidden"></div>
 </form>
-
 <hr>
-<h3>Manage Uploaded Videos</h3>
-<div id="videoList">Loading videos...</div>
-<button type="button" class="secondary" id="refreshVideos">Refresh Videos</button>
-</div>
+<h3>Existing videos</h3>
+<div id="videoList"></div>
+</section>
 
-<!-- TOP 5 MUSIC CHART MANAGER -->
-
-<div class="panel hidden" id="chartManager">
-<h2>🎵 Top 5 Music Chart Manager</h2>
-<p class="help-text">
-Manage songs, approve chart entries and monitor voting results.
-Vote totals are visible to administrators only.
-</p>
-
+<section class="panel tab" id="tab-chart">
+<h2>Top 5 Music Chart Manager</h2>
+<p class="help">Vote totals are visible here to administrators only. The public RPC must return song ranking data without vote counts.</p>
 <div class="stats">
-<div class="stat"><strong id="chartSongCount">0</strong><small>Total Songs</small></div>
-<div class="stat"><strong id="chartApprovedCount">0</strong><small>Approved Songs</small></div>
-<div class="stat"><strong id="chartVoteCount">0</strong><small>Total Votes</small></div>
+<div class="stat"><strong id="chartSongCount">0</strong><small>Songs</small></div>
+<div class="stat"><strong id="chartApprovedCount">0</strong><small>Approved & active</small></div>
+<div class="stat"><strong id="chartVoteCount">0</strong><small>Votes this week</small></div>
 </div>
-
-<hr>
-<h3 id="chartFormHeading">Add New Song</h3>
-
+<h3 id="chartFormHeading">Add song</h3>
 <form id="chartForm">
 <input type="hidden" id="chartSongId">
-
-<label>Song Title</label>
-<input id="chartTitle" required maxlength="200" placeholder="Enter song title">
-
-<label>Artist Name</label>
-<input id="chartArtist" required maxlength="200" placeholder="Enter artist name">
-
-<label>Chart Week (Monday)</label>
-<input id="chartWeek" type="date" required>
-
-<label>Cover Artwork URL (optional)</label>
-<input id="chartCoverUrl" type="url" placeholder="https://example.com/cover.jpg">
-
-<label>Upload Cover Artwork</label>
-<input id="chartCoverFile" type="file" accept="image/*">
-<p class="help-text">Maximum artwork size: 5MB.</p>
-
-<label>Streaming Link (optional)</label>
-<input id="chartStreamUrl" type="url" placeholder="https://...">
-
-<label>Display Order (used when votes are tied)</label>
-<input id="chartSortOrder" type="number" min="0" value="0">
-
-<div class="check-row">
-<input id="chartApproved" type="checkbox">
-<label for="chartApproved">Approve this song for the public chart</label>
-</div>
-
-<div class="check-row">
-<input id="chartActive" type="checkbox" checked>
-<label for="chartActive">Song is active</label>
-</div>
-
-<img id="chartCoverPreview" class="preview hidden" alt="Song cover preview">
-
-<button type="submit" id="chartSaveButton">Save Song</button>
-<button type="button" class="secondary hidden" id="chartCancelEdit">Cancel Editing</button>
-
+<label>Song title</label><input id="chartTitle" required>
+<label>Artist</label><input id="chartArtist" required>
+<label>Chart week (Monday)</label><input id="chartWeek" type="date" required>
+<label>Cover image URL</label><input id="chartCoverUrl" type="url">
+<label>Upload cover (max 5MB)</label><input id="chartCoverFile" type="file" accept="image/*">
+<label>Audio preview / streaming URL</label><input id="chartStreamUrl" type="url" placeholder="Use a direct audio URL for in-page playback; a normal streaming page opens externally">
+<label>Sort order for ties</label><input id="chartSortOrder" type="number" value="0">
+<div class="check"><input id="chartApproved" type="checkbox"><label for="chartApproved">Approve song</label></div>
+<div class="check"><input id="chartActive" type="checkbox" checked><label for="chartActive">Active</label></div>
+<img id="chartCoverPreview" class="preview hidden" alt="Cover">
+<button id="chartSave">Save Song</button>
+<button type="button" id="chartCancel" class="secondary hidden">Cancel</button>
 <div id="chartMessage" class="notice hidden"></div>
 </form>
-
 <hr>
-<h3>Manage Chart Songs</h3>
+<label>Filter chart week</label>
+<input id="chartFilterWeek" type="date">
+<div id="chartSongList"></div>
+</section>
 
-<label>Choose Chart Week</label>
-<input type="date" id="chartFilterWeek">
-
-<div id="chartSongList">Loading chart songs...</div>
-
-<button type="button" class="secondary" id="refreshChart">Refresh Chart</button>
-</div>
-
-<!-- ARTICLE FORM -->
-
-<div class="panel">
-<h2 id="formHeading">Create New Article</h2>
+<section class="panel tab" id="tab-articles">
+<h2 id="articleFormHeading">Create New Article</h2>
 <form id="articleForm">
-
-<label>Article Headline</label>
-<input id="title" required placeholder="Enter headline">
-
-<label>Short Description</label>
-<textarea id="excerpt" required placeholder="Article summary"></textarea>
-
-<label>Full Article</label>
-<textarea id="content" required placeholder="Write your full article here"></textarea>
-
+<input type="hidden" id="articleId">
+<label>Headline</label><input id="title" required>
+<label>Short description</label><textarea id="excerpt" required></textarea>
+<label>Full article</label><textarea id="content" required></textarea>
 <div class="row">
-<div>
-<label>News Category</label>
-<select id="category">
-<option value="local">Local News</option>
-<option value="national">National News</option>
-<option value="international">International News</option>
-</select>
+<div><label>Category</label><select id="category"><option value="local">Local News</option><option value="national">National News</option><option value="international">International News</option></select></div>
+<div><label>Section</label><select id="section"><option value="entertainment">Entertainment</option><option value="music">Music</option><option value="arts">Arts</option><option value="general">General News</option></select></div>
 </div>
-<div>
-<label>Section</label>
-<select id="section">
-<option value="entertainment">Entertainment</option>
-<option value="music">Music</option>
-<option value="arts">Arts</option>
-<option value="general">General News</option>
-</select>
-</div>
-</div>
-
-<label>Journalist</label>
-<select id="journalist">
-<option value="">No journalist selected</option>
-</select>
-
-<label>Article Photograph</label>
-<input id="photo" type="file" accept="image/*">
-<p><small>Maximum image size: 5MB. Leave empty to keep existing image.</small></p>
-
-<button type="submit" id="saveButton">Save Article</button>
-<button type="button" id="cancelEdit" class="secondary hidden">Cancel Editing</button>
+<label>Journalist</label><select id="journalist"><option value="">No journalist selected</option></select>
+<label>Article photograph (max 5MB)</label><input id="photo" type="file" accept="image/*">
+<button id="articleSave">Save Article</button>
+<button type="button" id="articleCancel" class="secondary hidden">Cancel editing</button>
+<div id="articleMessage" class="notice hidden"></div>
 </form>
-<div id="message" class="hidden"></div>
-</div>
-
-<!-- ARTICLE MANAGEMENT -->
-
-<div class="panel">
+<hr>
 <h2>Manage Articles</h2>
-
-<label>Search Articles</label>
-<input id="searchArticles" type="search" placeholder="Search headlines...">
-
+<label>Search</label><input id="searchArticles" type="search">
 <div class="row">
-<div>
-<label>Filter by Status</label>
-<select id="statusFilter">
-<option value="all">All Statuses</option>
-<option value="published">Published</option>
-<option value="draft">Drafts</option>
-</select>
+<div><label>Status</label><select id="statusFilter"><option value="all">All</option><option value="published">Published</option><option value="draft">Drafts</option></select></div>
+<div><label>Category</label><select id="categoryFilter"><option value="all">All</option><option value="local">Local</option><option value="national">National</option><option value="international">International</option></select></div>
 </div>
-<div>
-<label>Filter by Category</label>
-<select id="categoryFilter">
-<option value="all">All Categories</option>
-<option value="local">Local News</option>
-<option value="national">National News</option>
-<option value="international">International News</option>
-</select>
-</div>
-</div>
-
 <div id="articles">Loading articles...</div>
-</div>
-
+</section>
 </section>
 </main>
 
 <script>
-const db=window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+"use strict";
+if(!window.supabase||typeof SUPABASE_URL==="undefined"||typeof SUPABASE_PUBLISHABLE_KEY==="undefined")throw new Error("Check Supabase library and config.js.");
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY),$=id=>document.getElementById(id);
+let currentUser=null,currentRole=null,settings={},articles=[],banners=[],videos=[],songs=[],editArticleId=null,articleImage=null,editBannerId=null,bannerImage=null,editVideoId=null,videoUrl=null,thumbnailUrl=null,editSongId=null,coverUrl=null;
+const sectionKeys=[["latest","Latest stories"],["top-stories","Top stories sidebar"],["chart","Top 5 music chart"],["creators","Creators' Corner"],["local","Local news"],["national","National news"],["contact","Contact section"],["hero","Hero banner"]];
+let sectionOrder=sectionKeys.map(x=>x[0]),visibility={};
 
-const $=id=>document.getElementById(id);
+function msg(id,t,bad=false){$(id).textContent=t;$(id).style.color=bad?"#b42318":"#222";$(id).classList.remove("hidden");}
+function validUrl(v){try{return ["http:","https:"].includes(new URL(v).protocol)}catch{return false}}
+function fileName(n){return n.replace(/[^a-zA-Z0-9._-]/g,"-")}
+async function upload(bucket,path,file){const {error}=await db.storage.from(bucket).upload(path,file,{upsert:false});if(error)throw error;return db.storage.from(bucket).getPublicUrl(path).data.publicUrl;}
+function preview(id,url){if(url){$(id).src=url;$(id).classList.remove("hidden")}else{$(id).removeAttribute("src");$(id).classList.add("hidden")}}
+function monday(){const d=new Date(),day=d.getDay();d.setDate(d.getDate()+(day===0?-6:1-day));return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
 
-let currentUser=null;
-let currentRole=null;
+function switchTab(name){
+document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.id==="tab-"+name));
+document.querySelectorAll("#adminNav button").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
+}
+$("adminNav").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b)switchTab(b.dataset.tab)});
 
-let allArticles=[];
-let allBanners=[];
-let allVideos=[];
-let allChartSongs=[];
+function buildVisibility(){
+const box=$("visibilityControls");box.innerHTML="";
+sectionKeys.forEach(([key,label])=>{
+const wrap=document.createElement("div");wrap.className="check";
+const input=document.createElement("input");input.type="checkbox";input.id="vis_"+key;input.checked=visibility[key]!==false;
+const l=document.createElement("label");l.htmlFor=input.id;l.textContent=label+" visible";
+wrap.append(input,l);box.append(wrap);input.onchange=()=>visibility[key]=input.checked;
+});
+}
+function buildOrder(){
+const box=$("sectionOrder");box.innerHTML="";
+sectionOrder.forEach((key,i)=>{
+const row=document.createElement("div");row.className="order-row";
+const name=document.createElement("strong");name.textContent=(i+1)+". "+(sectionKeys.find(x=>x[0]===key)?.[1]||key);
+const up=document.createElement("button");up.textContent="↑";up.className="secondary";up.disabled=i===0;up.onclick=()=>swapOrder(i,-1);
+const down=document.createElement("button");down.textContent="↓";down.className="secondary";down.disabled=i===sectionOrder.length-1;down.onclick=()=>swapOrder(i,1);
+row.append(name,up,down);box.append(row);
+});
+}
+function swapOrder(i,delta){const j=i+delta;if(j<0||j>=sectionOrder.length)return;[sectionOrder[i],sectionOrder[j]]=[sectionOrder[j],sectionOrder[i]];buildOrder();}
 
-let editingArticleId=null;
-let existingImageUrl=null;
+const settingIds=["site_name","tagline","topbar_text","logo_url","theme_primary","theme_dark","theme_light","theme_background","theme_text","font_family","latest_heading","creators_heading","local_heading","national_heading","chart_heading","chart_description","creators_description","local_description","national_description","contact_heading","contact_email","contact_intro","contact_description","footer_text"];
 
-let editingBannerId=null;
-let existingBannerImage=null;
-
-let editingVideoId=null;
-let existingVideoUrl=null;
-let existingThumbnailUrl=null;
-
-let editingChartSongId=null;
-let existingChartCover=null;
-
-let currentSiteSettings={};
-let removeLogoRequested=false;
-
-function showMessage(id,text,error=false){
-  $(id).textContent=text;
-  $(id).style.color=error?'#b42318':'#222';
-  $(id).classList.remove('hidden');
+async function loadSettings(){
+const {data,error}=await db.from("site_settings").select("settings").eq("id","main").maybeSingle();
+if(error){msg("settingsMessage","Could not load settings: "+error.message,true);return;}
+settings=data?.settings||{};
+settingIds.forEach(id=>{if($(id))$(id).value=settings[id]??($(id).type==="color"?"#171717":"");});
+["theme_primary","theme_dark","theme_light","theme_background","theme_text"].forEach(id=>{
+if(!settings[id])$(id).value=({theme_primary:"#e7549b",theme_dark:"#171717",theme_light:"#fff1f7",theme_background:"#f5f5f5",theme_text:"#171717"})[id];
+});
+preview("logo_preview",settings.logo_url);
+visibility=settings.section_visibility||{};
+sectionOrder=Array.isArray(settings.section_order)?settings.section_order.slice():sectionKeys.map(x=>x[0]);
+sectionKeys.forEach(([k])=>{if(!sectionOrder.includes(k))sectionOrder.push(k)});
+buildVisibility();buildOrder();
 }
 
-function validUrl(url){
-  try{
-    return ['http:','https:'].includes(new URL(url).protocol);
-  }catch{return false;}
-}
+$("logo_url").addEventListener("input",()=>preview("logo_preview",validUrl($("logo_url").value)?$("logo_url").value:""));
+$("logo_file").addEventListener("change",()=>{
+const f=$("logo_file").files[0];if(!f)return;
+if(!f.type.startsWith("image/")||f.size>5*1024*1024){msg("settingsMessage","Logo must be an image smaller than 5MB.",true);$("logo_file").value="";return;}
+preview("logo_preview",URL.createObjectURL(f));
+});
 
-function safeFileName(name){
-  return name.replace(/[^a-zA-Z0-9._-]/g,'-');
-}
-
-function makeSlug(title){
-  return title.toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-|-$/g,'')+'-'+Date.now();
-}
-
-async function uploadFile(bucket,path,file){
-  const {error}=await db.storage.from(bucket)
-    .upload(path,file,{upsert:false});
-
-  if(error)throw error;
-
-  return db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
-}
-
-function setPreview(id,url){
-  $(id).src=url;
-}
-
-/* WEBSITE SETTINGS */
-
-const settingsFields={
-  site_name:'settingSiteName',
-  tagline:'settingTagline',
-  topbar_text:'settingTopbar',
-  latest_heading:'settingLatestHeading',
-  creators_heading:'settingCreatorsHeading',
-  local_heading:'settingLocalHeading',
-  national_heading:'settingNationalHeading',
-  contact_heading:'settingContactHeading',
-  contact_intro:'settingContactIntro',
-  contact_description:'settingContactDescription',
-  contact_email:'settingContactEmail',
-  footer_text:'settingFooterText'
+$("settingsForm").onsubmit=async e=>{
+e.preventDefault();if(currentRole!=="admin")return msg("settingsMessage","Administrator permission required.",true);
+const b=$("settingsSave");b.disabled=true;b.textContent="Saving...";
+try{
+const next={...settings};
+settingIds.forEach(id=>next[id]=$(id).value.trim());
+const f=$("logo_file").files[0];
+if(f)next.logo_url=await upload("article-images","site/"+currentUser.id+"/"+Date.now()+"-"+fileName(f.name),f);
+else if(next.logo_url&&!validUrl(next.logo_url))throw Error("Enter a valid logo URL.");
+next.section_visibility=visibility;next.section_order=sectionOrder;
+const {error}=await db.from("site_settings").upsert({id:"main",settings:next,updated_at:new Date().toISOString()},{onConflict:"id"});
+if(error)throw error;
+settings=next;$("logo_file").value="";preview("logo_preview",next.logo_url);
+msg("settingsMessage","All website settings saved. Refresh your public homepage to see the changes.");
+}catch(err){msg("settingsMessage",err.message,true)}
+finally{b.disabled=false;b.textContent="Save All Website Changes";}
 };
 
-function previewSettingsLogo(url){
-  const preview=$('settingLogoPreview');
-
-  if(url&&validUrl(url)){
-    preview.src=url;
-    preview.classList.remove('hidden');
-  }else{
-    preview.removeAttribute('src');
-    preview.classList.add('hidden');
-  }
-}
-
-$('settingLogoUrl').addEventListener('input',()=>{
-  const url=$('settingLogoUrl').value.trim();
-
-  if(!url){
-    previewSettingsLogo('');
-    return;
-  }
-
-  if(validUrl(url)){
-    previewSettingsLogo(url);
-  }
-});
-
-$('settingLogoFile').addEventListener('change',()=>{
-  const file=$('settingLogoFile').files[0];
-
-  if(!file)return;
-
-  if(!file.type.startsWith('image/')||file.size>5*1024*1024){
-    showMessage('settingsMessage','Please select an image smaller than 5MB.',true);
-    $('settingLogoFile').value='';
-    return;
-  }
-
-  previewSettingsLogo(URL.createObjectURL(file));
-});
-
-$('removeSettingLogo').addEventListener('click',()=>{
-  $('settingLogoFile').value='';
-  $('settingLogoUrl').value='';
-  previewSettingsLogo('');
-  removeLogoRequested=true;
-});
-
-async function loadWebsiteSettings(){
-  if(currentRole!=='admin')return;
-
-  $('settingsMessage').classList.add('hidden');
-
-  const {data,error}=await db
-    .from('site_settings')
-    .select('settings')
-    .eq('id','main')
-    .maybeSingle();
-
-  if(error){
-    showMessage('settingsMessage','Could not load website settings: '+error.message,true);
-    return;
-  }
-
-  currentSiteSettings=data?.settings||{};
-
-  Object.entries(settingsFields).forEach(([key,id])=>{
-    $(id).value=currentSiteSettings[key]||'';
-  });
-
-  $('settingLogoUrl').value=currentSiteSettings.logo_url||'';
-  previewSettingsLogo(currentSiteSettings.logo_url||'');
-
-  removeLogoRequested=false;
-}
-
-$('settingsForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-
-  if(currentRole!=='admin'){
-    showMessage('settingsMessage','Administrator permission required.',true);
-    return;
-  }
-
-  const button=$('settingsSaveButton');
-  button.disabled=true;
-  button.textContent='Saving...';
-
-  try{
-    const updatedSettings={...currentSiteSettings};
-
-    Object.entries(settingsFields).forEach(([key,id])=>{
-      updatedSettings[key]=$(id).value.trim();
-    });
-
-    let logoUrl=currentSiteSettings.logo_url||'';
-    const logoFile=$('settingLogoFile').files[0];
-
-    if(logoFile){
-      if(!logoFile.type.startsWith('image/')||logoFile.size>5*1024*1024){
-        throw new Error('Logo must be an image smaller than 5MB.');
-      }
-
-      logoUrl=await uploadFile(
-        'article-images',
-        'site/'+currentUser.id+'/'+Date.now()+'-'+safeFileName(logoFile.name),
-        logoFile
-      );
-    }else if(removeLogoRequested){
-      logoUrl='';
-    }else if($('settingLogoUrl').value.trim()){
-      logoUrl=$('settingLogoUrl').value.trim();
-
-      if(!validUrl(logoUrl)){
-        throw new Error('Please enter a valid logo image URL.');
-      }
-    }else{
-      logoUrl='';
-    }
-
-    updatedSettings.logo_url=logoUrl;
-
-    const {error}=await db
-      .from('site_settings')
-      .upsert({
-        id:'main',
-        settings:updatedSettings,
-        updated_at:new Date().toISOString()
-      },{
-        onConflict:'id'
-      });
-
-    if(error)throw error;
-
-    currentSiteSettings=updatedSettings;
-    removeLogoRequested=false;
-    $('settingLogoFile').value='';
-
-    previewSettingsLogo(logoUrl);
-
-    showMessage(
-      'settingsMessage',
-      'Website settings saved successfully! Your homepage will use the updated settings.'
-    );
-
-  }catch(err){
-    showMessage('settingsMessage',err.message||'Could not save website settings.',true);
-  }finally{
-    button.disabled=false;
-    button.textContent='Save Website Settings';
-  }
-});
-
-/* LOGIN */
-
-$('loginForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  $('loginMessage').textContent='Signing in...';
-
-  const {error}=await db.auth.signInWithPassword({
-    email:$('email').value,
-    password:$('password').value
-  });
-
-  if(error){
-    $('loginMessage').textContent=error.message;
-    return;
-  }
-
-  await startDashboard();
-});
-
-$('logout').onclick=async()=>{
-  await db.auth.signOut();
-  location.reload();
+$("loginForm").onsubmit=async e=>{
+e.preventDefault();$("loginMessage").textContent="Signing in...";
+const {error}=await db.auth.signInWithPassword({email:$("email").value,password:$("password").value});
+if(error){$("loginMessage").textContent=error.message;return;}
+await startDashboard();
 };
-
-/* DASHBOARD */
+$("logout").onclick=async()=>{await db.auth.signOut();location.reload();};
 
 async function startDashboard(){
-  const {data:{user},error}=await db.auth.getUser();
-
-  if(error||!user){
-    $('login').classList.remove('hidden');
-    $('dashboard').classList.add('hidden');
-    return;
-  }
-
-  const {data:profile,error:profileError}=await db
-    .from('profiles')
-    .select('full_name,role')
-    .eq('id',user.id)
-    .single();
-
-  if(profileError||!profile){
-    $('loginMessage').textContent='Could not load your profile. Contact the administrator.';
-    return;
-  }
-
-  currentUser=user;
-  currentRole=profile.role;
-
-  $('login').classList.add('hidden');
-  $('dashboard').classList.remove('hidden');
-
-  $('userInfo').textContent=
-    (profile.full_name||user.email)+' · '+currentRole.toUpperCase();
-
-  if(currentRole==='admin'){
-    $('websiteSettings').classList.remove('hidden');
-    $('bannerManager').classList.remove('hidden');
-    $('videoManager').classList.remove('hidden');
-    $('chartManager').classList.remove('hidden');
-
-    await Promise.all([
-      loadWebsiteSettings(),
-      loadBanners(),
-      loadVideos(),
-      initialiseChartManager()
-    ]);
-  }else{
-    $('websiteSettings').classList.add('hidden');
-    $('bannerManager').classList.add('hidden');
-    $('videoManager').classList.add('hidden');
-    $('chartManager').classList.add('hidden');
-  }
-
-  await loadJournalists();
-  await loadArticles();
+const {data:{user},error}=await db.auth.getUser();
+if(error||!user){$("login").classList.remove("hidden");$("dashboard").classList.add("hidden");return;}
+const {data:p,error:pe}=await db.from("profiles").select("full_name,role").eq("id",user.id).single();
+if(pe||!p){$("loginMessage").textContent="Could not load your profile. Contact the administrator.";return;}
+currentUser=user;currentRole=p.role;
+$("userInfo").textContent=(p.full_name||user.email)+" · "+String(p.role).toUpperCase();
+$("login").classList.add("hidden");$("dashboard").classList.remove("hidden");
+if(currentRole==="admin"){
+await Promise.all([loadSettings(),loadBanners(),loadVideos(),initChart()]);
+}else{
+["website","banners","videos","chart"].forEach(t=>document.querySelector(`[data-tab="${t}"]`).classList.add("hidden"));
 }
-
-/* JOURNALISTS */
-
+await loadJournalists();await loadArticles();
+}
 async function loadJournalists(){
-  const {data,error}=await db.from('journalists')
-    .select('id,name').order('name');
-
-  if(error){
-    console.error(error);
-    return;
-  }
-
-  $('journalist').innerHTML=
-    '<option value="">No journalist selected</option>';
-
-  (data||[]).forEach(j=>{
-    const option=document.createElement('option');
-    option.value=j.id;
-    option.textContent=j.name;
-    $('journalist').appendChild(option);
-  });
+const {data,error}=await db.from("journalists").select("id,name").order("name");
+if(error){console.warn(error);return;}
+$("journalist").innerHTML='<option value="">No journalist selected</option>';
+(data||[]).forEach(j=>{const o=document.createElement("option");o.value=j.id;o.textContent=j.name;$("journalist").append(o);});
 }
 
-/* ARTICLES */
-
-function resetArticleForm(){
-  $('articleForm').reset();
-  editingArticleId=null;
-  existingImageUrl=null;
-  $('formHeading').textContent='Create New Article';
-  $('saveButton').textContent='Save Article';
-  $('cancelEdit').classList.add('hidden');
+/* ARTICLE MANAGER */
+function resetArticle(){
+$("articleForm").reset();editArticleId=null;articleImage=null;
+$("articleFormHeading").textContent="Create New Article";
+$("articleSave").textContent="Save Article";$("articleCancel").classList.add("hidden");
 }
-
-$('cancelEdit').onclick=resetArticleForm;
-
-$('articleForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-
-  const button=$('saveButton');
-  button.disabled=true;
-
-  showMessage('message',editingArticleId?'Updating article...':'Saving article...');
-
-  try{
-    let imageUrl=existingImageUrl;
-    const file=$('photo').files[0];
-
-    if(file){
-      if(!file.type.startsWith('image/')||file.size>5*1024*1024){
-        throw new Error('Please select an image smaller than 5MB.');
-      }
-
-      imageUrl=await uploadFile(
-        'article-images',
-        currentUser.id+'/'+Date.now()+'-'+safeFileName(file.name),
-        file
-      );
-    }
-
-    const article={
-      title:$('title').value.trim(),
-      slug:makeSlug($('title').value),
-      excerpt:$('excerpt').value.trim(),
-      content:$('content').value.trim(),
-      image_url:imageUrl,
-      category:$('category').value,
-      section:$('section').value,
-      journalist_id:$('journalist').value||null
-    };
-
-    let result;
-
-    if(editingArticleId){
-      delete article.slug;
-      result=await db.from('articles').update(article).eq('id',editingArticleId);
-    }else{
-      article.author_id=currentUser.id;
-      article.status=currentRole==='admin'?'published':'draft';
-      article.published_at=article.status==='published'?new Date().toISOString():null;
-      result=await db.from('articles').insert(article);
-    }
-
-    if(result.error)throw result.error;
-
-    showMessage(
-      'message',
-      editingArticleId?'Article updated successfully!':
-      currentRole==='admin'?'Article published successfully!':
-      'Draft saved! Awaiting administrator approval.'
-    );
-
-    resetArticleForm();
-    await loadArticles();
-
-  }catch(err){
-    showMessage('message',err.message,true);
-  }finally{
-    button.disabled=false;
-  }
-});
-
+$("articleCancel").onclick=resetArticle;
+$("articleForm").onsubmit=async e=>{
+e.preventDefault();const b=$("articleSave");b.disabled=true;
+try{
+let image=articleImage;const f=$("photo").files[0];
+if(f){
+if(!f.type.startsWith("image/")||f.size>5*1024*1024)throw Error("Photo must be an image smaller than 5MB.");
+image=await upload("article-images",currentUser.id+"/"+Date.now()+"-"+fileName(f.name),f);
+}
+const row={title:$("title").value.trim(),excerpt:$("excerpt").value.trim(),content:$("content").value.trim(),image_url:image,category:$("category").value,section:$("section").value,journalist_id:$("journalist").value||null};
+let r;
+if(editArticleId)r=await db.from("articles").update(row).eq("id",editArticleId);
+else{
+row.slug=row.title.toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-"+Date.now();
+row.author_id=currentUser.id;row.status=currentRole==="admin"?"published":"draft";
+row.published_at=row.status==="published"?new Date().toISOString():null;
+r=await db.from("articles").insert(row);
+}
+if(r.error)throw r.error;
+msg("articleMessage",editArticleId?"Article updated.":currentRole==="admin"?"Article published.":"Draft saved for administrator approval.");
+resetArticle();await loadArticles();
+}catch(err){msg("articleMessage",err.message,true)}
+finally{b.disabled=false;}
+};
 async function loadArticles(){
-  $('articles').textContent='Loading articles...';
-
-  const {data,error}=await db.from('articles')
-    .select('*').order('created_at',{ascending:false});
-
-  if(error){
-    $('articles').textContent=error.message;
-    return;
-  }
-
-  allArticles=data||[];
-  updateStats();
-  renderArticles();
+const {data,error}=await db.from("articles").select("*").order("created_at",{ascending:false});
+if(error){$("articles").textContent=error.message;return;}
+articles=data||[];
+$("totalCount").textContent=articles.length;
+$("publishedCount").textContent=articles.filter(a=>a.status==="published").length;
+$("draftCount").textContent=articles.filter(a=>a.status==="draft").length;
+renderArticles();
 }
-
-function updateStats(){
-  $('totalCount').textContent=allArticles.length;
-  $('publishedCount').textContent=allArticles.filter(a=>a.status==='published').length;
-  $('draftCount').textContent=allArticles.filter(a=>a.status==='draft').length;
-}
-
 function renderArticles(){
-  const search=$('searchArticles').value.toLowerCase();
-  const status=$('statusFilter').value;
-  const category=$('categoryFilter').value;
-
-  const filtered=allArticles.filter(a=>
-    (a.title||'').toLowerCase().includes(search)&&
-    (status==='all'||a.status===status)&&
-    (category==='all'||a.category===category)
-  );
-
-  $('articles').innerHTML='';
-
-  if(!filtered.length){
-    $('articles').textContent='No matching articles found.';
-    return;
-  }
-
-  filtered.forEach(article=>{
-    const div=document.createElement('div');
-    div.className='article';
-
-    const heading=document.createElement('h3');
-    heading.textContent=article.title;
-
-    const details=document.createElement('p');
-    details.className='status';
-    details.textContent=
-      (article.category||'').toUpperCase()+' · '+
-      (article.section||'').toUpperCase()+' · '+
-      (article.status||'').toUpperCase();
-
-    div.append(heading,details);
-
-    if(article.image_url){
-      const img=document.createElement('img');
-      img.src=article.image_url;
-      img.alt='Article photograph';
-      div.prepend(img);
-    }
-
-    if(currentRole==='admin'){
-      const edit=document.createElement('button');
-      edit.textContent='Edit';
-      edit.className='secondary';
-      edit.onclick=()=>editArticle(article);
-
-      const publish=document.createElement('button');
-      publish.textContent=article.status==='published'?'Unpublish':'Publish';
-      publish.onclick=()=>changeStatus(article);
-
-      const remove=document.createElement('button');
-      remove.textContent='Delete';
-      remove.className='danger';
-      remove.onclick=()=>deleteArticle(article);
-
-      div.append(edit,publish,remove);
-    }
-
-    $('articles').appendChild(div);
-  });
+const q=$("searchArticles").value.toLowerCase(),st=$("statusFilter").value,cat=$("categoryFilter").value;
+const list=articles.filter(a=>(a.title||"").toLowerCase().includes(q)&&(st==="all"||a.status===st)&&(cat==="all"||a.category===cat));
+$("articles").innerHTML="";
+if(!list.length){$("articles").textContent="No matching articles.";return;}
+list.forEach(a=>{
+const d=document.createElement("div");d.className="item";
+const h=document.createElement("h3");h.textContent=a.title;
+const p=document.createElement("p");p.className="status";p.textContent=[a.category,a.section,a.status].join(" · ").toUpperCase();
+d.append(h,p);
+if(a.image_url){const im=document.createElement("img");im.src=a.image_url;im.alt="Article";d.prepend(im);}
+if(currentRole==="admin"||(a.author_id===currentUser.id&&a.status==="draft")){
+const ed=document.createElement("button");ed.textContent="Edit";ed.className="secondary";ed.onclick=()=>editArticle(a);d.append(ed);
 }
-
+if(currentRole==="admin"){
+const pub=document.createElement("button");pub.textContent=a.status==="published"?"Unpublish":"Publish";pub.onclick=()=>changeArticleStatus(a);
+const del=document.createElement("button");del.textContent="Delete";del.className="danger";del.onclick=()=>deleteArticle(a);
+d.append(pub,del);
+}
+$("articles").append(d);
+});
+}
 function editArticle(a){
-  if(currentRole!=='admin')return;
-
-  editingArticleId=a.id;
-  existingImageUrl=a.image_url;
-
-  $('title').value=a.title||'';
-  $('excerpt').value=a.excerpt||'';
-  $('content').value=a.content||'';
-  $('category').value=a.category||'local';
-  $('section').value=a.section||'entertainment';
-  $('journalist').value=a.journalist_id||'';
-
-  $('formHeading').textContent='Edit Article';
-  $('saveButton').textContent='Update Article';
-  $('cancelEdit').classList.remove('hidden');
-
-  window.scrollTo({top:0,behavior:'smooth'});
+editArticleId=a.id;articleImage=a.image_url;
+$("title").value=a.title||"";$("excerpt").value=a.excerpt||"";$("content").value=a.content||"";
+$("category").value=a.category||"local";$("section").value=a.section||"entertainment";
+$("journalist").value=a.journalist_id||"";
+$("articleFormHeading").textContent="Edit Article";$("articleSave").textContent="Update Article";
+$("articleCancel").classList.remove("hidden");switchTab("articles");window.scrollTo({top:0,behavior:"smooth"});
 }
-
-async function changeStatus(a){
-  const next=a.status==='published'?'draft':'published';
-
-  if(!confirm('Are you sure you want to '+next+' this article?'))return;
-
-  const {error}=await db.from('articles').update({
-    status:next,
-    published_at:next==='published'?new Date().toISOString():null
-  }).eq('id',a.id);
-
-  if(error){alert(error.message);return;}
-  await loadArticles();
+async function changeArticleStatus(a){
+const status=a.status==="published"?"draft":"published";
+if(!confirm("Change article status to "+status+"?"))return;
+const {error}=await db.from("articles").update({status,published_at:status==="published"?new Date().toISOString():null}).eq("id",a.id);
+if(error)alert(error.message);else loadArticles();
 }
-
 async function deleteArticle(a){
-  if(!confirm('Permanently delete '+a.title+'?'))return;
-
-  const {error}=await db.from('articles').delete().eq('id',a.id);
-  if(error){alert(error.message);return;}
-
-  if(editingArticleId===a.id)resetArticleForm();
-  await loadArticles();
+if(!confirm("Permanently delete "+a.title+"?"))return;
+const {error}=await db.from("articles").delete().eq("id",a.id);
+if(error)alert(error.message);else{if(editArticleId===a.id)resetArticle();loadArticles();}
 }
+["searchArticles","statusFilter","categoryFilter"].forEach(id=>$(id).addEventListener(id==="searchArticles"?"input":"change",renderArticles));
 
-/* BANNERS */
-
-$('bannerImageUrl').addEventListener('input',()=>{
-  const url=$('bannerImageUrl').value.trim();
-  if(validUrl(url))setPreview('bannerPreview',url);
-});
-
-$('bannerImageFile').addEventListener('change',()=>{
-  const file=$('bannerImageFile').files[0];
-  if(!file)return;
-
-  if(!file.type.startsWith('image/')||file.size>5*1024*1024){
-    showMessage('bannerMessage','Image must be smaller than 5MB.',true);
-    $('bannerImageFile').value='';
-    return;
-  }
-
-  setPreview('bannerPreview',URL.createObjectURL(file));
-});
-
+/* BANNER MANAGER */
+$("bannerImageUrl").oninput=()=>preview("bannerPreview",$("bannerImageUrl").value);
+$("bannerImageFile").onchange=()=>{
+const f=$("bannerImageFile").files[0];if(!f)return;
+if(!f.type.startsWith("image/")||f.size>5*1024*1024){msg("bannerMessage","Image must be smaller than 5MB.",true);$("bannerImageFile").value="";return;}
+preview("bannerPreview",URL.createObjectURL(f));
+};
 async function loadBanners(){
-  if(currentRole!=='admin')return;
-
-  $('bannerList').textContent='Loading banners...';
-
-  const {data,error}=await db.from('banners').select('*')
-    .order('sort_order',{ascending:true})
-    .order('created_at',{ascending:false});
-
-  if(error){
-    $('bannerList').textContent='Unable to load banners: '+error.message;
-    return;
-  }
-
-  allBanners=data||[];
-
-  $('bannerCount').textContent=allBanners.length;
-  $('activeBannerCount').textContent=allBanners.filter(b=>b.is_active).length;
-  $('inactiveBannerCount').textContent=allBanners.filter(b=>!b.is_active).length;
-
-  renderBanners();
+if(currentRole!=="admin")return;
+const {data,error}=await db.from("banners").select("*").order("sort_order").order("created_at",{ascending:false});
+if(error){$("bannerList").textContent=error.message;return;}
+banners=data||[];
+$("bannerCount").textContent=banners.length;
+$("activeBannerCount").textContent=banners.filter(x=>x.is_active).length;
+$("inactiveBannerCount").textContent=banners.filter(x=>!x.is_active).length;
+renderBanners();
 }
-
 function renderBanners(){
-  $('bannerList').innerHTML='';
-
-  if(!allBanners.length){
-    $('bannerList').textContent='No banners yet. Add your first banner above.';
-    return;
-  }
-
-  allBanners.forEach((b,index)=>{
-    const item=document.createElement('div');
-    item.className='banner-item';
-
-    const img=document.createElement('img');
-    img.src=b.image_url||'https://placehold.co/600x300';
-    img.alt=b.title||'Banner';
-
-    const details=document.createElement('div');
-    details.className='banner-details';
-
-    const heading=document.createElement('h3');
-    heading.textContent=b.title;
-
-    const desc=document.createElement('p');
-    desc.textContent=b.subtitle||'No description';
-
-    const label=document.createElement('p');
-    label.textContent='Label: '+(b.label||'FEATURED');
-
-    const status=document.createElement('span');
-    status.className='pill'+(b.is_active?'':' inactive');
-    status.textContent=b.is_active?'ACTIVE':'INACTIVE';
-
-    details.append(heading,desc,label,status);
-
-    const actions=document.createElement('div');
-    actions.style.marginTop='12px';
-
-    const edit=document.createElement('button');
-    edit.textContent='Edit';
-    edit.className='secondary';
-    edit.onclick=()=>editBanner(b);
-
-    const toggle=document.createElement('button');
-    toggle.textContent=b.is_active?'Deactivate':'Activate';
-    toggle.className='secondary';
-    toggle.onclick=async()=>{
-      const {error}=await db.from('banners').update({is_active:!b.is_active}).eq('id',b.id);
-      if(error){alert(error.message);return;}
-      await loadBanners();
-    };
-
-    const up=document.createElement('button');
-    up.textContent='↑';
-    up.className='secondary';
-    up.disabled=index===0;
-    up.onclick=()=>moveBanner(index,-1);
-
-    const down=document.createElement('button');
-    down.textContent='↓';
-    down.className='secondary';
-    down.disabled=index===allBanners.length-1;
-    down.onclick=()=>moveBanner(index,1);
-
-    const remove=document.createElement('button');
-    remove.textContent='Delete';
-    remove.className='danger';
-    remove.onclick=()=>deleteBanner(b);
-
-    actions.append(edit,toggle,up,down,remove);
-    details.appendChild(actions);
-    item.append(img,details);
-    $('bannerList').appendChild(item);
-  });
-}
-
-function resetBannerForm(){
-  $('bannerForm').reset();
-  editingBannerId=null;
-  existingBannerImage=null;
-
-  $('bannerId').value='';
-  $('bannerFormHeading').textContent='Add New Banner';
-  $('bannerSaveButton').textContent='Save Banner';
-  $('bannerActive').checked=true;
-  $('bannerOrder').value=allBanners.length*10;
-  $('bannerPreview').src='https://placehold.co/1000x400?text=Banner+Preview';
-  $('bannerImageFile').value='';
-  $('cancelBannerEdit').classList.add('hidden');
-  $('bannerMessage').classList.add('hidden');
-}
-
-function editBanner(b){
-  editingBannerId=b.id;
-  existingBannerImage=b.image_url;
-
-  $('bannerId').value=b.id;
-  $('bannerTitle').value=b.title||'';
-  $('bannerSubtitle').value=b.subtitle||'';
-  $('bannerLabel').value=b.label||'FEATURED';
-  $('bannerImageUrl').value=b.image_url||'';
-  $('bannerLink').value=b.link_url||'#';
-  $('bannerOrder').value=b.sort_order??0;
-  $('bannerActive').checked=!!b.is_active;
-  $('bannerPreview').src=b.image_url||'';
-
-  $('bannerFormHeading').textContent='Edit Homepage Banner';
-  $('bannerSaveButton').textContent='Update Banner';
-  $('cancelBannerEdit').classList.remove('hidden');
-
-  $('bannerManager').scrollIntoView({behavior:'smooth'});
-}
-
-$('cancelBannerEdit').onclick=resetBannerForm;
-
-$('bannerForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-
-  if(currentRole!=='admin')return;
-
-  const button=$('bannerSaveButton');
-  button.disabled=true;
-
-  try{
-    let imageUrl=existingBannerImage;
-    const file=$('bannerImageFile').files[0];
-
-    if(file){
-      if(!file.type.startsWith('image/')||file.size>5*1024*1024)
-        throw new Error('Image must be smaller than 5MB.');
-
-      imageUrl=await uploadFile(
-        'article-images',
-        'banners/'+currentUser.id+'/'+Date.now()+'-'+safeFileName(file.name),
-        file
-      );
-    }else if($('bannerImageUrl').value.trim()){
-      const url=$('bannerImageUrl').value.trim();
-      if(!validUrl(url))throw new Error('Invalid image URL.');
-      imageUrl=url;
-    }
-
-    if(!imageUrl)throw new Error('Please provide a banner image.');
-
-    const data={
-      title:$('bannerTitle').value.trim(),
-      subtitle:$('bannerSubtitle').value.trim(),
-      label:$('bannerLabel').value.trim()||'FEATURED',
-      image_url:imageUrl,
-      link_url:$('bannerLink').value.trim()||'#',
-      sort_order:Math.max(0,parseInt($('bannerOrder').value,10)||0),
-      is_active:$('bannerActive').checked,
-      updated_at:new Date().toISOString()
-    };
-
-    const result=editingBannerId
-      ?await db.from('banners').update(data).eq('id',editingBannerId)
-      :await db.from('banners').insert(data);
-
-    if(result.error)throw result.error;
-
-    resetBannerForm();
-    await loadBanners();
-    showMessage('bannerMessage','Banner saved successfully!');
-
-  }catch(err){
-    showMessage('bannerMessage',err.message,true);
-  }finally{
-    button.disabled=false;
-  }
+$("bannerList").innerHTML="";
+if(!banners.length){$("bannerList").textContent="No banners yet.";return;}
+banners.forEach((x,i)=>{
+const d=document.createElement("div");d.className="media-item";
+const im=document.createElement("img");im.src=x.image_url||"";
+const info=document.createElement("div");
+const h=document.createElement("h3");h.textContent=x.title;
+const p=document.createElement("p");p.textContent=x.subtitle||"";
+const st=document.createElement("span");st.className="pill "+(x.is_active?"":"inactive");st.textContent=x.is_active?"ACTIVE":"INACTIVE";
+info.append(h,p,st);
+const edit=document.createElement("button");edit.textContent="Edit";edit.className="secondary";edit.onclick=()=>editBanner(x);
+const toggle=document.createElement("button");toggle.textContent=x.is_active?"Deactivate":"Activate";
+toggle.onclick=async()=>{const {error}=await db.from("banners").update({is_active:!x.is_active}).eq("id",x.id);if(error)alert(error.message);else loadBanners();};
+const up=document.createElement("button");up.textContent="↑";up.className="secondary";up.disabled=i===0;up.onclick=()=>swapBanner(i,-1);
+const down=document.createElement("button");down.textContent="↓";down.className="secondary";down.disabled=i===banners.length-1;down.onclick=()=>swapBanner(i,1);
+const del=document.createElement("button");del.textContent="Delete";del.className="danger";del.onclick=()=>deleteBanner(x);
+info.append(edit,toggle,up,down,del);d.append(im,info);$("bannerList").append(d);
 });
-
-async function moveBanner(index,direction){
-  const other=index+direction;
-  if(other<0||other>=allBanners.length)return;
-
-  const a=allBanners[index];
-  const b=allBanners[other];
-
-  const first=await db.from('banners').update({sort_order:b.sort_order??0}).eq('id',a.id);
-  if(first.error){alert(first.error.message);return;}
-
-  const second=await db.from('banners').update({sort_order:a.sort_order??0}).eq('id',b.id);
-  if(second.error){alert(second.error.message);return;}
-
-  await loadBanners();
 }
-
-async function deleteBanner(b){
-  if(!confirm('Permanently delete banner: '+b.title+'?'))return;
-
-  const {error}=await db.from('banners').delete().eq('id',b.id);
-  if(error){alert(error.message);return;}
-
-  if(editingBannerId===b.id)resetBannerForm();
-  await loadBanners();
+function resetBanner(){
+$("bannerForm").reset();editBannerId=null;bannerImage=null;
+$("bannerFormHeading").textContent="Add Banner";$("bannerSave").textContent="Save Banner";
+$("bannerCancel").classList.add("hidden");preview("bannerPreview","");
 }
-
-$('refreshBanners').onclick=loadBanners;
+function editBanner(x){
+editBannerId=x.id;bannerImage=x.image_url;
+$("bannerTitle").value=x.title||"";$("bannerSubtitle").value=x.subtitle||"";
+$("bannerLabel").value=x.label||"";$("bannerImageUrl").value=x.image_url||"";
+$("bannerLink").value=x.link_url||"";$("bannerOrder").value=x.sort_order||0;
+$("bannerActive").checked=!!x.is_active;preview("bannerPreview",x.image_url);
+$("bannerFormHeading").textContent="Edit Banner";$("bannerSave").textContent="Update Banner";
+$("bannerCancel").classList.remove("hidden");
+}
+$("bannerCancel").onclick=resetBanner;
+$("bannerForm").onsubmit=async e=>{
+e.preventDefault();const b=$("bannerSave");b.disabled=true;
+try{
+let image=bannerImage,f=$("bannerImageFile").files[0];
+if(f){
+if(!f.type.startsWith("image/")||f.size>5*1024*1024)throw Error("Banner image must be smaller than 5MB.");
+image=await upload("article-images","banners/"+currentUser.id+"/"+Date.now()+"-"+fileName(f.name),f);
+}else if($("bannerImageUrl").value.trim()){
+if(!validUrl($("bannerImageUrl").value))throw Error("Invalid banner image URL.");
+image=$("bannerImageUrl").value.trim();
+}
+if(!image)throw Error("Please provide a banner image.");
+const row={title:$("bannerTitle").value.trim(),subtitle:$("bannerSubtitle").value.trim(),label:$("bannerLabel").value.trim()||"FEATURED",image_url:image,link_url:$("bannerLink").value.trim()||"#",sort_order:+$("bannerOrder").value||0,is_active:$("bannerActive").checked,updated_at:new Date().toISOString()};
+const r=editBannerId?await db.from("banners").update(row).eq("id",editBannerId):await db.from("banners").insert(row);
+if(r.error)throw r.error;
+resetBanner();await loadBanners();msg("bannerMessage","Banner saved.");
+}catch(err){msg("bannerMessage",err.message,true)}
+finally{b.disabled=false;}
+};
+async function swapBanner(i,d){
+const j=i+d;if(j<0||j>=banners.length)return;
+const a=banners[i],b=banners[j];
+const r1=await db.from("banners").update({sort_order:b.sort_order??0}).eq("id",a.id);
+if(r1.error){alert(r1.error.message);return;}
+const r2=await db.from("banners").update({sort_order:a.sort_order??0}).eq("id",b.id);
+if(r2.error)alert(r2.error.message);loadBanners();
+}
+async function deleteBanner(x){
+if(!confirm("Delete banner "+x.title+"?"))return;
+const {error}=await db.from("banners").delete().eq("id",x.id);
+if(error)alert(error.message);else loadBanners();
+}
 
 /* VIDEO MANAGER */
-
-$('thumbnailUrl').addEventListener('input',()=>{
-  const url=$('thumbnailUrl').value.trim();
-
-  if(validUrl(url)){
-    $('thumbnailPreview').src=url;
-    $('thumbnailPreview').classList.remove('hidden');
-  }
-});
-
-$('thumbnailFile').addEventListener('change',()=>{
-  const file=$('thumbnailFile').files[0];
-  if(!file)return;
-
-  if(!file.type.startsWith('image/')||file.size>5*1024*1024){
-    showMessage('videoMessage','Thumbnail must be an image smaller than 5MB.',true);
-    $('thumbnailFile').value='';
-    return;
-  }
-
-  $('thumbnailPreview').src=URL.createObjectURL(file);
-  $('thumbnailPreview').classList.remove('hidden');
-});
-
-$('videoFile').addEventListener('change',()=>{
-  const file=$('videoFile').files[0];
-  if(!file)return;
-
-  if(!['video/mp4','video/webm'].includes(file.type)){
-    showMessage('videoMessage','Please choose an MP4 or WebM video.',true);
-    $('videoFile').value='';
-    return;
-  }
-
-  if(file.size>50*1024*1024){
-    showMessage('videoMessage','Video must be smaller than 50MB.',true);
-    $('videoFile').value='';
-    return;
-  }
-
-  $('videoPreview').src=URL.createObjectURL(file);
-  $('videoPreview').classList.remove('hidden');
-});
-
+$("thumbnailUrl").oninput=()=>preview("thumbnailPreview",$("thumbnailUrl").value);
+$("thumbnailFile").onchange=()=>{
+const f=$("thumbnailFile").files[0];if(!f)return;
+if(!f.type.startsWith("image/")||f.size>5*1024*1024){msg("videoMessage","Thumbnail must be an image smaller than 5MB.",true);$("thumbnailFile").value="";return;}
+preview("thumbnailPreview",URL.createObjectURL(f));
+};
+$("videoFile").onchange=()=>{
+const f=$("videoFile").files[0];if(!f)return;
+if(!["video/mp4","video/webm"].includes(f.type)||f.size>50*1024*1024){msg("videoMessage","Choose MP4/WebM video smaller than 50MB.",true);$("videoFile").value="";return;}
+preview("videoPreview",URL.createObjectURL(f));
+};
 async function loadVideos(){
-  if(currentRole!=='admin')return;
-
-  $('videoList').textContent='Loading videos...';
-
-  const {data,error}=await db.from('videos').select('*')
-    .order('created_at',{ascending:false});
-
-  if(error){
-    $('videoList').textContent='Unable to load videos: '+error.message;
-    return;
-  }
-
-  allVideos=data||[];
-
-  $('videoCount').textContent=allVideos.length;
-  $('publishedVideoCount').textContent=allVideos.filter(v=>v.status==='published').length;
-  $('draftVideoCount').textContent=allVideos.filter(v=>v.status==='draft').length;
-
-  renderVideos();
+if(currentRole!=="admin")return;
+const {data,error}=await db.from("videos").select("*").order("created_at",{ascending:false});
+if(error){$("videoList").textContent=error.message;return;}
+videos=data||[];
+$("videoCount").textContent=videos.length;
+$("publishedVideoCount").textContent=videos.filter(v=>v.status==="published").length;
+$("draftVideoCount").textContent=videos.filter(v=>v.status==="draft").length;
+renderVideos();
 }
-
 function renderVideos(){
-  $('videoList').innerHTML='';
-
-  if(!allVideos.length){
-    $('videoList').textContent='No videos uploaded yet.';
-    return;
-  }
-
-  allVideos.forEach(v=>{
-    const item=document.createElement('div');
-    item.className='video-item';
-
-    const media=document.createElement('div');
-
-    if(v.thumbnail_url){
-      const img=document.createElement('img');
-      img.src=v.thumbnail_url;
-      img.alt=v.title;
-      media.appendChild(img);
-    }else{
-      const video=document.createElement('video');
-      video.src=v.video_url;
-      video.controls=true;
-      media.appendChild(video);
-    }
-
-    const details=document.createElement('div');
-    details.className='video-details';
-
-    const title=document.createElement('h3');
-    title.textContent=v.title;
-
-    const creator=document.createElement('p');
-    creator.textContent='Creator: '+v.creator_name;
-
-    const category=document.createElement('p');
-    category.textContent='Category: '+(v.category||'Other');
-
-    const status=document.createElement('span');
-    status.className='pill'+(v.status==='published'?'':' inactive');
-    status.textContent=(v.status||'draft').toUpperCase();
-
-    const featured=document.createElement('p');
-    featured.textContent=v.is_featured?'★ Featured on homepage':'Not featured';
-
-    details.append(title,creator,category,status,featured);
-
-    const actions=document.createElement('div');
-    actions.style.marginTop='12px';
-
-    const preview=document.createElement('button');
-    preview.textContent='Preview';
-    preview.className='secondary';
-    preview.onclick=()=>{
-      const w=window.open('','_blank');
-
-      if(w){
-        const vdo=w.document.createElement('video');
-        vdo.src=v.video_url;
-        vdo.controls=true;
-        vdo.autoplay=true;
-        vdo.style.cssText='width:100%;height:auto';
-        w.document.body.style.margin='0';
-        w.document.body.appendChild(vdo);
-      }
-    };
-
-    const edit=document.createElement('button');
-    edit.textContent='Edit';
-    edit.className='secondary';
-    edit.onclick=()=>editVideo(v);
-
-    const toggle=document.createElement('button');
-    toggle.textContent=v.status==='published'?'Unpublish':'Publish';
-    toggle.onclick=()=>changeVideoStatus(v);
-
-    const remove=document.createElement('button');
-    remove.textContent='Delete';
-    remove.className='danger';
-    remove.onclick=()=>deleteVideo(v);
-
-    actions.append(preview,edit,toggle,remove);
-    details.appendChild(actions);
-
-    item.append(media,details);
-    $('videoList').appendChild(item);
-  });
+$("videoList").innerHTML="";
+if(!videos.length){$("videoList").textContent="No videos yet.";return;}
+videos.forEach(v=>{
+const d=document.createElement("div");d.className="media-item";
+const media=document.createElement(v.thumbnail_url?"img":"video");media.src=v.thumbnail_url||v.video_url;
+if(media.tagName==="VIDEO")media.controls=true;
+const info=document.createElement("div"),h=document.createElement("h3");h.textContent=v.title;
+const p=document.createElement("p");p.textContent="By "+v.creator_name+" · "+v.category+" · "+v.status;
+info.append(h,p);
+const edit=document.createElement("button");edit.textContent="Edit";edit.className="secondary";edit.onclick=()=>editVideo(v);
+const toggle=document.createElement("button");toggle.textContent=v.status==="published"?"Unpublish":"Publish";
+toggle.onclick=async()=>{const {error}=await db.from("videos").update({status:v.status==="published"?"draft":"published",updated_at:new Date().toISOString()}).eq("id",v.id);if(error)alert(error.message);else loadVideos();};
+const del=document.createElement("button");del.textContent="Delete";del.className="danger";
+del.onclick=async()=>{if(!confirm("Delete video record? Storage file is not automatically removed."))return;const {error}=await db.from("videos").delete().eq("id",v.id);if(error)alert(error.message);else loadVideos();};
+info.append(edit,toggle,del);d.append(media,info);$("videoList").append(d);
+});
 }
-
-function resetVideoForm(){
-  $('videoForm').reset();
-
-  editingVideoId=null;
-  existingVideoUrl=null;
-  existingThumbnailUrl=null;
-
-  $('videoId').value='';
-  $('videoFormHeading').textContent='Upload New Video';
-  $('videoSaveButton').textContent='Upload Video';
-  $('cancelVideoEdit').classList.add('hidden');
-
-  $('videoPreview').removeAttribute('src');
-  $('videoPreview').classList.add('hidden');
-  $('thumbnailPreview').removeAttribute('src');
-  $('thumbnailPreview').classList.add('hidden');
-
-  $('videoMessage').classList.add('hidden');
+function resetVideo(){
+$("videoForm").reset();editVideoId=null;videoUrl=null;thumbnailUrl=null;
+$("videoFormHeading").textContent="Upload video";$("videoSave").textContent="Save Video";
+$("videoCancel").classList.add("hidden");preview("videoPreview","");preview("thumbnailPreview","");
 }
-
 function editVideo(v){
-  editingVideoId=v.id;
-  existingVideoUrl=v.video_url;
-  existingThumbnailUrl=v.thumbnail_url;
-
-  $('videoId').value=v.id;
-  $('videoTitle').value=v.title||'';
-  $('videoDescription').value=v.description||'';
-  $('creatorName').value=v.creator_name||'';
-  $('videoCategory').value=v.category||'Other';
-  $('videoStatus').value=v.status||'draft';
-  $('videoFeatured').checked=!!v.is_featured;
-  $('thumbnailUrl').value=v.thumbnail_url||'';
-
-  if(v.video_url){
-    $('videoPreview').src=v.video_url;
-    $('videoPreview').classList.remove('hidden');
-  }
-
-  if(v.thumbnail_url){
-    $('thumbnailPreview').src=v.thumbnail_url;
-    $('thumbnailPreview').classList.remove('hidden');
-  }
-
-  $('videoFormHeading').textContent='Edit Video';
-  $('videoSaveButton').textContent='Update Video';
-  $('cancelVideoEdit').classList.remove('hidden');
-
-  $('videoManager').scrollIntoView({behavior:'smooth'});
+editVideoId=v.id;videoUrl=v.video_url;thumbnailUrl=v.thumbnail_url;
+$("videoTitle").value=v.title||"";$("videoDescription").value=v.description||"";
+$("creatorName").value=v.creator_name||"";$("videoCategory").value=v.category||"Other";
+$("videoStatus").value=v.status||"draft";$("videoFeatured").checked=!!v.is_featured;
+$("thumbnailUrl").value=v.thumbnail_url||"";
+preview("videoPreview",v.video_url);preview("thumbnailPreview",v.thumbnail_url);
+$("videoFormHeading").textContent="Edit video";$("videoSave").textContent="Update Video";
+$("videoCancel").classList.remove("hidden");
 }
+$("videoCancel").onclick=resetVideo;
+$("videoForm").onsubmit=async e=>{
+e.preventDefault();const b=$("videoSave");b.disabled=true;
+try{
+let vu=videoUrl,tu=thumbnailUrl;const vf=$("videoFile").files[0],tf=$("thumbnailFile").files[0];
+if(vf){
+if(!["video/mp4","video/webm"].includes(vf.type)||vf.size>50*1024*1024)throw Error("Video must be MP4/WebM and smaller than 50MB.");
+vu=await upload("magazine-videos",currentUser.id+"/"+Date.now()+"-"+fileName(vf.name),vf);
+}
+if(tf){
+if(!tf.type.startsWith("image/")||tf.size>5*1024*1024)throw Error("Thumbnail must be smaller than 5MB.");
+tu=await upload("article-images","video-thumbnails/"+currentUser.id+"/"+Date.now()+"-"+fileName(tf.name),tf);
+}else if($("thumbnailUrl").value.trim()){
+if(!validUrl($("thumbnailUrl").value))throw Error("Invalid thumbnail URL.");
+tu=$("thumbnailUrl").value.trim();
+}
+if(!vu)throw Error("Please upload a video.");
+const row={title:$("videoTitle").value.trim(),description:$("videoDescription").value.trim(),creator_name:$("creatorName").value.trim(),category:$("videoCategory").value,video_url:vu,thumbnail_url:tu,status:$("videoStatus").value,is_featured:$("videoFeatured").checked,updated_at:new Date().toISOString()};
+const r=editVideoId?await db.from("videos").update(row).eq("id",editVideoId):await db.from("videos").insert(row);
+if(r.error)throw r.error;
+resetVideo();await loadVideos();msg("videoMessage","Video saved.");
+}catch(err){msg("videoMessage",err.message,true)}
+finally{b.disabled=false;}
+};
 
-$('cancelVideoEdit').onclick=resetVideoForm;
-
-$('videoForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-
-  if(currentRole!=='admin'){
-    showMessage('videoMessage','Administrator permission required.',true);
-    return;
-  }
-
-  const button=$('videoSaveButton');
-  button.disabled=true;
-  button.textContent='Uploading...';
-
-  try{
-    let videoUrl=existingVideoUrl;
-    let thumbnailUrl=existingThumbnailUrl;
-
-    const videoFile=$('videoFile').files[0];
-    const thumbnailFile=$('thumbnailFile').files[0];
-
-    if(videoFile){
-      if(!['video/mp4','video/webm'].includes(videoFile.type))
-        throw new Error('Only MP4 and WebM videos are supported.');
-
-      if(videoFile.size>50*1024*1024)
-        throw new Error('Video must be smaller than 50MB.');
-
-      videoUrl=await uploadFile(
-        'magazine-videos',
-        currentUser.id+'/'+Date.now()+'-'+safeFileName(videoFile.name),
-        videoFile
-      );
-    }
-
-    if(thumbnailFile){
-      if(!thumbnailFile.type.startsWith('image/')||thumbnailFile.size>5*1024*1024)
-        throw new Error('Thumbnail must be an image smaller than 5MB.');
-
-      thumbnailUrl=await uploadFile(
-        'article-images',
-        'video-thumbnails/'+currentUser.id+'/'+Date.now()+'-'+safeFileName(thumbnailFile.name),
-        thumbnailFile
-      );
-    }else if($('thumbnailUrl').value.trim()){
-      const url=$('thumbnailUrl').value.trim();
-      if(!validUrl(url))throw new Error('Invalid thumbnail URL.');
-      thumbnailUrl=url;
-    }
-
-    if(!videoUrl)throw new Error('Please select a video file.');
-
-    const videoData={
-      title:$('videoTitle').value.trim(),
-      description:$('videoDescription').value.trim(),
-      creator_name:$('creatorName').value.trim(),
-      category:$('videoCategory').value,
-      video_url:videoUrl,
-      thumbnail_url:thumbnailUrl,
-      status:$('videoStatus').value,
-      is_featured:$('videoFeatured').checked,
-      updated_at:new Date().toISOString()
-    };
-
-    const result=editingVideoId
-      ?await db.from('videos').update(videoData).eq('id',editingVideoId)
-      :await db.from('videos').insert(videoData);
-
-    if(result.error)throw result.error;
-
-    resetVideoForm();
-    await loadVideos();
-    showMessage('videoMessage','Video saved successfully!');
-
-  }catch(err){
-    showMessage('videoMessage',err.message,true);
-  }finally{
-    button.disabled=false;
-    button.textContent=editingVideoId?'Update Video':'Upload Video';
-  }
+/* TOP 5 CHART MANAGER */
+async function initChart(){const w=monday();$("chartWeek").value=w;$("chartFilterWeek").value=w;await loadSongs();}
+async function loadSongs(){
+const week=$("chartFilterWeek").value||monday();$("chartSongList").textContent="Loading...";
+const [sr,vr]=await Promise.all([
+db.from("chart_songs").select("*").eq("chart_week",week).order("sort_order").order("created_at"),
+db.from("song_votes").select("song_id,user_id").eq("chart_week",week)
+]);
+if(sr.error){$("chartSongList").textContent=sr.error.message;return;}
+if(vr.error){$("chartSongList").textContent=vr.error.message;return;}
+songs=sr.data||[];const counts={};
+(vr.data||[]).forEach(v=>counts[v.song_id]=(counts[v.song_id]||0)+1);
+$("chartSongCount").textContent=songs.length;
+$("chartApprovedCount").textContent=songs.filter(s=>s.is_approved&&s.is_active).length;
+$("chartVoteCount").textContent=(vr.data||[]).length;
+renderSongs(counts);
+}
+function renderSongs(counts={}){
+$("chartSongList").innerHTML="";
+if(!songs.length){$("chartSongList").textContent="No songs for this week.";return;}
+[...songs].sort((a,b)=>(counts[b.id]||0)-(counts[a.id]||0)||(a.sort_order||0)-(b.sort_order||0)).forEach((s,i)=>{
+const d=document.createElement("div");d.className="song";
+const im=document.createElement("img");im.src=s.cover_url||"";
+const info=document.createElement("div"),h=document.createElement("h3");h.textContent=(i+1)+". "+s.title;
+const p=document.createElement("p");p.textContent=s.artist+" · Votes: "+(counts[s.id]||0);
+const st=document.createElement("p");st.className="help";st.textContent=(s.is_approved?"Approved":"Pending")+" · "+(s.is_active?"Active":"Inactive");
+info.append(h,p,st);
+const ed=document.createElement("button");ed.textContent="Edit";ed.className="secondary";ed.onclick=()=>editSong(s);
+const ap=document.createElement("button");ap.textContent=s.is_approved?"Unapprove":"Approve";ap.className="success";ap.onclick=()=>updateSong(s,{is_approved:!s.is_approved});
+const ac=document.createElement("button");ac.textContent=s.is_active?"Deactivate":"Activate";ac.className="secondary";ac.onclick=()=>updateSong(s,{is_active:!s.is_active});
+const del=document.createElement("button");del.textContent="Delete";del.className="danger";del.onclick=()=>deleteSong(s);
+info.append(ed,ap,ac,del);d.append(im,info);$("chartSongList").append(d);
 });
-
-async function changeVideoStatus(v){
-  const next=v.status==='published'?'draft':'published';
-
-  const {error}=await db.from('videos')
-    .update({status:next,updated_at:new Date().toISOString()})
-    .eq('id',v.id);
-
-  if(error){alert(error.message);return;}
-  await loadVideos();
 }
-
-async function deleteVideo(v){
-  if(!confirm('Permanently delete this video record?\n\n'+v.title+'\n\nThe uploaded file in Storage will not be deleted.'))return;
-
-  const {error}=await db.from('videos').delete().eq('id',v.id);
-
-  if(error){alert(error.message);return;}
-
-  if(editingVideoId===v.id)resetVideoForm();
-
-  await loadVideos();
+function resetSong(){
+$("chartForm").reset();editSongId=null;coverUrl=null;
+$("chartWeek").value=$("chartFilterWeek").value||monday();
+$("chartActive").checked=true;$("chartFormHeading").textContent="Add song";
+$("chartSave").textContent="Save Song";$("chartCancel").classList.add("hidden");
+preview("chartCoverPreview","");
 }
-
-$('refreshVideos').onclick=loadVideos;
-
-/* TOP 5 MUSIC CHART MANAGER */
-
-function getCurrentChartWeek(){
-  const now=new Date();
-  const day=now.getDay();
-  const diff=day===0?-6:1-day;
-
-  now.setDate(now.getDate()+diff);
-
-  return [
-    now.getFullYear(),
-    String(now.getMonth()+1).padStart(2,'0'),
-    String(now.getDate()).padStart(2,'0')
-  ].join('-');
+function editSong(s){
+editSongId=s.id;coverUrl=s.cover_url;
+$("chartTitle").value=s.title||"";$("chartArtist").value=s.artist||"";
+$("chartWeek").value=s.chart_week;$("chartCoverUrl").value=s.cover_url||"";
+$("chartStreamUrl").value=s.stream_url||"";$("chartSortOrder").value=s.sort_order||0;
+$("chartApproved").checked=!!s.is_approved;$("chartActive").checked=!!s.is_active;
+preview("chartCoverPreview",s.cover_url);
+$("chartFormHeading").textContent="Edit song";$("chartSave").textContent="Update Song";
+$("chartCancel").classList.remove("hidden");
 }
-
-function showChartMessage(message,error=false){
-  showMessage('chartMessage',message,error);
+$("chartCancel").onclick=resetSong;
+$("chartCoverUrl").oninput=()=>preview("chartCoverPreview",$("chartCoverUrl").value);
+$("chartCoverFile").onchange=()=>{
+const f=$("chartCoverFile").files[0];if(!f)return;
+if(!f.type.startsWith("image/")||f.size>5*1024*1024){msg("chartMessage","Cover must be smaller than 5MB.",true);$("chartCoverFile").value="";return;}
+preview("chartCoverPreview",URL.createObjectURL(f));
+};
+$("chartForm").onsubmit=async e=>{
+e.preventDefault();const b=$("chartSave");b.disabled=true;
+try{
+let cover=coverUrl;const f=$("chartCoverFile").files[0];
+if(f){
+if(!f.type.startsWith("image/")||f.size>5*1024*1024)throw Error("Cover must be smaller than 5MB.");
+cover=await upload("article-images","chart-covers/"+currentUser.id+"/"+Date.now()+"-"+fileName(f.name),f);
+}else if($("chartCoverUrl").value.trim()){
+if(!validUrl($("chartCoverUrl").value))throw Error("Invalid cover URL.");
+cover=$("chartCoverUrl").value.trim();
 }
-
-function resetChartForm(){
-  $('chartForm').reset();
-
-  editingChartSongId=null;
-  existingChartCover=null;
-
-  $('chartSongId').value='';
-  $('chartWeek').value=$('chartFilterWeek').value||getCurrentChartWeek();
-  $('chartSortOrder').value=0;
-  $('chartActive').checked=true;
-  $('chartApproved').checked=false;
-
-  $('chartFormHeading').textContent='Add New Song';
-  $('chartSaveButton').textContent='Save Song';
-  $('chartCancelEdit').classList.add('hidden');
-
-  $('chartCoverPreview').removeAttribute('src');
-  $('chartCoverPreview').classList.add('hidden');
-  $('chartCoverFile').value='';
+const stream=$("chartStreamUrl").value.trim();if(stream&&!validUrl(stream))throw Error("Invalid stream URL.");
+const row={title:$("chartTitle").value.trim(),artist:$("chartArtist").value.trim(),chart_week:$("chartWeek").value,cover_url:cover,stream_url:stream||null,sort_order:+$("chartSortOrder").value||0,is_approved:$("chartApproved").checked,is_active:$("chartActive").checked,updated_at:new Date().toISOString()};
+const r=editSongId?await db.from("chart_songs").update(row).eq("id",editSongId):await db.from("chart_songs").insert(row);
+if(r.error)throw r.error;
+$("chartFilterWeek").value=row.chart_week;resetSong();await loadSongs();msg("chartMessage","Song saved.");
+}catch(err){msg("chartMessage",err.message,true)}
+finally{b.disabled=false;}
+};
+async function updateSong(s,changes){
+const {error}=await db.from("chart_songs").update({...changes,updated_at:new Date().toISOString()}).eq("id",s.id);
+if(error)alert(error.message);else loadSongs();
 }
-
-$('chartCoverUrl').addEventListener('input',()=>{
-  const url=$('chartCoverUrl').value.trim();
-
-  if(validUrl(url)){
-    $('chartCoverPreview').src=url;
-    $('chartCoverPreview').classList.remove('hidden');
-  }
-});
-
-$('chartCoverFile').addEventListener('change',()=>{
-  const file=$('chartCoverFile').files[0];
-
-  if(!file)return;
-
-  if(!file.type.startsWith('image/')||file.size>5*1024*1024){
-    showChartMessage('Please select an image smaller than 5MB.',true);
-    $('chartCoverFile').value='';
-    return;
-  }
-
-  $('chartCoverPreview').src=URL.createObjectURL(file);
-  $('chartCoverPreview').classList.remove('hidden');
-});
-
-async function initialiseChartManager(){
-  if(currentRole!=='admin')return;
-
-  const week=getCurrentChartWeek();
-
-  $('chartWeek').value=week;
-  $('chartFilterWeek').value=week;
-
-  await loadChartSongs();
+async function deleteSong(s){
+if(!confirm("Delete "+s.title+"? Associated votes may also be deleted by your database relationship."))return;
+const {error}=await db.from("chart_songs").delete().eq("id",s.id);
+if(error)alert(error.message);else loadSongs();
 }
-
-async function loadChartSongs(){
-  if(currentRole!=='admin')return;
-
-  const week=$('chartFilterWeek').value||getCurrentChartWeek();
-
-  $('chartSongList').textContent='Loading chart songs...';
-
-  const [songsResult,votesResult]=await Promise.all([
-    db.from('chart_songs')
-      .select('*')
-      .eq('chart_week',week)
-      .order('sort_order',{ascending:true})
-      .order('created_at',{ascending:true}),
-
-    db.from('song_votes')
-      .select('song_id,user_id')
-      .eq('chart_week',week)
-  ]);
-
-  if(songsResult.error){
-    $('chartSongList').textContent='Unable to load songs: '+songsResult.error.message;
-    return;
-  }
-
-  if(votesResult.error){
-    $('chartSongList').textContent='Unable to load voting statistics: '+votesResult.error.message;
-    return;
-  }
-
-  allChartSongs=songsResult.data||[];
-
-  const votes=votesResult.data||[];
-  const voteCounts={};
-
-  votes.forEach(v=>{
-    voteCounts[v.song_id]=(voteCounts[v.song_id]||0)+1;
-  });
-
-  $('chartSongCount').textContent=allChartSongs.length;
-
-  $('chartApprovedCount').textContent=
-    allChartSongs.filter(s=>s.is_approved&&s.is_active).length;
-
-  $('chartVoteCount').textContent=votes.length;
-
-  renderChartSongs(voteCounts);
-}
-
-function renderChartSongs(voteCounts={}){
-  const container=$('chartSongList');
-  container.innerHTML='';
-
-  if(!allChartSongs.length){
-    container.textContent='No songs have been added for this chart week yet.';
-    return;
-  }
-
-  const sorted=[...allChartSongs].sort((a,b)=>{
-    const difference=(voteCounts[b.id]||0)-(voteCounts[a.id]||0);
-    return difference||(a.sort_order||0)-(b.sort_order||0);
-  });
-
-  sorted.forEach((song,index)=>{
-    const item=document.createElement('div');
-    item.className='chart-song';
-
-    if(song.cover_url){
-      const img=document.createElement('img');
-      img.src=song.cover_url;
-      img.alt='Song cover';
-      item.appendChild(img);
-    }else{
-      const placeholder=document.createElement('div');
-      placeholder.style.cssText='width:100px;height:100px;background:#f5f5f7;border-radius:7px;display:grid;place-items:center';
-      placeholder.textContent='🎵';
-      item.appendChild(placeholder);
-    }
-
-    const details=document.createElement('div');
-
-    const heading=document.createElement('h3');
-    heading.textContent=(index+1)+'. '+song.title;
-
-    const artist=document.createElement('p');
-    artist.textContent='Artist: '+song.artist;
-
-    const votes=document.createElement('p');
-    votes.className='status';
-    votes.textContent='Votes: '+(voteCounts[song.id]||0);
-
-    const status=document.createElement('p');
-    status.className='help-text';
-    status.textContent=
-      'Approval: '+(song.is_approved?'Approved':'Pending')+
-      ' · Status: '+(song.is_active?'Active':'Inactive');
-
-    details.append(heading,artist,votes,status);
-
-    if(song.stream_url&&validUrl(song.stream_url)){
-      const link=document.createElement('a');
-      link.href=song.stream_url;
-      link.target='_blank';
-      link.rel='noopener noreferrer';
-      link.textContent='Open streaming link';
-      details.appendChild(link);
-    }
-
-    const actions=document.createElement('div');
-    actions.className='chart-actions';
-
-    const edit=document.createElement('button');
-    edit.textContent='Edit';
-    edit.className='secondary';
-    edit.onclick=()=>editChartSong(song);
-
-    const approve=document.createElement('button');
-    approve.textContent=song.is_approved?'Unapprove':'Approve';
-    approve.className='success';
-    approve.onclick=()=>updateChartSong(song,{
-      is_approved:!song.is_approved
-    });
-
-    const toggle=document.createElement('button');
-    toggle.textContent=song.is_active?'Deactivate':'Activate';
-    toggle.className='secondary';
-    toggle.onclick=()=>updateChartSong(song,{
-      is_active:!song.is_active
-    });
-
-    const remove=document.createElement('button');
-    remove.textContent='Delete';
-    remove.className='danger';
-    remove.onclick=()=>deleteChartSong(song);
-
-    actions.append(edit,approve,toggle,remove);
-    details.appendChild(actions);
-
-    item.appendChild(details);
-    container.appendChild(item);
-  });
-}
-
-function editChartSong(song){
-  editingChartSongId=song.id;
-  existingChartCover=song.cover_url;
-
-  $('chartSongId').value=song.id;
-  $('chartTitle').value=song.title||'';
-  $('chartArtist').value=song.artist||'';
-  $('chartWeek').value=song.chart_week;
-  $('chartCoverUrl').value=song.cover_url||'';
-  $('chartStreamUrl').value=song.stream_url||'';
-  $('chartSortOrder').value=song.sort_order||0;
-  $('chartApproved').checked=!!song.is_approved;
-  $('chartActive').checked=!!song.is_active;
-
-  if(song.cover_url){
-    $('chartCoverPreview').src=song.cover_url;
-    $('chartCoverPreview').classList.remove('hidden');
-  }else{
-    $('chartCoverPreview').classList.add('hidden');
-  }
-
-  $('chartFormHeading').textContent='Edit Song';
-  $('chartSaveButton').textContent='Update Song';
-  $('chartCancelEdit').classList.remove('hidden');
-
-  $('chartManager').scrollIntoView({behavior:'smooth'});
-}
-
-async function updateChartSong(song,changes){
-  const {error}=await db.from('chart_songs')
-    .update({
-      ...changes,
-      updated_at:new Date().toISOString()
-    })
-    .eq('id',song.id);
-
-  if(error){
-    alert(error.message);
-    return;
-  }
-
-  await loadChartSongs();
-}
-
-async function deleteChartSong(song){
-  if(!confirm(
-    'Permanently delete "'+song.title+'" by '+song.artist+'?\n\nAssociated votes will also be deleted.'
-  ))return;
-
-  const {error}=await db.from('chart_songs')
-    .delete()
-    .eq('id',song.id);
-
-  if(error){
-    alert(error.message);
-    return;
-  }
-
-  if(editingChartSongId===song.id){
-    resetChartForm();
-  }
-
-  await loadChartSongs();
-}
-
-$('chartCancelEdit').onclick=resetChartForm;
-
-$('chartForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-
-  if(currentRole!=='admin'){
-    showChartMessage('Administrator permission required.',true);
-    return;
-  }
-
-  const button=$('chartSaveButton');
-  button.disabled=true;
-
-  try{
-    const title=$('chartTitle').value.trim();
-    const artist=$('chartArtist').value.trim();
-    const week=$('chartWeek').value;
-
-    if(!title||!artist||!week){
-      throw new Error('Please complete the song title, artist and chart week.');
-    }
-
-    let coverUrl=existingChartCover;
-    const file=$('chartCoverFile').files[0];
-
-    if(file){
-      if(!file.type.startsWith('image/')||file.size>5*1024*1024){
-        throw new Error('Cover artwork must be an image smaller than 5MB.');
-      }
-
-      coverUrl=await uploadFile(
-        'article-images',
-        'chart-covers/'+currentUser.id+'/'+Date.now()+'-'+safeFileName(file.name),
-        file
-      );
-    }else if($('chartCoverUrl').value.trim()){
-      coverUrl=$('chartCoverUrl').value.trim();
-
-      if(!validUrl(coverUrl)){
-        throw new Error('Please enter a valid cover artwork URL.');
-      }
-    }
-
-    const streamUrl=$('chartStreamUrl').value.trim();
-
-    if(streamUrl&&!validUrl(streamUrl)){
-      throw new Error('Please enter a valid streaming link.');
-    }
-
-    const songData={
-      title,
-      artist,
-      cover_url:coverUrl,
-      stream_url:streamUrl||null,
-      chart_week:week,
-      sort_order:Math.max(0,parseInt($('chartSortOrder').value,10)||0),
-      is_approved:$('chartApproved').checked,
-      is_active:$('chartActive').checked,
-      updated_at:new Date().toISOString()
-    };
-
-    const result=editingChartSongId
-      ?await db.from('chart_songs').update(songData).eq('id',editingChartSongId)
-      :await db.from('chart_songs').insert(songData);
-
-    if(result.error)throw result.error;
-
-    $('chartFilterWeek').value=week;
-
-    resetChartForm();
-    await loadChartSongs();
-
-    showChartMessage('Song saved successfully!');
-
-  }catch(err){
-    showChartMessage(err.message||'Could not save song.',true);
-  }finally{
-    button.disabled=false;
-    button.textContent=editingChartSongId?'Update Song':'Save Song';
-  }
-});
-
-$('chartFilterWeek').addEventListener('change',()=>{
-  $('chartWeek').value=$('chartFilterWeek').value;
-  loadChartSongs();
-});
-
-$('refreshChart').onclick=loadChartSongs;
-
-/* FILTERS */
-
-$('searchArticles').addEventListener('input',renderArticles);
-$('statusFilter').addEventListener('change',renderArticles);
-$('categoryFilter').addEventListener('change',renderArticles);
-
-/* AUTH */
+$("chartFilterWeek").onchange=()=>{$("chartWeek").value=$("chartFilterWeek").value;loadSongs();};
 
 db.auth.onAuthStateChange(event=>{
-  if(event==='SIGNED_OUT'){
-    currentUser=null;
-    currentRole=null;
-    $('dashboard').classList.add('hidden');
-    $('login').classList.remove('hidden');
-  }
+if(event==="SIGNED_OUT"){
+currentUser=null;currentRole=null;
+$("dashboard").classList.add("hidden");$("login").classList.remove("hidden");
+}
 });
-
-/* START */
-
 startDashboard();
 </script>
 </body>
