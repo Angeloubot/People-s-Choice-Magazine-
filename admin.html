@@ -69,6 +69,25 @@ hr{border:0;border-top:1px solid #eee;margin:25px 0}
   background:#fafafa;
 }
 
+.chart-song{
+  border:1px solid #eee;
+  border-radius:8px;
+  padding:15px;
+  margin:15px 0;
+  display:grid;
+  grid-template-columns:100px 1fr;
+  gap:15px;
+}
+.chart-song img{
+  width:100px;
+  height:100px;
+  object-fit:cover;
+  border-radius:7px;
+  background:#eee;
+}
+.chart-song h3{margin:3px 0 8px;font-family:Georgia,serif}
+.chart-actions{margin-top:10px}
+
 @media(max-width:600px){
  main{padding:10px}
  .panel{padding:17px}
@@ -78,6 +97,8 @@ hr{border:0;border-top:1px solid #eee;margin:25px 0}
  .banner-item img,.video-item img,.video-item video{width:100%;height:190px}
  .settings-grid{grid-template-columns:1fr}
  .settings-grid .full-width{grid-column:auto}
+ .chart-song{grid-template-columns:75px 1fr}
+ .chart-song img{width:75px;height:75px}
 }
 </style>
 </head>
@@ -140,12 +161,10 @@ Changes are saved to Supabase and displayed on your public homepage.
 <label>Magazine Name</label>
 <input id="settingSiteName" placeholder="People's Choice Magazine">
 </div>
-
 <div class="full-width">
 <label>Magazine Tagline</label>
 <input id="settingTagline" placeholder="Your voice. Your stories. Your choice.">
 </div>
-
 <div class="full-width">
 <label>Top Announcement Bar</label>
 <input id="settingTopbar" placeholder="Welcome to People's Choice Magazine">
@@ -153,7 +172,6 @@ Changes are saved to Supabase and displayed on your public homepage.
 </div>
 
 <hr>
-
 <h3>Magazine Logo</h3>
 
 <label>Upload Logo</label>
@@ -171,7 +189,6 @@ Maximum logo image size: 5MB. Upload a transparent PNG or another suitable image
 </p>
 
 <hr>
-
 <h3>Homepage Section Headings</h3>
 
 <div class="settings-grid">
@@ -179,17 +196,14 @@ Maximum logo image size: 5MB. Upload a transparent PNG or another suitable image
 <label>Latest Stories Heading</label>
 <input id="settingLatestHeading" placeholder="Latest Stories">
 </div>
-
 <div>
 <label>Creators Corner Heading</label>
 <input id="settingCreatorsHeading" placeholder="Creators Corner">
 </div>
-
 <div>
 <label>Local News Heading</label>
 <input id="settingLocalHeading" placeholder="Local News">
 </div>
-
 <div>
 <label>National News Heading</label>
 <input id="settingNationalHeading" placeholder="National News">
@@ -197,7 +211,6 @@ Maximum logo image size: 5MB. Upload a transparent PNG or another suitable image
 </div>
 
 <hr>
-
 <h3>Contact Section</h3>
 
 <div class="settings-grid">
@@ -205,37 +218,28 @@ Maximum logo image size: 5MB. Upload a transparent PNG or another suitable image
 <label>Contact Heading</label>
 <input id="settingContactHeading" placeholder="Get In Touch">
 </div>
-
 <div>
 <label>Contact Email</label>
 <input id="settingContactEmail" type="email" placeholder="info@example.com">
 </div>
-
 <div class="full-width">
 <label>Contact Introduction</label>
-<textarea id="settingContactIntro" style="min-height:80px"
-placeholder="We would love to hear from you."></textarea>
+<textarea id="settingContactIntro" style="min-height:80px" placeholder="We would love to hear from you."></textarea>
 </div>
-
 <div class="full-width">
 <label>Contact Description</label>
-<textarea id="settingContactDescription"
-placeholder="Send us your stories, news tips and enquiries."></textarea>
+<textarea id="settingContactDescription" placeholder="Send us your stories, news tips and enquiries."></textarea>
 </div>
 </div>
 
 <hr>
-
 <h3>Footer</h3>
 
 <label>Footer Text</label>
-<textarea id="settingFooterText" style="min-height:80px"
-placeholder="Your voice. Your stories. Your choice."></textarea>
+<textarea id="settingFooterText" style="min-height:80px" placeholder="Your voice. Your stories. Your choice."></textarea>
 
 <button type="submit" id="settingsSaveButton">Save Website Settings</button>
-
 <div id="settingsMessage" class="notice hidden"></div>
-
 </form>
 </div>
 
@@ -373,7 +377,6 @@ Maximum file size: 50MB. Leave empty when editing to keep the existing video.
 
 <button type="submit" id="videoSaveButton">Upload Video</button>
 <button type="button" class="secondary hidden" id="cancelVideoEdit">Cancel Editing</button>
-
 <div id="videoMessage" class="notice hidden"></div>
 </form>
 
@@ -381,6 +384,78 @@ Maximum file size: 50MB. Leave empty when editing to keep the existing video.
 <h3>Manage Uploaded Videos</h3>
 <div id="videoList">Loading videos...</div>
 <button type="button" class="secondary" id="refreshVideos">Refresh Videos</button>
+</div>
+
+<!-- TOP 5 MUSIC CHART MANAGER -->
+
+<div class="panel hidden" id="chartManager">
+<h2>🎵 Top 5 Music Chart Manager</h2>
+<p class="help-text">
+Manage songs, approve chart entries and monitor voting results.
+Vote totals are visible to administrators only.
+</p>
+
+<div class="stats">
+<div class="stat"><strong id="chartSongCount">0</strong><small>Total Songs</small></div>
+<div class="stat"><strong id="chartApprovedCount">0</strong><small>Approved Songs</small></div>
+<div class="stat"><strong id="chartVoteCount">0</strong><small>Total Votes</small></div>
+</div>
+
+<hr>
+<h3 id="chartFormHeading">Add New Song</h3>
+
+<form id="chartForm">
+<input type="hidden" id="chartSongId">
+
+<label>Song Title</label>
+<input id="chartTitle" required maxlength="200" placeholder="Enter song title">
+
+<label>Artist Name</label>
+<input id="chartArtist" required maxlength="200" placeholder="Enter artist name">
+
+<label>Chart Week (Monday)</label>
+<input id="chartWeek" type="date" required>
+
+<label>Cover Artwork URL (optional)</label>
+<input id="chartCoverUrl" type="url" placeholder="https://example.com/cover.jpg">
+
+<label>Upload Cover Artwork</label>
+<input id="chartCoverFile" type="file" accept="image/*">
+<p class="help-text">Maximum artwork size: 5MB.</p>
+
+<label>Streaming Link (optional)</label>
+<input id="chartStreamUrl" type="url" placeholder="https://...">
+
+<label>Display Order (used when votes are tied)</label>
+<input id="chartSortOrder" type="number" min="0" value="0">
+
+<div class="check-row">
+<input id="chartApproved" type="checkbox">
+<label for="chartApproved">Approve this song for the public chart</label>
+</div>
+
+<div class="check-row">
+<input id="chartActive" type="checkbox" checked>
+<label for="chartActive">Song is active</label>
+</div>
+
+<img id="chartCoverPreview" class="preview hidden" alt="Song cover preview">
+
+<button type="submit" id="chartSaveButton">Save Song</button>
+<button type="button" class="secondary hidden" id="chartCancelEdit">Cancel Editing</button>
+
+<div id="chartMessage" class="notice hidden"></div>
+</form>
+
+<hr>
+<h3>Manage Chart Songs</h3>
+
+<label>Choose Chart Week</label>
+<input type="date" id="chartFilterWeek">
+
+<div id="chartSongList">Loading chart songs...</div>
+
+<button type="button" class="secondary" id="refreshChart">Refresh Chart</button>
 </div>
 
 <!-- ARTICLE FORM -->
@@ -481,6 +556,7 @@ let currentRole=null;
 let allArticles=[];
 let allBanners=[];
 let allVideos=[];
+let allChartSongs=[];
 
 let editingArticleId=null;
 let existingImageUrl=null;
@@ -491,6 +567,9 @@ let existingBannerImage=null;
 let editingVideoId=null;
 let existingVideoUrl=null;
 let existingThumbnailUrl=null;
+
+let editingChartSongId=null;
+let existingChartCover=null;
 
 let currentSiteSettings={};
 let removeLogoRequested=false;
@@ -759,16 +838,19 @@ async function startDashboard(){
     $('websiteSettings').classList.remove('hidden');
     $('bannerManager').classList.remove('hidden');
     $('videoManager').classList.remove('hidden');
+    $('chartManager').classList.remove('hidden');
 
     await Promise.all([
       loadWebsiteSettings(),
       loadBanners(),
-      loadVideos()
+      loadVideos(),
+      initialiseChartManager()
     ]);
   }else{
     $('websiteSettings').classList.add('hidden');
     $('bannerManager').classList.add('hidden');
     $('videoManager').classList.add('hidden');
+    $('chartManager').classList.add('hidden');
   }
 
   await loadJournalists();
@@ -1560,6 +1642,378 @@ async function deleteVideo(v){
 }
 
 $('refreshVideos').onclick=loadVideos;
+
+/* TOP 5 MUSIC CHART MANAGER */
+
+function getCurrentChartWeek(){
+  const now=new Date();
+  const day=now.getDay();
+  const diff=day===0?-6:1-day;
+
+  now.setDate(now.getDate()+diff);
+
+  return [
+    now.getFullYear(),
+    String(now.getMonth()+1).padStart(2,'0'),
+    String(now.getDate()).padStart(2,'0')
+  ].join('-');
+}
+
+function showChartMessage(message,error=false){
+  showMessage('chartMessage',message,error);
+}
+
+function resetChartForm(){
+  $('chartForm').reset();
+
+  editingChartSongId=null;
+  existingChartCover=null;
+
+  $('chartSongId').value='';
+  $('chartWeek').value=$('chartFilterWeek').value||getCurrentChartWeek();
+  $('chartSortOrder').value=0;
+  $('chartActive').checked=true;
+  $('chartApproved').checked=false;
+
+  $('chartFormHeading').textContent='Add New Song';
+  $('chartSaveButton').textContent='Save Song';
+  $('chartCancelEdit').classList.add('hidden');
+
+  $('chartCoverPreview').removeAttribute('src');
+  $('chartCoverPreview').classList.add('hidden');
+  $('chartCoverFile').value='';
+}
+
+$('chartCoverUrl').addEventListener('input',()=>{
+  const url=$('chartCoverUrl').value.trim();
+
+  if(validUrl(url)){
+    $('chartCoverPreview').src=url;
+    $('chartCoverPreview').classList.remove('hidden');
+  }
+});
+
+$('chartCoverFile').addEventListener('change',()=>{
+  const file=$('chartCoverFile').files[0];
+
+  if(!file)return;
+
+  if(!file.type.startsWith('image/')||file.size>5*1024*1024){
+    showChartMessage('Please select an image smaller than 5MB.',true);
+    $('chartCoverFile').value='';
+    return;
+  }
+
+  $('chartCoverPreview').src=URL.createObjectURL(file);
+  $('chartCoverPreview').classList.remove('hidden');
+});
+
+async function initialiseChartManager(){
+  if(currentRole!=='admin')return;
+
+  const week=getCurrentChartWeek();
+
+  $('chartWeek').value=week;
+  $('chartFilterWeek').value=week;
+
+  await loadChartSongs();
+}
+
+async function loadChartSongs(){
+  if(currentRole!=='admin')return;
+
+  const week=$('chartFilterWeek').value||getCurrentChartWeek();
+
+  $('chartSongList').textContent='Loading chart songs...';
+
+  const [songsResult,votesResult]=await Promise.all([
+    db.from('chart_songs')
+      .select('*')
+      .eq('chart_week',week)
+      .order('sort_order',{ascending:true})
+      .order('created_at',{ascending:true}),
+
+    db.from('song_votes')
+      .select('song_id,user_id')
+      .eq('chart_week',week)
+  ]);
+
+  if(songsResult.error){
+    $('chartSongList').textContent='Unable to load songs: '+songsResult.error.message;
+    return;
+  }
+
+  if(votesResult.error){
+    $('chartSongList').textContent='Unable to load voting statistics: '+votesResult.error.message;
+    return;
+  }
+
+  allChartSongs=songsResult.data||[];
+
+  const votes=votesResult.data||[];
+  const voteCounts={};
+
+  votes.forEach(v=>{
+    voteCounts[v.song_id]=(voteCounts[v.song_id]||0)+1;
+  });
+
+  $('chartSongCount').textContent=allChartSongs.length;
+
+  $('chartApprovedCount').textContent=
+    allChartSongs.filter(s=>s.is_approved&&s.is_active).length;
+
+  $('chartVoteCount').textContent=votes.length;
+
+  renderChartSongs(voteCounts);
+}
+
+function renderChartSongs(voteCounts={}){
+  const container=$('chartSongList');
+  container.innerHTML='';
+
+  if(!allChartSongs.length){
+    container.textContent='No songs have been added for this chart week yet.';
+    return;
+  }
+
+  const sorted=[...allChartSongs].sort((a,b)=>{
+    const difference=(voteCounts[b.id]||0)-(voteCounts[a.id]||0);
+    return difference||(a.sort_order||0)-(b.sort_order||0);
+  });
+
+  sorted.forEach((song,index)=>{
+    const item=document.createElement('div');
+    item.className='chart-song';
+
+    if(song.cover_url){
+      const img=document.createElement('img');
+      img.src=song.cover_url;
+      img.alt='Song cover';
+      item.appendChild(img);
+    }else{
+      const placeholder=document.createElement('div');
+      placeholder.style.cssText='width:100px;height:100px;background:#f5f5f7;border-radius:7px;display:grid;place-items:center';
+      placeholder.textContent='🎵';
+      item.appendChild(placeholder);
+    }
+
+    const details=document.createElement('div');
+
+    const heading=document.createElement('h3');
+    heading.textContent=(index+1)+'. '+song.title;
+
+    const artist=document.createElement('p');
+    artist.textContent='Artist: '+song.artist;
+
+    const votes=document.createElement('p');
+    votes.className='status';
+    votes.textContent='Votes: '+(voteCounts[song.id]||0);
+
+    const status=document.createElement('p');
+    status.className='help-text';
+    status.textContent=
+      'Approval: '+(song.is_approved?'Approved':'Pending')+
+      ' · Status: '+(song.is_active?'Active':'Inactive');
+
+    details.append(heading,artist,votes,status);
+
+    if(song.stream_url&&validUrl(song.stream_url)){
+      const link=document.createElement('a');
+      link.href=song.stream_url;
+      link.target='_blank';
+      link.rel='noopener noreferrer';
+      link.textContent='Open streaming link';
+      details.appendChild(link);
+    }
+
+    const actions=document.createElement('div');
+    actions.className='chart-actions';
+
+    const edit=document.createElement('button');
+    edit.textContent='Edit';
+    edit.className='secondary';
+    edit.onclick=()=>editChartSong(song);
+
+    const approve=document.createElement('button');
+    approve.textContent=song.is_approved?'Unapprove':'Approve';
+    approve.className='success';
+    approve.onclick=()=>updateChartSong(song,{
+      is_approved:!song.is_approved
+    });
+
+    const toggle=document.createElement('button');
+    toggle.textContent=song.is_active?'Deactivate':'Activate';
+    toggle.className='secondary';
+    toggle.onclick=()=>updateChartSong(song,{
+      is_active:!song.is_active
+    });
+
+    const remove=document.createElement('button');
+    remove.textContent='Delete';
+    remove.className='danger';
+    remove.onclick=()=>deleteChartSong(song);
+
+    actions.append(edit,approve,toggle,remove);
+    details.appendChild(actions);
+
+    item.appendChild(details);
+    container.appendChild(item);
+  });
+}
+
+function editChartSong(song){
+  editingChartSongId=song.id;
+  existingChartCover=song.cover_url;
+
+  $('chartSongId').value=song.id;
+  $('chartTitle').value=song.title||'';
+  $('chartArtist').value=song.artist||'';
+  $('chartWeek').value=song.chart_week;
+  $('chartCoverUrl').value=song.cover_url||'';
+  $('chartStreamUrl').value=song.stream_url||'';
+  $('chartSortOrder').value=song.sort_order||0;
+  $('chartApproved').checked=!!song.is_approved;
+  $('chartActive').checked=!!song.is_active;
+
+  if(song.cover_url){
+    $('chartCoverPreview').src=song.cover_url;
+    $('chartCoverPreview').classList.remove('hidden');
+  }else{
+    $('chartCoverPreview').classList.add('hidden');
+  }
+
+  $('chartFormHeading').textContent='Edit Song';
+  $('chartSaveButton').textContent='Update Song';
+  $('chartCancelEdit').classList.remove('hidden');
+
+  $('chartManager').scrollIntoView({behavior:'smooth'});
+}
+
+async function updateChartSong(song,changes){
+  const {error}=await db.from('chart_songs')
+    .update({
+      ...changes,
+      updated_at:new Date().toISOString()
+    })
+    .eq('id',song.id);
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  await loadChartSongs();
+}
+
+async function deleteChartSong(song){
+  if(!confirm(
+    'Permanently delete "'+song.title+'" by '+song.artist+'?\n\nAssociated votes will also be deleted.'
+  ))return;
+
+  const {error}=await db.from('chart_songs')
+    .delete()
+    .eq('id',song.id);
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  if(editingChartSongId===song.id){
+    resetChartForm();
+  }
+
+  await loadChartSongs();
+}
+
+$('chartCancelEdit').onclick=resetChartForm;
+
+$('chartForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  if(currentRole!=='admin'){
+    showChartMessage('Administrator permission required.',true);
+    return;
+  }
+
+  const button=$('chartSaveButton');
+  button.disabled=true;
+
+  try{
+    const title=$('chartTitle').value.trim();
+    const artist=$('chartArtist').value.trim();
+    const week=$('chartWeek').value;
+
+    if(!title||!artist||!week){
+      throw new Error('Please complete the song title, artist and chart week.');
+    }
+
+    let coverUrl=existingChartCover;
+    const file=$('chartCoverFile').files[0];
+
+    if(file){
+      if(!file.type.startsWith('image/')||file.size>5*1024*1024){
+        throw new Error('Cover artwork must be an image smaller than 5MB.');
+      }
+
+      coverUrl=await uploadFile(
+        'article-images',
+        'chart-covers/'+currentUser.id+'/'+Date.now()+'-'+safeFileName(file.name),
+        file
+      );
+    }else if($('chartCoverUrl').value.trim()){
+      coverUrl=$('chartCoverUrl').value.trim();
+
+      if(!validUrl(coverUrl)){
+        throw new Error('Please enter a valid cover artwork URL.');
+      }
+    }
+
+    const streamUrl=$('chartStreamUrl').value.trim();
+
+    if(streamUrl&&!validUrl(streamUrl)){
+      throw new Error('Please enter a valid streaming link.');
+    }
+
+    const songData={
+      title,
+      artist,
+      cover_url:coverUrl,
+      stream_url:streamUrl||null,
+      chart_week:week,
+      sort_order:Math.max(0,parseInt($('chartSortOrder').value,10)||0),
+      is_approved:$('chartApproved').checked,
+      is_active:$('chartActive').checked,
+      updated_at:new Date().toISOString()
+    };
+
+    const result=editingChartSongId
+      ?await db.from('chart_songs').update(songData).eq('id',editingChartSongId)
+      :await db.from('chart_songs').insert(songData);
+
+    if(result.error)throw result.error;
+
+    $('chartFilterWeek').value=week;
+
+    resetChartForm();
+    await loadChartSongs();
+
+    showChartMessage('Song saved successfully!');
+
+  }catch(err){
+    showChartMessage(err.message||'Could not save song.',true);
+  }finally{
+    button.disabled=false;
+    button.textContent=editingChartSongId?'Update Song':'Save Song';
+  }
+});
+
+$('chartFilterWeek').addEventListener('change',()=>{
+  $('chartWeek').value=$('chartFilterWeek').value;
+  loadChartSongs();
+});
+
+$('refreshChart').onclick=loadChartSongs;
 
 /* FILTERS */
 
