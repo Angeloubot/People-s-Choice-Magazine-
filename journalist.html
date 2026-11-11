@@ -188,7 +188,7 @@ function normalizePhone(phone) {
 }
 
 function loginEmail(phone) {
-  return normalizePhone(phone) + "@journalist.peopleschoicemagazine.co.zw";
+  return normalizePhone(phone).replace(/\D/g, "") + "@journalist.peopleschoicemagazine.co.zw";
 }
 
 function showLogin() {
