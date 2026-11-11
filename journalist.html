@@ -471,8 +471,30 @@ async function saveArticle(status) {
 }
 
 
-function saveDraft() {
-  saveArticle("draft");
+async function unpublishStory(article) {
+
+  if (!confirm("Are you sure you want to unpublish this story?")) {
+    return;
+  }
+
+  const { error } = await db
+    .from("articles")
+    .update({
+      status: "draft",
+      published_at: null,
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", article.id)
+    .eq("author_id", currentUser.id);
+
+  if (error) {
+    alert("Could not unpublish story: " + error.message);
+    return;
+  }
+
+  alert("Story successfully unpublished.");
+
+  await loadStories();
 }
 
 
