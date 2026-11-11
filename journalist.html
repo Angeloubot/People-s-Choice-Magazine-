@@ -518,19 +518,23 @@ async function loadStories() {
     status.className = "status";
     status.textContent = article.status;
 
-    const edit = document.createElement("button");
-    edit.className = "light";
-    edit.textContent = "Edit";
-    edit.onclick = () => editStory(article);
+   const edit = document.createElement("button");
+edit.className = "light";
+edit.textContent = "Edit";
+edit.onclick = () => editStory(article);
 
-    item.append(
-      title,
-      status,
-      document.createElement("br"),
-      edit
-    );
+item.append(title, status, document.createElement("br"), edit);
 
-    container.appendChild(item);
+if (article.status === "published") {
+  const unpublish = document.createElement("button");
+  unpublish.className = "danger";
+  unpublish.textContent = "Unpublish";
+  unpublish.onclick = () => unpublishStory(article);
+
+  item.appendChild(unpublish);
+}
+
+container.appendChild(item); 
 
   });
 }
