@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#17131c">
-
 <title>Journalist Dashboard | People's Choice Magazine</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -26,37 +25,17 @@
   --red:#c43c48;
   --shadow:0 8px 30px rgba(32,20,40,.055);
 }
-
-* {
-  box-sizing:border-box;
-}
-
-html {
-  scroll-behavior:smooth;
-}
-
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
 body {
   margin:0;
   font-family:Inter,Arial,sans-serif;
   background:var(--background);
   color:var(--text);
 }
-
-button,input,textarea,select {
-  font:inherit;
-}
-
-button {
-  cursor:pointer;
-  transition:.2s ease;
-}
-
-.hidden {
-  display:none!important;
-}
-
-/* LOGIN */
-
+button,input,textarea,select {font:inherit}
+button {cursor:pointer;transition:.2s}
+.hidden {display:none!important}
 .auth-page {
   min-height:100vh;
   display:flex;
@@ -67,7 +46,6 @@ button {
     radial-gradient(circle at top right,#f8d9e9,transparent 40%),
     linear-gradient(135deg,#211b27,#382638);
 }
-
 .auth-card {
   background:white;
   width:100%;
@@ -76,677 +54,216 @@ button {
   border-radius:22px;
   box-shadow:0 20px 70px #0003;
 }
-
 .brand-mark {
-  width:55px;
-  height:55px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:16px;
-  background:var(--pink);
-  color:white;
-  font-size:25px;
-  font-weight:900;
+  width:55px;height:55px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:16px;background:var(--pink);
+  color:white;font-size:25px;font-weight:900;
   margin-bottom:20px;
 }
-
-.auth-card h1 {
-  margin:0 0 8px;
-  font-size:25px;
-}
-
-.auth-card p {
-  color:var(--muted);
-  line-height:1.6;
-}
-
-.auth-card input {
-  margin-top:9px;
-}
-
-/* GENERAL INPUTS */
-
+.auth-card h1 {margin:0 0 8px;font-size:25px}
+.auth-card p {color:var(--muted);line-height:1.6}
 input,textarea,select {
-  width:100%;
-  padding:14px;
+  width:100%;padding:14px;
   border:1px solid var(--border);
-  border-radius:11px;
-  background:#fff;
-  color:var(--text);
-  outline:none;
-  margin:7px 0 13px;
+  border-radius:11px;background:#fff;
+  color:var(--text);outline:none;margin:7px 0 13px;
 }
-
 input:focus,textarea:focus,select:focus {
   border-color:var(--pink);
   box-shadow:0 0 0 3px #e7549b18;
 }
-
-textarea {
-  min-height:220px;
-  resize:vertical;
-  line-height:1.7;
-}
-
-label {
-  font-size:13px;
-  font-weight:700;
-  display:block;
-  margin-top:9px;
-}
-
+textarea {min-height:220px;resize:vertical;line-height:1.7}
+label {font-size:13px;font-weight:700;display:block;margin-top:9px}
 button {
-  border:0;
-  border-radius:10px;
-  padding:12px 17px;
-  font-weight:700;
+  border:0;border-radius:10px;
+  padding:12px 17px;font-weight:700;
 }
-
-button:hover {
-  transform:translateY(-1px);
-  filter:brightness(.97);
-}
-
-.primary {
-  background:var(--pink);
-  color:white;
-}
-
-.primary:hover {
-  background:var(--pink-dark);
-}
-
-.dark {
-  background:var(--dark);
-  color:white;
-}
-
-.light {
-  background:#f0edf2;
-  color:var(--text);
-}
-
-.danger {
-  background:#fff0f0;
-  color:var(--red);
-}
-
-.full-button {
-  width:100%;
-  margin:8px 0;
-}
-
-#message {
-  margin-top:15px;
-  font-size:13px;
-  font-weight:700;
-  line-height:1.5;
-}
-
-/* DASHBOARD LAYOUT */
-
-.dashboard-layout {
-  min-height:100vh;
-}
-
+button:hover {transform:translateY(-1px);filter:brightness(.97)}
+.primary {background:var(--pink);color:white}
+.primary:hover {background:var(--pink-dark)}
+.dark {background:var(--dark);color:white}
+.light {background:#f0edf2;color:var(--text)}
+.danger {background:#fff0f0;color:var(--red)}
+.full-button {width:100%;margin:8px 0}
+#message {margin-top:15px;font-size:13px;font-weight:700;line-height:1.5}
+.dashboard-layout {min-height:100vh}
 .sidebar {
-  position:fixed;
-  inset:0 auto 0 0;
-  width:245px;
-  background:var(--sidebar);
-  color:white;
-  padding:27px 18px;
-  display:flex;
-  flex-direction:column;
-  z-index:20;
+  position:fixed;inset:0 auto 0 0;width:245px;
+  background:var(--sidebar);color:white;padding:27px 18px;
+  display:flex;flex-direction:column;z-index:20;
 }
-
-.sidebar-brand {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:5px 8px 30px;
-}
-
+.sidebar-brand {display:flex;align-items:center;gap:12px;padding:5px 8px 30px}
 .sidebar-logo {
-  width:43px;
-  height:43px;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  background:var(--pink);
-  font-weight:900;
-  font-size:21px;
+  width:43px;height:43px;border-radius:13px;
+  display:grid;place-items:center;background:var(--pink);
+  font-weight:900;font-size:21px;
 }
-
-.sidebar-brand strong {
-  display:block;
-  font-size:13px;
-  line-height:1.4;
-}
-
-.sidebar-brand small {
-  color:#bdb4c4;
-  font-size:10px;
-}
-
+.sidebar-brand strong {display:block;font-size:13px;line-height:1.4}
+.sidebar-brand small {color:#bdb4c4;font-size:10px}
 .nav-label {
-  color:#8e8496;
-  font-size:10px;
-  letter-spacing:1.5px;
-  font-weight:800;
-  padding:15px 12px 10px;
+  color:#8e8496;font-size:10px;letter-spacing:1.5px;
+  font-weight:800;padding:15px 12px 10px;
 }
-
 .nav-link {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:13px 14px;
-  margin:3px 0;
-  border-radius:10px;
-  color:#d6cfdd;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:700;
+  display:flex;align-items:center;gap:12px;
+  padding:13px 14px;margin:3px 0;border-radius:10px;
+  color:#d6cfdd;text-decoration:none;font-size:13px;font-weight:700;
 }
-
-.nav-link:hover,
-.nav-link.active {
-  background:#e7549b20;
-  color:#ff9dca;
-}
-
-.nav-icon {
-  font-size:18px;
-  width:22px;
-  text-align:center;
-}
-
-.sidebar-bottom {
-  margin-top:auto;
-}
-
+.nav-link:hover,.nav-link.active {background:#e7549b20;color:#ff9dca}
+.nav-icon {font-size:18px;width:22px;text-align:center}
+.sidebar-bottom {margin-top:auto}
 .sidebar-note {
-  border:1px solid #ffffff18;
-  background:#ffffff09;
-  padding:14px;
-  border-radius:12px;
-  font-size:11px;
-  line-height:1.6;
-  color:#c7bfce;
+  border:1px solid #ffffff18;background:#ffffff09;
+  padding:14px;border-radius:12px;font-size:11px;
+  line-height:1.6;color:#c7bfce;
 }
-
-.main-area {
-  margin-left:245px;
-  min-height:100vh;
-}
-
-/* TOP BAR */
-
+.main-area {margin-left:245px;min-height:100vh}
 .topbar {
-  background:white;
-  border-bottom:1px solid var(--border);
-  min-height:75px;
-  padding:16px 35px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
+  background:white;border-bottom:1px solid var(--border);
+  min-height:75px;padding:16px 35px;
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
 }
-
-.topbar h2 {
-  font-size:17px;
-  margin:0;
-}
-
-.topbar p {
-  margin:5px 0 0;
-  color:var(--muted);
-  font-size:12px;
-}
-
+.topbar h2 {font-size:17px;margin:0}
+.topbar p {margin:5px 0 0;color:var(--muted);font-size:12px}
 .profile-chip {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:#faf8fb;
-  padding:8px 13px;
-  border-radius:30px;
-  font-size:12px;
-  font-weight:700;
+  display:flex;align-items:center;gap:10px;
+  background:#faf8fb;padding:8px 13px;
+  border-radius:30px;font-size:12px;font-weight:700;
 }
-
 .profile-avatar {
-  width:34px;
-  height:34px;
-  display:grid;
-  place-items:center;
-  border-radius:50%;
-  background:#f9d5e7;
-  color:#a72d68;
-  font-weight:900;
+  width:34px;height:34px;display:grid;place-items:center;
+  border-radius:50%;background:#f9d5e7;color:#a72d68;font-weight:900;
 }
-
-/* CONTENT */
-
-.content {
-  max-width:1250px;
-  margin:auto;
-  padding:30px 35px 60px;
-}
-
+.content {max-width:1250px;margin:auto;padding:30px 35px 60px}
 .welcome-banner {
-  padding:28px;
-  border-radius:18px;
-  color:white;
+  padding:28px;border-radius:18px;color:white;
   background:linear-gradient(115deg,#281e30,#513048);
-  position:relative;
-  overflow:hidden;
-  margin-bottom:25px;
+  position:relative;overflow:hidden;margin-bottom:25px;
 }
-
 .welcome-banner:after {
-  content:"PC";
-  position:absolute;
-  right:35px;
-  top:-35px;
-  font-size:145px;
-  font-weight:900;
-  color:#ffffff0b;
+  content:"PC";position:absolute;right:35px;top:-35px;
+  font-size:145px;font-weight:900;color:#ffffff0b;
 }
-
 .welcome-banner h1 {
-  font-size:25px;
-  margin:0 0 9px;
-  position:relative;
-  z-index:1;
+  font-size:25px;margin:0 0 9px;position:relative;z-index:1;
 }
-
 .welcome-banner p {
-  color:#e3d9e7;
-  font-size:13px;
-  margin:0;
-  position:relative;
-  z-index:1;
+  color:#e3d9e7;font-size:13px;margin:0;position:relative;z-index:1;
 }
-
-/* STATISTICS */
-
 .stats-grid {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:17px;
-  margin-bottom:27px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:17px;margin-bottom:27px;
 }
-
 .stat-card {
-  background:white;
-  border:1px solid var(--border);
-  padding:21px;
-  border-radius:15px;
-  box-shadow:var(--shadow);
+  background:white;border:1px solid var(--border);
+  padding:21px;border-radius:15px;box-shadow:var(--shadow);
 }
-
-.stat-top {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
+.stat-top {display:flex;justify-content:space-between;align-items:center}
 .stat-icon {
-  width:40px;
-  height:40px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  font-size:19px;
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:12px;font-size:19px;
 }
-
-.stat-card h2 {
-  font-size:30px;
-  margin:16px 0 4px;
-}
-
-.stat-card p {
-  color:var(--muted);
-  font-size:12px;
-  margin:0;
-  font-weight:600;
-}
-
-.icon-pink { background:#ffeaf3; }
-.icon-green { background:#e6f7ef; }
-.icon-orange { background:#fff1df; }
-
-/* PANELS */
-
+.stat-card h2 {font-size:30px;margin:16px 0 4px}
+.stat-card p {color:var(--muted);font-size:12px;margin:0;font-weight:600}
+.icon-pink {background:#ffeaf3}
+.icon-green {background:#e6f7ef}
+.icon-orange {background:#fff1df}
 .panel {
-  background:white;
-  padding:25px;
-  border-radius:16px;
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
-  margin-bottom:23px;
-  scroll-margin-top:20px;
+  background:white;padding:25px;border-radius:16px;
+  border:1px solid var(--border);box-shadow:var(--shadow);
+  margin-bottom:23px;scroll-margin-top:20px;
 }
-
 .panel-heading {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:20px;
 }
-
-.panel-heading h2 {
-  margin:0;
-  font-size:18px;
-}
-
-.panel-heading p {
-  color:var(--muted);
-  font-size:12px;
-  margin:6px 0 0;
-}
-
-.form-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0 17px;
-}
-
-.form-grid .wide {
-  grid-column:1/-1;
-}
-
-.editor-actions {
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-  margin-top:15px;
-}
-
-.editor-actions button {
-  margin:0;
-}
-
-/* STORIES */
-
+.panel-heading h2 {margin:0;font-size:18px}
+.panel-heading p {color:var(--muted);font-size:12px;margin:6px 0 0}
+.form-grid {display:grid;grid-template-columns:1fr 1fr;gap:0 17px}
+.form-grid .wide {grid-column:1/-1}
+.editor-actions {display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.editor-actions button {margin:0}
 .story {
-  padding:19px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  margin:12px 0;
-  transition:.2s ease;
+  padding:19px;border:1px solid var(--border);
+  border-radius:13px;margin:12px 0;transition:.2s;
 }
-
-.story:hover {
-  border-color:#efb2d0;
-  box-shadow:0 5px 18px #00000008;
-}
-
-.story-top {
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:15px;
-}
-
-.story h3 {
-  margin:0 0 9px;
-  font-size:16px;
-  line-height:1.5;
-}
-
-.story-description {
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.6;
-  margin:8px 0;
-}
-
-.story-meta {
-  color:var(--muted);
-  font-size:11px;
-  margin:10px 0;
-}
-
+.story:hover {border-color:#efb2d0;box-shadow:0 5px 18px #00000008}
+.story-top {display:flex;justify-content:space-between;align-items:flex-start;gap:15px}
+.story h3 {margin:0 0 9px;font-size:16px;line-height:1.5}
+.story-description {color:var(--muted);font-size:12px;line-height:1.6;margin:8px 0}
+.story-meta {color:var(--muted);font-size:11px;margin:10px 0}
 .status {
-  display:inline-block;
-  border-radius:30px;
-  padding:6px 11px;
-  font-size:10px;
-  font-weight:800;
-  text-transform:capitalize;
-  white-space:nowrap;
+  display:inline-block;border-radius:30px;padding:6px 11px;
+  font-size:10px;font-weight:800;text-transform:capitalize;white-space:nowrap;
 }
-
-.status-published {
-  background:#e5f7ed;
-  color:#13764e;
+.status-published {background:#e5f7ed;color:#13764e}
+.status-draft {background:#f0edf3;color:#72677d}
+.status-pending {background:#fff2df;color:#a66a13}
+.story-actions {display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.story-actions button {font-size:11px;padding:9px 13px}
+.empty-state {padding:40px 15px;text-align:center;color:var(--muted);font-size:13px}
+.empty-state span {display:block;font-size:35px;margin-bottom:10px}
+.image-preview {
+  width:100%;max-width:350px;max-height:250px;
+  object-fit:cover;border-radius:12px;display:block;margin:10px 0 12px;
 }
-
-.status-draft {
-  background:#f0edf3;
-  color:#72677d;
-}
-
-.status-pending {
-  background:#fff2df;
-  color:#a66a13;
-}
-
-.story-actions {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:13px;
-}
-
-.story-actions button {
-  font-size:11px;
-  padding:9px 13px;
-}
-
-.empty-state {
-  padding:40px 15px;
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.empty-state span {
-  display:block;
-  font-size:35px;
-  margin-bottom:10px;
-}
-
-/* MOBILE */
-
-.mobile-header {
-  display:none;
-}
-
+.mobile-header {display:none}
 @media(max-width:850px) {
-  .sidebar {
-    width:205px;
-  }
-
-  .main-area {
-    margin-left:205px;
-  }
-
-  .content {
-    padding:25px 20px;
-  }
+  .sidebar {width:205px}
+  .main-area {margin-left:205px}
+  .content {padding:25px 20px}
 }
-
 @media(max-width:650px) {
-  .sidebar {
-    display:none;
-  }
-
-  .main-area {
-    margin-left:0;
-    padding-bottom:70px;
-  }
-
-  .topbar {
-    padding:13px 16px;
-    min-height:65px;
-  }
-
-  .topbar h2 {
-    font-size:14px;
-  }
-
-  .topbar p {
-    font-size:10px;
-  }
-
-  .profile-chip {
-    padding:5px 8px;
-    font-size:10px;
-  }
-
-  .profile-avatar {
-    width:29px;
-    height:29px;
-  }
-
-  .content {
-    padding:18px 13px 30px;
-  }
-
-  .welcome-banner {
-    padding:23px 19px;
-  }
-
-  .welcome-banner h1 {
-    font-size:21px;
-  }
-
-  .stats-grid {
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:8px;
-  }
-
-  .stat-card {
-    padding:12px 9px;
-  }
-
-  .stat-card h2 {
-    font-size:23px;
-    margin-top:12px;
-  }
-
-  .stat-card p {
-    font-size:10px;
-  }
-
-  .stat-icon {
-    width:32px;
-    height:32px;
-    font-size:15px;
-  }
-
-  .panel {
-    padding:17px 14px;
-  }
-
-  .panel-heading h2 {
-    font-size:16px;
-  }
-
-  .form-grid {
-    display:block;
-  }
-
-  textarea {
-    min-height:190px;
-  }
-
-  .editor-actions {
-    display:grid;
-    grid-template-columns:1fr;
-  }
-
-  .editor-actions button {
-    width:100%;
-  }
-
-  .story {
-    padding:14px;
-  }
-
-  .story-top {
-    gap:8px;
-  }
-
-  .story h3 {
-    font-size:14px;
-  }
-
-  .story-actions button {
-    flex:1;
-  }
-
+  .sidebar {display:none}
+  .main-area {margin-left:0;padding-bottom:70px}
+  .topbar {padding:13px 16px;min-height:65px}
+  .topbar h2 {font-size:14px}
+  .topbar p {font-size:10px}
+  .profile-chip {padding:5px 8px;font-size:10px}
+  .profile-avatar {width:29px;height:29px}
+  .content {padding:18px 13px 30px}
+  .welcome-banner {padding:23px 19px}
+  .welcome-banner h1 {font-size:21px}
+  .stats-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .stat-card {padding:12px 9px}
+  .stat-card h2 {font-size:23px;margin-top:12px}
+  .stat-card p {font-size:10px}
+  .stat-icon {width:32px;height:32px;font-size:15px}
+  .panel {padding:17px 14px}
+  .panel-heading h2 {font-size:16px}
+  .form-grid {display:block}
+  textarea {min-height:190px}
+  .editor-actions {display:grid;grid-template-columns:1fr}
+  .editor-actions button {width:100%}
+  .story {padding:14px}
+  .story-top {gap:8px}
+  .story h3 {font-size:14px}
+  .story-actions button {flex:1}
   .mobile-header {
-    display:flex;
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    z-index:30;
-    background:white;
-    border-top:1px solid var(--border);
+    display:flex;position:fixed;bottom:0;left:0;right:0;
+    z-index:30;background:white;border-top:1px solid var(--border);
     justify-content:space-around;
     padding:8px 4px calc(8px + env(safe-area-inset-bottom));
   }
-
   .mobile-header a {
-    text-decoration:none;
-    color:#77717e;
-    font-size:10px;
-    font-weight:700;
-    text-align:center;
-    padding:5px;
+    text-decoration:none;color:#77717e;font-size:10px;
+    font-weight:700;text-align:center;padding:5px;
   }
-
-  .mobile-header a span {
-    display:block;
-    font-size:19px;
-    margin-bottom:3px;
-  }
+  .mobile-header a span {display:block;font-size:19px;margin-bottom:3px}
 }
-
 @media(max-width:370px) {
-  .stats-grid {
-    grid-template-columns:1fr;
-  }
-
-  .stat-card {
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
-
-  .stat-card h2 {
-    margin:0;
-  }
+  .stats-grid {grid-template-columns:1fr}
+  .stat-card {display:flex;align-items:center;gap:14px}
+  .stat-card h2 {margin:0}
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIGN IN / REGISTRATION -->
-
 <div id="authPanel" class="auth-page">
   <div class="auth-card">
-
     <div class="brand-mark">PC</div>
 
     <div id="registerBox">
@@ -765,13 +282,8 @@ button:hover {
       <label>Confirm password</label>
       <input id="confirmPassword" type="password" placeholder="Confirm password">
 
-      <button class="primary full-button" onclick="registerJournalist()">
-        Create Journalist Account
-      </button>
-
-      <button class="light full-button" onclick="showLogin()">
-        Already registered? Sign in
-      </button>
+      <button class="primary full-button" onclick="registerJournalist()">Create Journalist Account</button>
+      <button class="light full-button" onclick="showLogin()">Already registered? Sign in</button>
     </div>
 
     <div id="loginBox" class="hidden">
@@ -784,27 +296,17 @@ button:hover {
       <label>Password</label>
       <input id="loginPassword" type="password" placeholder="Enter your password">
 
-      <button class="primary full-button" onclick="loginJournalist()">
-        Sign In
-      </button>
-
-      <button class="light full-button" onclick="showRegister()">
-        Create an account
-      </button>
+      <button class="primary full-button" onclick="loginJournalist()">Sign In</button>
+      <button class="light full-button" onclick="showRegister()">Create an account</button>
     </div>
 
     <div id="message" aria-live="polite"></div>
-
   </div>
 </div>
-
-
-<!-- MAIN DASHBOARD -->
 
 <div id="dashboard" class="dashboard-layout hidden">
 
   <aside class="sidebar">
-
     <div class="sidebar-brand">
       <div class="sidebar-logo">PC</div>
       <div>
@@ -814,92 +316,56 @@ button:hover {
     </div>
 
     <div class="nav-label">WORKSPACE</div>
-
-    <a class="nav-link active" href="#overview">
-      <span class="nav-icon">⌂</span> Overview
-    </a>
-
-    <a class="nav-link" href="#editor">
-      <span class="nav-icon">✎</span> Write a Story
-    </a>
-
-    <a class="nav-link" href="#myStories">
-      <span class="nav-icon">▤</span> My Stories
-    </a>
+    <a class="nav-link active" href="#overview"><span class="nav-icon">⌂</span> Overview</a>
+    <a class="nav-link" href="#editor"><span class="nav-icon">✎</span> Write a Story</a>
+    <a class="nav-link" href="#myStories"><span class="nav-icon">▤</span> My Stories</a>
 
     <div class="sidebar-bottom">
       <div class="sidebar-note">
-        <strong>People's Choice Magazine</strong>
-        <br>
+        <strong>People's Choice Magazine</strong><br>
         Your voice. Your stories. Your community.
       </div>
-
-      <button class="danger full-button" onclick="logout()">
-        Sign Out
-      </button>
+      <button class="danger full-button" onclick="logout()">Sign Out</button>
     </div>
-
   </aside>
 
-
   <div class="main-area">
-
     <header class="topbar">
       <div>
         <h2>Journalist Workspace</h2>
         <p>Manage your stories and publications</p>
       </div>
-
       <div class="profile-chip">
         <div class="profile-avatar" id="profileAvatar">J</div>
         <span id="topJournalistName">Journalist</span>
       </div>
     </header>
 
-
     <main class="content">
-
       <section class="welcome-banner" id="overview">
         <h1>Welcome back, <span id="journalistName">Journalist</span>!</h1>
         <p>Ready to share your next story with the world?</p>
       </section>
 
-
-      <!-- STORY STATISTICS -->
-
       <section class="stats-grid">
-
         <div class="stat-card">
-          <div class="stat-top">
-            <span class="stat-icon icon-pink">▤</span>
-          </div>
+          <div class="stat-top"><span class="stat-icon icon-pink">▤</span></div>
           <h2 id="totalStories">0</h2>
           <p>Total Stories</p>
         </div>
-
         <div class="stat-card">
-          <div class="stat-top">
-            <span class="stat-icon icon-green">✓</span>
-          </div>
+          <div class="stat-top"><span class="stat-icon icon-green">✓</span></div>
           <h2 id="publishedStories">0</h2>
           <p>Published</p>
         </div>
-
         <div class="stat-card">
-          <div class="stat-top">
-            <span class="stat-icon icon-orange">✎</span>
-          </div>
+          <div class="stat-top"><span class="stat-icon icon-orange">✎</span></div>
           <h2 id="draftStories">0</h2>
           <p>Drafts</p>
         </div>
-
       </section>
 
-
-      <!-- STORY EDITOR -->
-
       <section class="panel" id="editor">
-
         <div class="panel-heading">
           <div>
             <h2 id="editorHeading">Write a New Story</h2>
@@ -909,7 +375,6 @@ button:hover {
         </div>
 
         <div class="form-grid">
-
           <div class="wide">
             <label>Article title</label>
             <input id="articleTitle" placeholder="Enter an engaging headline">
@@ -948,33 +413,27 @@ button:hover {
           </div>
 
           <div class="wide">
-  <label>Upload Article Cover Image</label>
+            <label>Upload Article Cover Image</label>
+            <input
+              type="file"
+              id="articleImageFile"
+              accept="image/jpeg,image/png,image/webp"
+              onchange="previewArticleImage()"
+            >
 
-  <input
-    type="file"
-    id="articleImageFile"
-    accept="image/jpeg,image/png,image/webp"
-    onchange="previewArticleImage()"
-  >
+            <div id="imagePreviewContainer" class="hidden">
+              <p>Image preview:</p>
+              <img id="imagePreview" class="image-preview" alt="Article cover preview">
+            </div>
 
-  <div id="imagePreviewContainer" class="hidden">
-    <p>Image preview:</p>
-    <img
-      id="imagePreview"
-      style="width:100%;max-width:350px;border-radius:12px;display:block;margin-bottom:12px;"
-      alt="Article cover preview"
-    >
-  </div>
-
-  <label>Or enter an image URL (optional)</label>
-  <input id="articleImage" placeholder="https://example.com/image.jpg">
+            <label>Or enter an image URL (optional)</label>
+            <input id="articleImage" placeholder="https://example.com/image.jpg">
           </div>
 
           <div class="wide">
             <label>Full story</label>
             <textarea id="articleContent" placeholder="Start writing your story here..."></textarea>
           </div>
-
         </div>
 
         <div class="editor-actions">
@@ -982,33 +441,21 @@ button:hover {
           <button class="primary" onclick="publishStory()">Publish Story</button>
           <button class="light hidden" id="cancelEdit" onclick="resetEditor()">Cancel Editing</button>
         </div>
-
       </section>
 
-
-      <!-- MY STORIES -->
-
       <section class="panel" id="myStories">
-
         <div class="panel-heading">
           <div>
             <h2>My Stories</h2>
             <p>View and manage your submitted articles.</p>
           </div>
         </div>
-
         <div id="stories">
           <div class="empty-state">Loading your stories...</div>
         </div>
-
       </section>
-
     </main>
-
   </div>
-
-
-  <!-- MOBILE NAVIGATION -->
 
   <nav class="mobile-header">
     <a href="#overview"><span>⌂</span>Home</a>
@@ -1016,12 +463,9 @@ button:hover {
     <a href="#myStories"><span>▤</span>Stories</a>
     <a href="#" onclick="logout();return false;"><span>↪</span>Logout</a>
   </nav>
-
 </div>
 
-
 <script>
-
 const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
@@ -1031,7 +475,7 @@ let currentUser = null;
 let currentProfile = null;
 let currentJournalist = null;
 let editingArticle = null;
-
+let imagePreviewUrl = null;
 
 function showMessage(message, error=false) {
   const el = document.getElementById("message");
@@ -1039,17 +483,14 @@ function showMessage(message, error=false) {
   el.style.color = error ? "#b42318" : "#16803c";
 }
 
-
 function normalizePhone(phone) {
-  return phone.replace(/[\s()-]/g,"");
+  return phone.replace(/[\s()-]/g, "");
 }
-
 
 function loginEmail(phone) {
   return normalizePhone(phone).replace(/\D/g, "") +
     "@journalist.peopleschoicemagazine.co.zw";
 }
-
 
 function showLogin() {
   document.getElementById("registerBox").classList.add("hidden");
@@ -1057,18 +498,14 @@ function showLogin() {
   showMessage("");
 }
 
-
 function showRegister() {
   document.getElementById("loginBox").classList.add("hidden");
   document.getElementById("registerBox").classList.remove("hidden");
   showMessage("");
 }
 
-
 // REGISTRATION
-
 async function registerJournalist() {
-
   const fullName = document.getElementById("fullName").value.trim();
   const phone = normalizePhone(document.getElementById("phone").value);
   const password = document.getElementById("regPassword").value;
@@ -1092,7 +529,7 @@ async function registerJournalist() {
 
   showMessage("Creating your account...");
 
-  const { data, error } = await db.auth.signUp({
+  const {data, error} = await db.auth.signUp({
     email: loginEmail(phone),
     password,
     options: {
@@ -1103,9 +540,7 @@ async function registerJournalist() {
     }
   });
 
-  if (error) {
-    return showMessage(error.message, true);
-  }
+  if (error) return showMessage(error.message, true);
 
   if (!data.session) {
     return showMessage(
@@ -1116,22 +551,18 @@ async function registerJournalist() {
   await loadDashboard();
 }
 
-
 // LOGIN
-
 async function loginJournalist() {
-
   const phone = normalizePhone(
     document.getElementById("loginPhone").value
   );
-
   const password = document.getElementById("loginPassword").value;
 
   if (!phone || !password) {
     return showMessage("Enter your phone number and password.", true);
   }
 
-  const { error } = await db.auth.signInWithPassword({
+  const {error} = await db.auth.signInWithPassword({
     email: loginEmail(phone),
     password
   });
@@ -1143,21 +574,16 @@ async function loginJournalist() {
   await loadDashboard();
 }
 
-
 // CREATE OR FIND JOURNALIST RECORD
-
 async function ensureJournalistRecord() {
-
   const journalistData = {
     id: currentUser.id,
     name: currentProfile.full_name || "Journalist"
   };
 
-  const { data, error } = await db
+  const {data, error} = await db
     .from("journalists")
-    .upsert(journalistData, {
-      onConflict: "id"
-    })
+    .upsert(journalistData, {onConflict:"id"})
     .select("id,name")
     .single();
 
@@ -1168,23 +594,18 @@ async function ensureJournalistRecord() {
   }
 
   currentJournalist = data;
-
   return data.id;
 }
 
-
 // LOAD DASHBOARD
-
 async function loadDashboard() {
-
-  const { data: authData, error: authError } =
-    await db.auth.getUser();
+  const {data:authData, error:authError} = await db.auth.getUser();
 
   if (authError || !authData.user) return;
 
   currentUser = authData.user;
 
-  const { data: profile, error } = await db
+  const {data:profile, error} = await db
     .from("profiles")
     .select("id,full_name,role,phone_number")
     .eq("id", currentUser.id)
@@ -1225,10 +646,16 @@ async function loadDashboard() {
   await loadStories();
 }
 
+// IMAGE PREVIEW
 function previewArticleImage() {
   const file = document.getElementById("articleImageFile").files[0];
   const container = document.getElementById("imagePreviewContainer");
   const preview = document.getElementById("imagePreview");
+
+  if (imagePreviewUrl) {
+    URL.revokeObjectURL(imagePreviewUrl);
+    imagePreviewUrl = null;
+  }
 
   if (!file) {
     container.classList.add("hidden");
@@ -1236,12 +663,13 @@ function previewArticleImage() {
     return;
   }
 
-  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+  const allowedTypes = ["image/jpeg","image/png","image/webp"];
 
   if (!allowedTypes.includes(file.type)) {
     alert("Please select a JPG, PNG or WEBP image.");
     document.getElementById("articleImageFile").value = "";
     container.classList.add("hidden");
+    preview.removeAttribute("src");
     return;
   }
 
@@ -1249,17 +677,17 @@ function previewArticleImage() {
     alert("Please choose an image smaller than 5 MB.");
     document.getElementById("articleImageFile").value = "";
     container.classList.add("hidden");
+    preview.removeAttribute("src");
     return;
   }
 
-  preview.src = URL.createObjectURL(file);
+  imagePreviewUrl = URL.createObjectURL(file);
+  preview.src = imagePreviewUrl;
   container.classList.remove("hidden");
-    }
-  
+}
+
 // ARTICLE DATA
-
 function getArticlePayload(status) {
-
   return {
     title: document.getElementById("articleTitle").value.trim(),
     excerpt: document.getElementById("articleExcerpt").value.trim(),
@@ -1271,11 +699,8 @@ function getArticlePayload(status) {
   };
 }
 
-
 // SAVE OR PUBLISH ARTICLE
-
 async function saveArticle(status) {
-
   if (!currentUser || !currentJournalist) {
     return alert("Please sign in again.");
   }
@@ -1290,6 +715,46 @@ async function saveArticle(status) {
     return alert("Article title must contain at least 3 characters.");
   }
 
+  // UPLOAD IMAGE IF ONE WAS SELECTED
+  const imageFile = document.getElementById("articleImageFile").files[0];
+
+  if (imageFile) {
+    const allowedTypes = ["image/jpeg","image/png","image/webp"];
+
+    if (!allowedTypes.includes(imageFile.type)) {
+      return alert("Please select a JPG, PNG or WEBP image.");
+    }
+
+    if (imageFile.size > 5 * 1024 * 1024) {
+      return alert("Please choose an image smaller than 5 MB.");
+    }
+
+    const ext = imageFile.type === "image/jpeg"
+      ? "jpg"
+      : imageFile.type.split("/")[1];
+
+    const filePath =
+      `${currentUser.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+    const {error:uploadError} = await db.storage
+      .from("article-images")
+      .upload(filePath, imageFile, {
+        cacheControl:"3600",
+        upsert:false,
+        contentType:imageFile.type
+      });
+
+    if (uploadError) {
+      return alert("Could not upload image: " + uploadError.message);
+    }
+
+    const {data:publicData} = db.storage
+      .from("article-images")
+      .getPublicUrl(filePath);
+
+    article.image_url = publicData.publicUrl;
+  }
+
   const slug = article.title
     .toLowerCase()
     .trim()
@@ -1297,7 +762,6 @@ async function saveArticle(status) {
     .replace(/^-|-$/g,"");
 
   article.slug = slug;
-
   article.author_id = currentUser.id;
   article.journalist_id = currentJournalist.id;
   article.updated_at = new Date().toISOString();
@@ -1309,19 +773,15 @@ async function saveArticle(status) {
   let result;
 
   if (editingArticle) {
-
     result = await db
       .from("articles")
       .update(article)
       .eq("id", editingArticle)
       .eq("author_id", currentUser.id);
-
   } else {
-
     result = await db
       .from("articles")
       .insert(article);
-
   }
 
   if (result.error) {
@@ -1335,35 +795,29 @@ async function saveArticle(status) {
   );
 
   resetEditor();
-
   await loadStories();
 }
-
 
 function saveDraft() {
   saveArticle("draft");
 }
 
-
 function publishStory() {
   saveArticle("published");
 }
 
-
 // UNPUBLISH STORY
-
 async function unpublishStory(article) {
-
   if (!confirm("Are you sure you want to unpublish this story?")) {
     return;
   }
 
-  const { error } = await db
+  const {error} = await db
     .from("articles")
     .update({
-      status: "draft",
-      published_at: null,
-      updated_at: new Date().toISOString()
+      status:"draft",
+      published_at:null,
+      updated_at:new Date().toISOString()
     })
     .eq("id", article.id)
     .eq("author_id", currentUser.id);
@@ -1374,17 +828,12 @@ async function unpublishStory(article) {
   }
 
   alert("Story successfully unpublished.");
-
   await loadStories();
 }
 
-
 // UPDATE STATISTICS
-
 function updateStatistics(articles) {
-
-  document.getElementById("totalStories").textContent =
-    articles.length;
+  document.getElementById("totalStories").textContent = articles.length;
 
   document.getElementById("publishedStories").textContent =
     articles.filter(a => a.status === "published").length;
@@ -1393,24 +842,19 @@ function updateStatistics(articles) {
     articles.filter(a => a.status === "draft").length;
 }
 
-
 // LOAD JOURNALIST STORIES
-
 async function loadStories() {
-
   const container = document.getElementById("stories");
-
   container.textContent = "Loading your stories...";
 
-  const { data, error } = await db
+  const {data,error} = await db
     .from("articles")
     .select("*")
     .eq("author_id", currentUser.id)
-    .order("created_at", { ascending:false });
+    .order("created_at", {ascending:false});
 
   if (error) {
-    container.textContent =
-      "Could not load stories: " + error.message;
+    container.textContent = "Could not load stories: " + error.message;
     return;
   }
 
@@ -1430,7 +874,6 @@ async function loadStories() {
   container.innerHTML = "";
 
   data.forEach(article => {
-
     const item = document.createElement("div");
     item.className = "story";
 
@@ -1449,18 +892,17 @@ async function loadStories() {
 
     const titleArea = document.createElement("div");
     titleArea.appendChild(title);
-
-    top.append(titleArea, status);
+    top.append(titleArea,status);
 
     const description = document.createElement("p");
     description.className = "story-description";
-    description.textContent = article.excerpt || "No short description added.";
+    description.textContent =
+      article.excerpt || "No short description added.";
 
     const meta = document.createElement("div");
     meta.className = "story-meta";
     meta.textContent =
-      (article.category || "Uncategorised") +
-      " • " +
+      (article.category || "Uncategorised") + " • " +
       (article.created_at
         ? new Date(article.created_at).toLocaleDateString()
         : "");
@@ -1472,54 +914,53 @@ async function loadStories() {
     edit.className = "light";
     edit.textContent = "Edit Story";
     edit.onclick = () => editStory(article);
-
     actions.appendChild(edit);
 
     if (article.status === "published") {
-
       const unpublish = document.createElement("button");
       unpublish.className = "danger";
       unpublish.textContent = "Unpublish";
       unpublish.onclick = () => unpublishStory(article);
-
       actions.appendChild(unpublish);
     }
 
-    item.append(top, description, meta, actions);
-
+    item.append(top,description,meta,actions);
     container.appendChild(item);
-
   });
 }
 
-
 // EDIT STORY
-
 function editStory(article) {
-
   editingArticle = article.id;
 
-  document.getElementById("articleTitle").value =
-    article.title || "";
+  document.getElementById("articleTitle").value = article.title || "";
+  document.getElementById("articleExcerpt").value = article.excerpt || "";
+  document.getElementById("articleCategory").value = article.category || "";
+  document.getElementById("articleSection").value = article.section || "latest";
+  document.getElementById("articleImage").value = article.image_url || "";
+  document.getElementById("articleContent").value = article.content || "";
 
-  document.getElementById("articleExcerpt").value =
-    article.excerpt || "";
+  // Clear any previously selected file
+  document.getElementById("articleImageFile").value = "";
 
-  document.getElementById("articleCategory").value =
-    article.category || "";
+  // Show the saved cover image as the preview
+  const preview = document.getElementById("imagePreview");
+  const container = document.getElementById("imagePreviewContainer");
 
-  document.getElementById("articleSection").value =
-    article.section || "latest";
+  if (imagePreviewUrl) {
+    URL.revokeObjectURL(imagePreviewUrl);
+    imagePreviewUrl = null;
+  }
 
-  document.getElementById("articleImage").value =
-    article.image_url || "";
+  if (article.image_url) {
+    preview.src = article.image_url;
+    container.classList.remove("hidden");
+  } else {
+    preview.removeAttribute("src");
+    container.classList.add("hidden");
+  }
 
-  document.getElementById("articleContent").value =
-    article.content || "";
-
-  document.getElementById("editorHeading").textContent =
-    "Edit Story";
-
+  document.getElementById("editorHeading").textContent = "Edit Story";
   document.getElementById("cancelEdit").classList.remove("hidden");
 
   document.getElementById("editor").scrollIntoView({
@@ -1527,11 +968,8 @@ function editStory(article) {
   });
 }
 
-
 // RESET EDITOR
-
 function resetEditor() {
-
   editingArticle = null;
 
   document.getElementById("articleTitle").value = "";
@@ -1540,18 +978,22 @@ function resetEditor() {
   document.getElementById("articleSection").value = "latest";
   document.getElementById("articleImage").value = "";
   document.getElementById("articleContent").value = "";
+  document.getElementById("articleImageFile").value = "";
 
-  document.getElementById("editorHeading").textContent =
-    "Write a New Story";
+  if (imagePreviewUrl) {
+    URL.revokeObjectURL(imagePreviewUrl);
+    imagePreviewUrl = null;
+  }
 
+  document.getElementById("imagePreview").removeAttribute("src");
+  document.getElementById("imagePreviewContainer").classList.add("hidden");
+
+  document.getElementById("editorHeading").textContent = "Write a New Story";
   document.getElementById("cancelEdit").classList.add("hidden");
 }
 
-
 // LOGOUT
-
 async function logout() {
-
   await db.auth.signOut();
 
   currentUser = null;
@@ -1561,30 +1003,21 @@ async function logout() {
   location.reload();
 }
 
-
 // AUTHENTICATION LISTENER
-
-db.auth.onAuthStateChange((event, session) => {
-
+db.auth.onAuthStateChange((event,session) => {
   if (session && !currentUser) {
-    setTimeout(() => loadDashboard(), 0);
+    setTimeout(() => loadDashboard(),0);
   }
-
 });
 
-
 // CHECK EXISTING SESSION
-
 (async function start() {
-
-  const { data } = await db.auth.getSession();
+  const {data} = await db.auth.getSession();
 
   if (data.session) {
     await loadDashboard();
   }
-
 })();
-
 </script>
 
 </body>
