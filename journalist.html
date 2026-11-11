@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17131c">
+
 <title>Journalist Dashboard | People's Choice Magazine</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,174 +14,992 @@
 <style>
 :root {
   --pink:#e7549b;
-  --dark:#171717;
-  --light:#f7f7f7;
+  --pink-dark:#c93680;
+  --dark:#211b27;
+  --sidebar:#19151e;
+  --background:#f6f5f8;
+  --white:#fff;
+  --text:#292431;
+  --muted:#898391;
+  --border:#eeeaf1;
+  --green:#16845b;
+  --red:#c43c48;
+  --shadow:0 8px 30px rgba(32,20,40,.055);
 }
-* { box-sizing:border-box; }
+
+* {
+  box-sizing:border-box;
+}
+
+html {
+  scroll-behavior:smooth;
+}
+
 body {
   margin:0;
-  font-family:Arial,sans-serif;
-  background:var(--light);
-  color:var(--dark);
+  font-family:Inter,Arial,sans-serif;
+  background:var(--background);
+  color:var(--text);
 }
-header {
-  background:var(--dark);
-  color:white;
-  padding:20px;
-  border-bottom:4px solid var(--pink);
-}
-header h2 { margin:0; }
-header p { margin:6px 0 0; color:#ddd; }
-main {
-  max-width:1000px;
-  margin:25px auto;
-  padding:15px;
-}
-.panel {
-  background:white;
-  padding:22px;
-  border-radius:12px;
-  margin-bottom:20px;
-  box-shadow:0 2px 12px #00000010;
-}
-h3 { margin-top:0; }
-input,textarea,select {
-  width:100%;
-  padding:13px;
-  margin:7px 0 14px;
-  border:1px solid #ddd;
-  border-radius:7px;
+
+button,input,textarea,select {
   font:inherit;
 }
-textarea { min-height:180px; resize:vertical; }
+
+button {
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.hidden {
+  display:none!important;
+}
+
+/* LOGIN */
+
+.auth-page {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at top right,#f8d9e9,transparent 40%),
+    linear-gradient(135deg,#211b27,#382638);
+}
+
+.auth-card {
+  background:white;
+  width:100%;
+  max-width:450px;
+  padding:35px;
+  border-radius:22px;
+  box-shadow:0 20px 70px #0003;
+}
+
+.brand-mark {
+  width:55px;
+  height:55px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:16px;
+  background:var(--pink);
+  color:white;
+  font-size:25px;
+  font-weight:900;
+  margin-bottom:20px;
+}
+
+.auth-card h1 {
+  margin:0 0 8px;
+  font-size:25px;
+}
+
+.auth-card p {
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.auth-card input {
+  margin-top:9px;
+}
+
+/* GENERAL INPUTS */
+
+input,textarea,select {
+  width:100%;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#fff;
+  color:var(--text);
+  outline:none;
+  margin:7px 0 13px;
+}
+
+input:focus,textarea:focus,select:focus {
+  border-color:var(--pink);
+  box-shadow:0 0 0 3px #e7549b18;
+}
+
+textarea {
+  min-height:220px;
+  resize:vertical;
+  line-height:1.7;
+}
+
+label {
+  font-size:13px;
+  font-weight:700;
+  display:block;
+  margin-top:9px;
+}
+
 button {
   border:0;
-  padding:12px 18px;
-  border-radius:7px;
-  cursor:pointer;
-  font-weight:bold;
-  margin:4px;
+  border-radius:10px;
+  padding:12px 17px;
+  font-weight:700;
 }
-.primary { background:var(--pink); color:white; }
-.dark { background:var(--dark); color:white; }
-.light { background:#eee; color:#222; }
-.danger { background:#b42318; color:white; }
-.hidden { display:none!important; }
-.story {
-  border:1px solid #eee;
-  padding:15px;
-  border-radius:9px;
-  margin:12px 0;
+
+button:hover {
+  transform:translateY(-1px);
+  filter:brightness(.97);
 }
-.status {
+
+.primary {
+  background:var(--pink);
+  color:white;
+}
+
+.primary:hover {
+  background:var(--pink-dark);
+}
+
+.dark {
+  background:var(--dark);
+  color:white;
+}
+
+.light {
+  background:#f0edf2;
+  color:var(--text);
+}
+
+.danger {
+  background:#fff0f0;
+  color:var(--red);
+}
+
+.full-button {
+  width:100%;
+  margin:8px 0;
+}
+
+#message {
+  margin-top:15px;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.5;
+}
+
+/* DASHBOARD LAYOUT */
+
+.dashboard-layout {
+  min-height:100vh;
+}
+
+.sidebar {
+  position:fixed;
+  inset:0 auto 0 0;
+  width:245px;
+  background:var(--sidebar);
+  color:white;
+  padding:27px 18px;
+  display:flex;
+  flex-direction:column;
+  z-index:20;
+}
+
+.sidebar-brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:5px 8px 30px;
+}
+
+.sidebar-logo {
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:var(--pink);
+  font-weight:900;
+  font-size:21px;
+}
+
+.sidebar-brand strong {
+  display:block;
+  font-size:13px;
+  line-height:1.4;
+}
+
+.sidebar-brand small {
+  color:#bdb4c4;
+  font-size:10px;
+}
+
+.nav-label {
+  color:#8e8496;
+  font-size:10px;
+  letter-spacing:1.5px;
+  font-weight:800;
+  padding:15px 12px 10px;
+}
+
+.nav-link {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 14px;
+  margin:3px 0;
+  border-radius:10px;
+  color:#d6cfdd;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background:#e7549b20;
+  color:#ff9dca;
+}
+
+.nav-icon {
+  font-size:18px;
+  width:22px;
+  text-align:center;
+}
+
+.sidebar-bottom {
+  margin-top:auto;
+}
+
+.sidebar-note {
+  border:1px solid #ffffff18;
+  background:#ffffff09;
+  padding:14px;
+  border-radius:12px;
+  font-size:11px;
+  line-height:1.6;
+  color:#c7bfce;
+}
+
+.main-area {
+  margin-left:245px;
+  min-height:100vh;
+}
+
+/* TOP BAR */
+
+.topbar {
+  background:white;
+  border-bottom:1px solid var(--border);
+  min-height:75px;
+  padding:16px 35px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.topbar h2 {
+  font-size:17px;
+  margin:0;
+}
+
+.topbar p {
+  margin:5px 0 0;
+  color:var(--muted);
   font-size:12px;
-  background:#eee;
-  padding:5px 9px;
-  border-radius:20px;
 }
-#message { margin:12px 0; font-weight:bold; }
-small { color:#666; }
-@media(max-width:600px) {
-  main { padding:10px; }
-  .panel { padding:16px; }
-  button { margin:4px 0; }
+
+.profile-chip {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#faf8fb;
+  padding:8px 13px;
+  border-radius:30px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.profile-avatar {
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#f9d5e7;
+  color:#a72d68;
+  font-weight:900;
+}
+
+/* CONTENT */
+
+.content {
+  max-width:1250px;
+  margin:auto;
+  padding:30px 35px 60px;
+}
+
+.welcome-banner {
+  padding:28px;
+  border-radius:18px;
+  color:white;
+  background:linear-gradient(115deg,#281e30,#513048);
+  position:relative;
+  overflow:hidden;
+  margin-bottom:25px;
+}
+
+.welcome-banner:after {
+  content:"PC";
+  position:absolute;
+  right:35px;
+  top:-35px;
+  font-size:145px;
+  font-weight:900;
+  color:#ffffff0b;
+}
+
+.welcome-banner h1 {
+  font-size:25px;
+  margin:0 0 9px;
+  position:relative;
+  z-index:1;
+}
+
+.welcome-banner p {
+  color:#e3d9e7;
+  font-size:13px;
+  margin:0;
+  position:relative;
+  z-index:1;
+}
+
+/* STATISTICS */
+
+.stats-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:17px;
+  margin-bottom:27px;
+}
+
+.stat-card {
+  background:white;
+  border:1px solid var(--border);
+  padding:21px;
+  border-radius:15px;
+  box-shadow:var(--shadow);
+}
+
+.stat-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stat-icon {
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  font-size:19px;
+}
+
+.stat-card h2 {
+  font-size:30px;
+  margin:16px 0 4px;
+}
+
+.stat-card p {
+  color:var(--muted);
+  font-size:12px;
+  margin:0;
+  font-weight:600;
+}
+
+.icon-pink { background:#ffeaf3; }
+.icon-green { background:#e6f7ef; }
+.icon-orange { background:#fff1df; }
+
+/* PANELS */
+
+.panel {
+  background:white;
+  padding:25px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  margin-bottom:23px;
+  scroll-margin-top:20px;
+}
+
+.panel-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.panel-heading h2 {
+  margin:0;
+  font-size:18px;
+}
+
+.panel-heading p {
+  color:var(--muted);
+  font-size:12px;
+  margin:6px 0 0;
+}
+
+.form-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0 17px;
+}
+
+.form-grid .wide {
+  grid-column:1/-1;
+}
+
+.editor-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:15px;
+}
+
+.editor-actions button {
+  margin:0;
+}
+
+/* STORIES */
+
+.story {
+  padding:19px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  margin:12px 0;
+  transition:.2s ease;
+}
+
+.story:hover {
+  border-color:#efb2d0;
+  box-shadow:0 5px 18px #00000008;
+}
+
+.story-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+}
+
+.story h3 {
+  margin:0 0 9px;
+  font-size:16px;
+  line-height:1.5;
+}
+
+.story-description {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  margin:8px 0;
+}
+
+.story-meta {
+  color:var(--muted);
+  font-size:11px;
+  margin:10px 0;
+}
+
+.status {
+  display:inline-block;
+  border-radius:30px;
+  padding:6px 11px;
+  font-size:10px;
+  font-weight:800;
+  text-transform:capitalize;
+  white-space:nowrap;
+}
+
+.status-published {
+  background:#e5f7ed;
+  color:#13764e;
+}
+
+.status-draft {
+  background:#f0edf3;
+  color:#72677d;
+}
+
+.status-pending {
+  background:#fff2df;
+  color:#a66a13;
+}
+
+.story-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:13px;
+}
+
+.story-actions button {
+  font-size:11px;
+  padding:9px 13px;
+}
+
+.empty-state {
+  padding:40px 15px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.empty-state span {
+  display:block;
+  font-size:35px;
+  margin-bottom:10px;
+}
+
+/* MOBILE */
+
+.mobile-header {
+  display:none;
+}
+
+@media(max-width:850px) {
+  .sidebar {
+    width:205px;
+  }
+
+  .main-area {
+    margin-left:205px;
+  }
+
+  .content {
+    padding:25px 20px;
+  }
+}
+
+@media(max-width:650px) {
+  .sidebar {
+    display:none;
+  }
+
+  .main-area {
+    margin-left:0;
+    padding-bottom:70px;
+  }
+
+  .topbar {
+    padding:13px 16px;
+    min-height:65px;
+  }
+
+  .topbar h2 {
+    font-size:14px;
+  }
+
+  .topbar p {
+    font-size:10px;
+  }
+
+  .profile-chip {
+    padding:5px 8px;
+    font-size:10px;
+  }
+
+  .profile-avatar {
+    width:29px;
+    height:29px;
+  }
+
+  .content {
+    padding:18px 13px 30px;
+  }
+
+  .welcome-banner {
+    padding:23px 19px;
+  }
+
+  .welcome-banner h1 {
+    font-size:21px;
+  }
+
+  .stats-grid {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .stat-card {
+    padding:12px 9px;
+  }
+
+  .stat-card h2 {
+    font-size:23px;
+    margin-top:12px;
+  }
+
+  .stat-card p {
+    font-size:10px;
+  }
+
+  .stat-icon {
+    width:32px;
+    height:32px;
+    font-size:15px;
+  }
+
+  .panel {
+    padding:17px 14px;
+  }
+
+  .panel-heading h2 {
+    font-size:16px;
+  }
+
+  .form-grid {
+    display:block;
+  }
+
+  textarea {
+    min-height:190px;
+  }
+
+  .editor-actions {
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .editor-actions button {
+    width:100%;
+  }
+
+  .story {
+    padding:14px;
+  }
+
+  .story-top {
+    gap:8px;
+  }
+
+  .story h3 {
+    font-size:14px;
+  }
+
+  .story-actions button {
+    flex:1;
+  }
+
+  .mobile-header {
+    display:flex;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:30;
+    background:white;
+    border-top:1px solid var(--border);
+    justify-content:space-around;
+    padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-header a {
+    text-decoration:none;
+    color:#77717e;
+    font-size:10px;
+    font-weight:700;
+    text-align:center;
+    padding:5px;
+  }
+
+  .mobile-header a span {
+    display:block;
+    font-size:19px;
+    margin-bottom:3px;
+  }
+}
+
+@media(max-width:370px) {
+  .stats-grid {
+    grid-template-columns:1fr;
+  }
+
+  .stat-card {
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+
+  .stat-card h2 {
+    margin:0;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h2>People's Choice Magazine</h2>
-  <p>Journalist Dashboard</p>
-</header>
+<!-- SIGN IN / REGISTRATION -->
 
-<main>
+<div id="authPanel" class="auth-page">
+  <div class="auth-card">
 
-<div id="authPanel" class="panel">
+    <div class="brand-mark">PC</div>
 
-  <div id="registerBox">
-    <h3>Journalist Registration</h3>
-    <p>Create your journalist account.</p>
+    <div id="registerBox">
+      <h1>Journalist Registration</h1>
+      <p>Join People's Choice Magazine and start sharing your stories.</p>
 
-    <input id="fullName" placeholder="Full name">
-    <input id="phone" placeholder="Phone number (+263...)">
-    <input id="regPassword" type="password" placeholder="Create password">
-    <input id="confirmPassword" type="password" placeholder="Confirm password">
+      <label>Full name</label>
+      <input id="fullName" placeholder="Enter your full name">
 
-    <button class="primary" onclick="registerJournalist()">Register</button>
-    <button class="light" onclick="showLogin()">Already registered? Sign in</button>
+      <label>Phone number</label>
+      <input id="phone" placeholder="Phone number (+263...)">
+
+      <label>Create password</label>
+      <input id="regPassword" type="password" placeholder="At least 8 characters">
+
+      <label>Confirm password</label>
+      <input id="confirmPassword" type="password" placeholder="Confirm password">
+
+      <button class="primary full-button" onclick="registerJournalist()">
+        Create Journalist Account
+      </button>
+
+      <button class="light full-button" onclick="showLogin()">
+        Already registered? Sign in
+      </button>
+    </div>
+
+    <div id="loginBox" class="hidden">
+      <h1>Welcome Back</h1>
+      <p>Sign in to manage your magazine stories.</p>
+
+      <label>Phone number</label>
+      <input id="loginPhone" placeholder="Registered phone number (+263...)">
+
+      <label>Password</label>
+      <input id="loginPassword" type="password" placeholder="Enter your password">
+
+      <button class="primary full-button" onclick="loginJournalist()">
+        Sign In
+      </button>
+
+      <button class="light full-button" onclick="showRegister()">
+        Create an account
+      </button>
+    </div>
+
+    <div id="message" aria-live="polite"></div>
+
   </div>
-
-  <div id="loginBox" class="hidden">
-    <h3>Journalist Sign In</h3>
-
-    <input id="loginPhone" placeholder="Registered phone number (+263...)">
-    <input id="loginPassword" type="password" placeholder="Password">
-
-    <button class="primary" onclick="loginJournalist()">Sign In</button>
-    <button class="light" onclick="showRegister()">Create account</button>
-  </div>
-
-  <div id="message"></div>
 </div>
 
 
-<div id="dashboard" class="hidden">
+<!-- MAIN DASHBOARD -->
 
-  <div class="panel">
-    <h3>Welcome, <span id="journalistName"></span></h3>
-    <p>Write, manage and publish your stories.</p>
-    <button class="dark" onclick="logout()">Sign Out</button>
+<div id="dashboard" class="dashboard-layout hidden">
+
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">PC</div>
+      <div>
+        <strong>PEOPLE'S CHOICE</strong>
+        <small>MAGAZINE • JOURNALIST</small>
+      </div>
+    </div>
+
+    <div class="nav-label">WORKSPACE</div>
+
+    <a class="nav-link active" href="#overview">
+      <span class="nav-icon">⌂</span> Overview
+    </a>
+
+    <a class="nav-link" href="#editor">
+      <span class="nav-icon">✎</span> Write a Story
+    </a>
+
+    <a class="nav-link" href="#myStories">
+      <span class="nav-icon">▤</span> My Stories
+    </a>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-note">
+        <strong>People's Choice Magazine</strong>
+        <br>
+        Your voice. Your stories. Your community.
+      </div>
+
+      <button class="danger full-button" onclick="logout()">
+        Sign Out
+      </button>
+    </div>
+
+  </aside>
+
+
+  <div class="main-area">
+
+    <header class="topbar">
+      <div>
+        <h2>Journalist Workspace</h2>
+        <p>Manage your stories and publications</p>
+      </div>
+
+      <div class="profile-chip">
+        <div class="profile-avatar" id="profileAvatar">J</div>
+        <span id="topJournalistName">Journalist</span>
+      </div>
+    </header>
+
+
+    <main class="content">
+
+      <section class="welcome-banner" id="overview">
+        <h1>Welcome back, <span id="journalistName">Journalist</span>!</h1>
+        <p>Ready to share your next story with the world?</p>
+      </section>
+
+
+      <!-- STORY STATISTICS -->
+
+      <section class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-icon icon-pink">▤</span>
+          </div>
+          <h2 id="totalStories">0</h2>
+          <p>Total Stories</p>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-icon icon-green">✓</span>
+          </div>
+          <h2 id="publishedStories">0</h2>
+          <p>Published</p>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <span class="stat-icon icon-orange">✎</span>
+          </div>
+          <h2 id="draftStories">0</h2>
+          <p>Drafts</p>
+        </div>
+
+      </section>
+
+
+      <!-- STORY EDITOR -->
+
+      <section class="panel" id="editor">
+
+        <div class="panel-heading">
+          <div>
+            <h2 id="editorHeading">Write a New Story</h2>
+            <p>Create, edit and publish your articles.</p>
+          </div>
+          <span class="stat-icon icon-pink">✎</span>
+        </div>
+
+        <div class="form-grid">
+
+          <div class="wide">
+            <label>Article title</label>
+            <input id="articleTitle" placeholder="Enter an engaging headline">
+          </div>
+
+          <div class="wide">
+            <label>Short description</label>
+            <input id="articleExcerpt" placeholder="Write a short summary of your story">
+          </div>
+
+          <div>
+            <label>Category</label>
+            <select id="articleCategory" required>
+              <option value="">Select category</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="music">Music</option>
+              <option value="celebrity">Celebrity News</option>
+              <option value="community">Community</option>
+              <option value="events">Events</option>
+              <option value="interviews">Interviews</option>
+              <option value="national">National News</option>
+              <option value="local">Local News</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Website section</label>
+            <select id="articleSection" required>
+              <option value="latest">Latest Stories</option>
+              <option value="local">Local News</option>
+              <option value="national">National News</option>
+              <option value="creators">Creators</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="music">Music</option>
+            </select>
+          </div>
+
+          <div class="wide">
+            <label>Cover image URL (optional)</label>
+            <input id="articleImage" placeholder="https://example.com/image.jpg">
+          </div>
+
+          <div class="wide">
+            <label>Full story</label>
+            <textarea id="articleContent" placeholder="Start writing your story here..."></textarea>
+          </div>
+
+        </div>
+
+        <div class="editor-actions">
+          <button class="dark" onclick="saveDraft()">Save as Draft</button>
+          <button class="primary" onclick="publishStory()">Publish Story</button>
+          <button class="light hidden" id="cancelEdit" onclick="resetEditor()">Cancel Editing</button>
+        </div>
+
+      </section>
+
+
+      <!-- MY STORIES -->
+
+      <section class="panel" id="myStories">
+
+        <div class="panel-heading">
+          <div>
+            <h2>My Stories</h2>
+            <p>View and manage your submitted articles.</p>
+          </div>
+        </div>
+
+        <div id="stories">
+          <div class="empty-state">Loading your stories...</div>
+        </div>
+
+      </section>
+
+    </main>
+
   </div>
 
-  <div class="panel">
 
-    <h3 id="editorHeading">Write a Story</h3>
+  <!-- MOBILE NAVIGATION -->
 
-    <input id="articleTitle" placeholder="Article title">
-
-    <input id="articleExcerpt" placeholder="Short article description">
-
-    <select id="articleCategory" required>
-      <option value="">Select category</option>
-      <option value="entertainment">Entertainment</option>
-      <option value="music">Music</option>
-      <option value="celebrity">Celebrity News</option>
-      <option value="community">Community</option>
-      <option value="events">Events</option>
-      <option value="interviews">Interviews</option>
-      <option value="national">National News</option>
-      <option value="local">Local News</option>
-    </select>
-
-    <select id="articleSection" required>
-      <option value="latest">Latest Stories</option>
-      <option value="local">Local News</option>
-      <option value="national">National News</option>
-      <option value="creators">Creators</option>
-      <option value="entertainment">Entertainment</option>
-      <option value="music">Music</option>
-    </select>
-
-    <input id="articleImage" placeholder="Cover image URL (optional)">
-
-    <textarea id="articleContent" placeholder="Write your full story here..."></textarea>
-
-    <button class="dark" onclick="saveDraft()">Save Draft</button>
-    <button class="primary" onclick="publishStory()">Publish Story</button>
-    <button class="light hidden" id="cancelEdit" onclick="resetEditor()">Cancel Edit</button>
-
-  </div>
-
-  <div class="panel">
-    <h3>My Stories</h3>
-    <div id="stories">Loading stories...</div>
-  </div>
+  <nav class="mobile-header">
+    <a href="#overview"><span>⌂</span>Home</a>
+    <a href="#editor"><span>✎</span>Write</a>
+    <a href="#myStories"><span>▤</span>Stories</a>
+    <a href="#" onclick="logout();return false;"><span>↪</span>Logout</a>
+  </nav>
 
 </div>
-
-</main>
 
 
 <script>
@@ -307,7 +1127,6 @@ async function loginJournalist() {
 
 
 // CREATE OR FIND JOURNALIST RECORD
-// IMPORTANT: journalists.id must match the authenticated user's UUID.
 
 async function ensureJournalistRecord() {
 
@@ -378,8 +1197,12 @@ async function loadDashboard() {
   document.getElementById("authPanel").classList.add("hidden");
   document.getElementById("dashboard").classList.remove("hidden");
 
-  document.getElementById("journalistName").textContent =
-    profile.full_name || "Journalist";
+  const name = profile.full_name || "Journalist";
+
+  document.getElementById("journalistName").textContent = name;
+  document.getElementById("topJournalistName").textContent = name;
+  document.getElementById("profileAvatar").textContent =
+    name.charAt(0).toUpperCase();
 
   await loadStories();
 }
@@ -416,7 +1239,7 @@ async function saveArticle(status) {
   }
 
   if (article.title.length < 3) {
-  return alert("Article title must contain at least 3 characters.");
+    return alert("Article title must contain at least 3 characters.");
   }
 
   const slug = article.title
@@ -427,10 +1250,8 @@ async function saveArticle(status) {
 
   article.slug = slug;
 
-  // Correct journalist and author IDs
   article.author_id = currentUser.id;
   article.journalist_id = currentJournalist.id;
-
   article.updated_at = new Date().toISOString();
 
   if (status === "published") {
@@ -471,6 +1292,18 @@ async function saveArticle(status) {
 }
 
 
+function saveDraft() {
+  saveArticle("draft");
+}
+
+
+function publishStory() {
+  saveArticle("published");
+}
+
+
+// UNPUBLISH STORY
+
 async function unpublishStory(article) {
 
   if (!confirm("Are you sure you want to unpublish this story?")) {
@@ -498,8 +1331,18 @@ async function unpublishStory(article) {
 }
 
 
-function publishStory() {
-  saveArticle("published");
+// UPDATE STATISTICS
+
+function updateStatistics(articles) {
+
+  document.getElementById("totalStories").textContent =
+    articles.length;
+
+  document.getElementById("publishedStories").textContent =
+    articles.filter(a => a.status === "published").length;
+
+  document.getElementById("draftStories").textContent =
+    articles.filter(a => a.status === "draft").length;
 }
 
 
@@ -507,13 +1350,15 @@ function publishStory() {
 
 async function loadStories() {
 
+  const container = document.getElementById("stories");
+
+  container.textContent = "Loading your stories...";
+
   const { data, error } = await db
     .from("articles")
     .select("*")
     .eq("author_id", currentUser.id)
     .order("created_at", { ascending:false });
-
-  const container = document.getElementById("stories");
 
   if (error) {
     container.textContent =
@@ -521,8 +1366,16 @@ async function loadStories() {
     return;
   }
 
+  updateStatistics(data || []);
+
   if (!data || !data.length) {
-    container.textContent = "You haven't written any stories yet.";
+    container.innerHTML = `
+      <div class="empty-state">
+        <span>📝</span>
+        You haven't written any stories yet.
+        <br>Start by creating your first article.
+      </div>
+    `;
     return;
   }
 
@@ -533,30 +1386,60 @@ async function loadStories() {
     const item = document.createElement("div");
     item.className = "story";
 
+    const top = document.createElement("div");
+    top.className = "story-top";
+
     const title = document.createElement("h3");
     title.textContent = article.title;
 
     const status = document.createElement("span");
-    status.className = "status";
-    status.textContent = article.status;
+    status.className = "status status-" +
+      (article.status === "published" ? "published" :
+       article.status === "draft" ? "draft" : "pending");
 
-   const edit = document.createElement("button");
-edit.className = "light";
-edit.textContent = "Edit";
-edit.onclick = () => editStory(article);
+    status.textContent = article.status || "unknown";
 
-item.append(title, status, document.createElement("br"), edit);
+    const titleArea = document.createElement("div");
+    titleArea.appendChild(title);
 
-if (article.status === "published") {
-  const unpublish = document.createElement("button");
-  unpublish.className = "danger";
-  unpublish.textContent = "Unpublish";
-  unpublish.onclick = () => unpublishStory(article);
+    top.append(titleArea, status);
 
-  item.appendChild(unpublish);
-}
+    const description = document.createElement("p");
+    description.className = "story-description";
+    description.textContent = article.excerpt || "No short description added.";
 
-container.appendChild(item); 
+    const meta = document.createElement("div");
+    meta.className = "story-meta";
+    meta.textContent =
+      (article.category || "Uncategorised") +
+      " • " +
+      (article.created_at
+        ? new Date(article.created_at).toLocaleDateString()
+        : "");
+
+    const actions = document.createElement("div");
+    actions.className = "story-actions";
+
+    const edit = document.createElement("button");
+    edit.className = "light";
+    edit.textContent = "Edit Story";
+    edit.onclick = () => editStory(article);
+
+    actions.appendChild(edit);
+
+    if (article.status === "published") {
+
+      const unpublish = document.createElement("button");
+      unpublish.className = "danger";
+      unpublish.textContent = "Unpublish";
+      unpublish.onclick = () => unpublishStory(article);
+
+      actions.appendChild(unpublish);
+    }
+
+    item.append(top, description, meta, actions);
+
+    container.appendChild(item);
 
   });
 }
@@ -591,8 +1474,7 @@ function editStory(article) {
 
   document.getElementById("cancelEdit").classList.remove("hidden");
 
-  window.scrollTo({
-    top:0,
+  document.getElementById("editor").scrollIntoView({
     behavior:"smooth"
   });
 }
@@ -612,7 +1494,7 @@ function resetEditor() {
   document.getElementById("articleContent").value = "";
 
   document.getElementById("editorHeading").textContent =
-    "Write a Story";
+    "Write a New Story";
 
   document.getElementById("cancelEdit").classList.add("hidden");
 }
