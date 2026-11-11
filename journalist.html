@@ -5,8 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Journalist Dashboard | People's Choice Magazine</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+
 <style>
 :root {
   --pink:#e7549b;
@@ -84,6 +86,7 @@ small { color:#666; }
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -94,6 +97,7 @@ small { color:#666; }
 <main>
 
 <div id="authPanel" class="panel">
+
   <div id="registerBox">
     <h3>Journalist Registration</h3>
     <p>Create your journalist account.</p>
@@ -109,14 +113,17 @@ small { color:#666; }
 
   <div id="loginBox" class="hidden">
     <h3>Journalist Sign In</h3>
+
     <input id="loginPhone" placeholder="Registered phone number (+263...)">
     <input id="loginPassword" type="password" placeholder="Password">
+
     <button class="primary" onclick="loginJournalist()">Sign In</button>
     <button class="light" onclick="showRegister()">Create account</button>
   </div>
 
   <div id="message"></div>
 </div>
+
 
 <div id="dashboard" class="hidden">
 
@@ -127,38 +134,42 @@ small { color:#666; }
   </div>
 
   <div class="panel">
+
     <h3 id="editorHeading">Write a Story</h3>
 
     <input id="articleTitle" placeholder="Article title">
+
     <input id="articleExcerpt" placeholder="Short article description">
 
     <select id="articleCategory" required>
-  <option value="">Select category</option>
-  <option value="entertainment">Entertainment</option>
-  <option value="music">Music</option>
-  <option value="celebrity">Celebrity News</option>
-  <option value="community">Community</option>
-  <option value="events">Events</option>
-  <option value="interviews">Interviews</option>
-  <option value="national">National News</option>
-  <option value="local">Local News</option>
-</select>
+      <option value="">Select category</option>
+      <option value="entertainment">Entertainment</option>
+      <option value="music">Music</option>
+      <option value="celebrity">Celebrity News</option>
+      <option value="community">Community</option>
+      <option value="events">Events</option>
+      <option value="interviews">Interviews</option>
+      <option value="national">National News</option>
+      <option value="local">Local News</option>
+    </select>
 
-<select id="articleSection" required>
-  <option value="latest">Latest Stories</option>
-  <option value="local">Local News</option>
-  <option value="national">National News</option>
-  <option value="creators">Creators</option>
-  <option value="entertainment">Entertainment</option>
-  <option value="music">Music</option>
-</select>
+    <select id="articleSection" required>
+      <option value="latest">Latest Stories</option>
+      <option value="local">Local News</option>
+      <option value="national">National News</option>
+      <option value="creators">Creators</option>
+      <option value="entertainment">Entertainment</option>
+      <option value="music">Music</option>
+    </select>
 
     <input id="articleImage" placeholder="Cover image URL (optional)">
+
     <textarea id="articleContent" placeholder="Write your full story here..."></textarea>
 
     <button class="dark" onclick="saveDraft()">Save Draft</button>
     <button class="primary" onclick="publishStory()">Publish Story</button>
     <button class="light hidden" id="cancelEdit" onclick="resetEditor()">Cancel Edit</button>
+
   </div>
 
   <div class="panel">
@@ -167,9 +178,12 @@ small { color:#666; }
   </div>
 
 </div>
+
 </main>
 
+
 <script>
+
 const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
@@ -177,7 +191,9 @@ const db = window.supabase.createClient(
 
 let currentUser = null;
 let currentProfile = null;
+let currentJournalist = null;
 let editingArticle = null;
+
 
 function showMessage(message, error=false) {
   const el = document.getElementById("message");
@@ -185,13 +201,17 @@ function showMessage(message, error=false) {
   el.style.color = error ? "#b42318" : "#16803c";
 }
 
+
 function normalizePhone(phone) {
   return phone.replace(/[\s()-]/g,"");
 }
 
+
 function loginEmail(phone) {
-  return normalizePhone(phone).replace(/\D/g, "") + "@journalist.peopleschoicemagazine.co.zw";
+  return normalizePhone(phone).replace(/\D/g, "") +
+    "@journalist.peopleschoicemagazine.co.zw";
 }
+
 
 function showLogin() {
   document.getElementById("registerBox").classList.add("hidden");
@@ -199,13 +219,18 @@ function showLogin() {
   showMessage("");
 }
 
+
 function showRegister() {
   document.getElementById("loginBox").classList.add("hidden");
   document.getElementById("registerBox").classList.remove("hidden");
   showMessage("");
 }
 
+
+// REGISTRATION
+
 async function registerJournalist() {
+
   const fullName = document.getElementById("fullName").value.trim();
   const phone = normalizePhone(document.getElementById("phone").value);
   const password = document.getElementById("regPassword").value;
@@ -229,10 +254,8 @@ async function registerJournalist() {
 
   showMessage("Creating your account...");
 
-  const email = loginEmail(phone);
-
   const { data, error } = await db.auth.signUp({
-    email,
+    email: loginEmail(phone),
     password,
     options: {
       data: {
@@ -248,15 +271,22 @@ async function registerJournalist() {
 
   if (!data.session) {
     return showMessage(
-      "Registration submitted. Check Supabase email confirmation settings before signing in."
+      "Registration submitted. Email confirmation may be required before signing in."
     );
   }
 
   await loadDashboard();
 }
 
+
+// LOGIN
+
 async function loginJournalist() {
-  const phone = normalizePhone(document.getElementById("loginPhone").value);
+
+  const phone = normalizePhone(
+    document.getElementById("loginPhone").value
+  );
+
   const password = document.getElementById("loginPassword").value;
 
   if (!phone || !password) {
@@ -275,10 +305,45 @@ async function loginJournalist() {
   await loadDashboard();
 }
 
-async function loadDashboard() {
-  const { data: authData } = await db.auth.getUser();
 
-  if (!authData.user) return;
+// CREATE OR FIND JOURNALIST RECORD
+// IMPORTANT: journalists.id must match the authenticated user's UUID.
+
+async function ensureJournalistRecord() {
+
+  const journalistData = {
+    id: currentUser.id,
+    name: currentProfile.full_name || "Journalist"
+  };
+
+  const { data, error } = await db
+    .from("journalists")
+    .upsert(journalistData, {
+      onConflict: "id"
+    })
+    .select("id,name")
+    .single();
+
+  if (error) {
+    throw new Error(
+      "Could not connect your journalist account: " + error.message
+    );
+  }
+
+  currentJournalist = data;
+
+  return data.id;
+}
+
+
+// LOAD DASHBOARD
+
+async function loadDashboard() {
+
+  const { data: authData, error: authError } =
+    await db.auth.getUser();
+
+  if (authError || !authData.user) return;
 
   currentUser = authData.user;
 
@@ -290,24 +355,40 @@ async function loadDashboard() {
 
   if (error || !profile) {
     await db.auth.signOut();
+    currentUser = null;
     return showMessage("Your profile could not be verified.", true);
   }
 
   if (!["journalist","editor","admin"].includes(profile.role)) {
     await db.auth.signOut();
+    currentUser = null;
     return showMessage("This account does not have journalist access.", true);
   }
 
   currentProfile = profile;
 
+  try {
+    await ensureJournalistRecord();
+  } catch (err) {
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("authPanel").classList.remove("hidden");
+    return showMessage(err.message, true);
+  }
+
   document.getElementById("authPanel").classList.add("hidden");
   document.getElementById("dashboard").classList.remove("hidden");
-  document.getElementById("journalistName").textContent = profile.full_name || "Journalist";
+
+  document.getElementById("journalistName").textContent =
+    profile.full_name || "Journalist";
 
   await loadStories();
 }
 
+
+// ARTICLE DATA
+
 function getArticlePayload(status) {
+
   return {
     title: document.getElementById("articleTitle").value.trim(),
     excerpt: document.getElementById("articleExcerpt").value.trim(),
@@ -319,8 +400,14 @@ function getArticlePayload(status) {
   };
 }
 
+
+// SAVE OR PUBLISH ARTICLE
+
 async function saveArticle(status) {
-  if (!currentUser) return;
+
+  if (!currentUser || !currentJournalist) {
+    return alert("Please sign in again.");
+  }
 
   const article = getArticlePayload(status);
 
@@ -339,8 +426,11 @@ async function saveArticle(status) {
     .replace(/^-|-$/g,"");
 
   article.slug = slug;
+
+  // Correct journalist and author IDs
   article.author_id = currentUser.id;
-  article.journalist_id = currentUser.id;
+  article.journalist_id = currentJournalist.id;
+
   article.updated_at = new Date().toISOString();
 
   if (status === "published") {
@@ -350,45 +440,62 @@ async function saveArticle(status) {
   let result;
 
   if (editingArticle) {
+
     result = await db
       .from("articles")
       .update(article)
       .eq("id", editingArticle)
       .eq("author_id", currentUser.id);
+
   } else {
+
     result = await db
       .from("articles")
       .insert(article);
+
   }
 
   if (result.error) {
     return alert("Could not save article: " + result.error.message);
   }
 
-  alert(status === "draft" ? "Draft saved." : "Your story has been published.");
+  alert(
+    status === "draft"
+      ? "Draft saved successfully."
+      : "Your story has been published."
+  );
+
   resetEditor();
+
   await loadStories();
 }
+
 
 function saveDraft() {
   saveArticle("draft");
 }
 
+
 function publishStory() {
   saveArticle("published");
 }
 
+
+// LOAD JOURNALIST STORIES
+
 async function loadStories() {
+
   const { data, error } = await db
     .from("articles")
     .select("*")
-    .eq("author_id",currentUser.id)
-    .order("created_at",{ascending:false});
+    .eq("author_id", currentUser.id)
+    .order("created_at", { ascending:false });
 
   const container = document.getElementById("stories");
 
   if (error) {
-    container.textContent = "Could not load stories: " + error.message;
+    container.textContent =
+      "Could not load stories: " + error.message;
     return;
   }
 
@@ -400,6 +507,7 @@ async function loadStories() {
   container.innerHTML = "";
 
   data.forEach(article => {
+
     const item = document.createElement("div");
     item.className = "story";
 
@@ -415,28 +523,59 @@ async function loadStories() {
     edit.textContent = "Edit";
     edit.onclick = () => editStory(article);
 
-    item.append(title,status,document.createElement("br"),edit);
+    item.append(
+      title,
+      status,
+      document.createElement("br"),
+      edit
+    );
+
     container.appendChild(item);
+
   });
 }
 
+
+// EDIT STORY
+
 function editStory(article) {
+
   editingArticle = article.id;
 
-  document.getElementById("articleTitle").value = article.title || "";
-  document.getElementById("articleExcerpt").value = article.excerpt || "";
-  document.getElementById("articleCategory").value = article.category || "";
-  document.getElementById("articleSection").value = article.section || "latest";
-  document.getElementById("articleImage").value = article.image_url || "";
-  document.getElementById("articleContent").value = article.content || "";
+  document.getElementById("articleTitle").value =
+    article.title || "";
 
-  document.getElementById("editorHeading").textContent = "Edit Story";
+  document.getElementById("articleExcerpt").value =
+    article.excerpt || "";
+
+  document.getElementById("articleCategory").value =
+    article.category || "";
+
+  document.getElementById("articleSection").value =
+    article.section || "latest";
+
+  document.getElementById("articleImage").value =
+    article.image_url || "";
+
+  document.getElementById("articleContent").value =
+    article.content || "";
+
+  document.getElementById("editorHeading").textContent =
+    "Edit Story";
+
   document.getElementById("cancelEdit").classList.remove("hidden");
 
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
+
+// RESET EDITOR
+
 function resetEditor() {
+
   editingArticle = null;
 
   document.getElementById("articleTitle").value = "";
@@ -446,25 +585,51 @@ function resetEditor() {
   document.getElementById("articleImage").value = "";
   document.getElementById("articleContent").value = "";
 
-  document.getElementById("editorHeading").textContent = "Write a Story";
+  document.getElementById("editorHeading").textContent =
+    "Write a Story";
+
   document.getElementById("cancelEdit").classList.add("hidden");
 }
 
+
+// LOGOUT
+
 async function logout() {
+
   await db.auth.signOut();
+
+  currentUser = null;
+  currentProfile = null;
+  currentJournalist = null;
+
   location.reload();
 }
 
-db.auth.onAuthStateChange(async (event, session) => {
+
+// AUTHENTICATION LISTENER
+
+db.auth.onAuthStateChange((event, session) => {
+
   if (session && !currentUser) {
-    setTimeout(loadDashboard,0);
+    setTimeout(() => loadDashboard(), 0);
   }
+
 });
 
+
+// CHECK EXISTING SESSION
+
 (async function start() {
+
   const { data } = await db.auth.getSession();
-  if (data.session) await loadDashboard();
+
+  if (data.session) {
+    await loadDashboard();
+  }
+
 })();
+
 </script>
+
 </body>
 </html>
