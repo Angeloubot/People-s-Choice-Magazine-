@@ -132,24 +132,26 @@ small { color:#666; }
     <input id="articleTitle" placeholder="Article title">
     <input id="articleExcerpt" placeholder="Short article description">
 
-    <select id="articleCategory">
-      <option value="">Select category</option>
-      <option>Entertainment</option>
-      <option>Music</option>
-      <option>Celebrity News</option>
-      <option>Community</option>
-      <option>Events</option>
-      <option>Interviews</option>
-      <option>National News</option>
-      <option>Local News</option>
-    </select>
+    <select id="articleCategory" required>
+  <option value="">Select category</option>
+  <option value="entertainment">Entertainment</option>
+  <option value="music">Music</option>
+  <option value="celebrity">Celebrity News</option>
+  <option value="community">Community</option>
+  <option value="events">Events</option>
+  <option value="interviews">Interviews</option>
+  <option value="national">National News</option>
+  <option value="local">Local News</option>
+</select>
 
-    <select id="articleSection">
-      <option value="latest">Latest Stories</option>
-      <option value="local">Local News</option>
-      <option value="national">National News</option>
-      <option value="creators">Creators</option>
-    </select>
+<select id="articleSection" required>
+  <option value="latest">Latest Stories</option>
+  <option value="local">Local News</option>
+  <option value="national">National News</option>
+  <option value="creators">Creators</option>
+  <option value="entertainment">Entertainment</option>
+  <option value="music">Music</option>
+</select>
 
     <input id="articleImage" placeholder="Cover image URL (optional)">
     <textarea id="articleContent" placeholder="Write your full story here..."></textarea>
