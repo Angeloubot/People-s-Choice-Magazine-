@@ -4,20 +4,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171717">
+
+<title>People's Choice Magazine | Your Voice, Your Stories</title>
+
 <meta name="description" content="People's Choice Magazine brings you Zimbabwean entertainment news, music, artists, interviews and community stories.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://peopleschoicemagazine.co.zw/">
+
+<!-- FACEBOOK, WHATSAPP AND OPEN GRAPH -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="People's Choice Magazine | Zimbabwe Entertainment & News">
+<meta property="og:site_name" content="People's Choice Magazine">
+<meta property="og:title" content="People's Choice Magazine | Your Voice, Your Stories">
 <meta property="og:description" content="Discover Zimbabwean artists, entertainment, interviews, music and community stories.">
 <meta property="og:url" content="https://peopleschoicemagazine.co.zw/">
-<meta property="og:site_name" content="People's Choice Magazine">
-<meta name="twitter:card" content="summary_large_image">
 <meta property="og:image" content="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200">
+<meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="People's Choice Magazine">
+
+<!-- X / TWITTER -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="People's Choice Magazine">
+<meta name="twitter:description" content="Your Voice. Your Stories. Your Choice.">
 <meta name="twitter:image" content="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200">
-<title>People's Choice Magazine | Zimbabwe News, Music & Entertainment</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+
 <style>
 :root{--pink:#e7549b;--dark:#171717;--light:#fff1f7;--white:#fff;--gray:#777;--page:#f5f5f5}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -253,12 +268,24 @@ return String(value||"content")
 }
 
 function makeShareUrl(type,item){
-return SITE_ORIGIN+"/share/"+type+"/"+makeSlug(item.title)+"-"+encodeURIComponent(String(item.id||""))+"/";
+const allowedTypes=["article","song","video"];
+
+if(!allowedTypes.includes(type)||!item.id){
+return SITE_ORIGIN+"/";
+}
+
+return SITE_ORIGIN+"/share/"+type+"/"+makeSlug(item.title)+"-"+encodeURIComponent(String(item.id))+"/";
 }
 
 /* Scroll to a shared song or video after its content loads. */
 function scrollToSharedItem(){
-const hash=decodeURIComponent(location.hash.slice(1));
+let hash="";
+
+try{
+hash=decodeURIComponent(location.hash.slice(1));
+}catch{
+return;
+}
 
 if(!/^(song|video)-[a-z0-9-]+$/i.test(hash))return;
 
@@ -276,7 +303,8 @@ async function shareContent(button){
 const id=button.dataset.shareId;
 const title=button.dataset.shareTitle||"People's Choice Magazine";
 const description=button.dataset.shareDescription||"Discover this on People's Choice Magazine.";
-const url=makeShareUrl(button.dataset.shareType,{id,title});
+const type=button.dataset.shareType;
+const url=makeShareUrl(type,{id,title});
 
 const payload={
 title,
