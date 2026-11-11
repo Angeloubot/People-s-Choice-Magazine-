@@ -238,9 +238,8 @@ function safeImage(v){
 return /^https?:\/\//i.test(String(v||""))?String(v):fallbackImage;
 }
 
-/* CLEAN SHARING LINKS
-   These routes require the Cloudflare Worker to be configured.
-*/
+/* GITHUB ACTIONS STATIC SHARING PAGES */
+
 const SITE_ORIGIN="https://peopleschoicemagazine.co.zw";
 
 function makeSlug(value){
@@ -254,7 +253,23 @@ return String(value||"content")
 }
 
 function makeShareUrl(type,item){
-return SITE_ORIGIN+"/share/"+type+"/"+makeSlug(item.title)+"-"+encodeURIComponent(String(item.id||""));
+return SITE_ORIGIN+"/share/"+type+"/"+makeSlug(item.title)+"-"+encodeURIComponent(String(item.id||""))+"/";
+}
+
+/* Scroll to a shared song or video after its content loads. */
+function scrollToSharedItem(){
+const hash=decodeURIComponent(location.hash.slice(1));
+
+if(!/^(song|video)-[a-z0-9-]+$/i.test(hash))return;
+
+const target=$(hash);
+
+if(target){
+target.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+}
 }
 
 async function shareContent(button){
@@ -577,6 +592,8 @@ data-share-image="${esc(safeImage(s.cover_url))}">SHARE SONG ↗</button>
 </div>
 </div>
 </article>`).join("");
+
+requestAnimationFrame(scrollToSharedItem);
 }
 
 async function loadMusicChart(){
@@ -682,7 +699,7 @@ const poster=/^https?:\/\//i.test(v.thumbnail_url||"")
 const type=/\.webm(\?|$)/i.test(v.video_url)?"video/webm":"video/mp4";
 
 return `
-<article class="video-card">
+<article class="video-card" id="video-${esc(v.id)}">
 <video controls playsinline preload="metadata" ${poster}>
 <source src="${esc(v.video_url)}" type="${type}">
 Your browser does not support video.
@@ -702,6 +719,8 @@ data-share-image="${esc(safeImage(v.thumbnail_url))}">SHARE VIDEO ↗</button>
 </div>
 </article>`;
 }).filter(Boolean).join("")||'<div class="video-empty">No playable videos are available.</div>';
+
+requestAnimationFrame(scrollToSharedItem);
 }
 
 async function initialiseHomepage(){
