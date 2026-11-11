@@ -1,36 +1,35 @@
 name: Generate Social Sharing Previews
 
 on:
-workflow_dispatch:
-schedule:
-- cron: "*/30 * * * *"
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
 
 permissions:
-contents: write
+  contents: write
 
 jobs:
-generate-previews:
-runs-on: ubuntu-latest
+  generate-previews:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-  - name: Set up Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: 20
+      - name: Generate sharing pages
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: node scripts/generate-social-previews.js
 
-  - name: Generate sharing pages
-    env:
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
-    run: node scripts/generate-social-previews.js
-
-  - name: Save generated pages
-    run: |
-      git config user.name "github-actions[bot]"
-      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      git add share/
-      git diff --cached --quiet || git commit -m "Update social sharing previews"
-      git push
+      - name: Save generated pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add share/
+          git diff --cached --quiet || git commit -m "Update social sharing previews"
+          git push
