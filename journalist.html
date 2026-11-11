@@ -415,8 +415,8 @@ async function saveArticle(status) {
     return alert("Please enter a title, category and story content.");
   }
 
-  if (!/^[a-z0-9-]+$/i.test(article.title.replace(/\s+/g,"-"))) {
-    return alert("Please use a valid article title.");
+  if (article.title.length < 3) {
+  return alert("Article title must contain at least 3 characters.");
   }
 
   const slug = article.title
