@@ -763,6 +763,672 @@ if(error)alert(error.message);else loadSongs();
 }
 $("chartFilterWeek").onchange=()=>{$("chartWeek").value=$("chartFilterWeek").value;loadSongs();};
 
+ /* ==========================================
+   PEOPLE'S CHOICE MAGAZINE - DASHBOARD UPGRADE
+========================================== */
+
+/* ADDITIONAL DASHBOARD TABS */
+const upgradeTabs = [
+  ["design", "Branding & Logo"],
+  ["themes", "Theme Manager"],
+  ["templates", "Template Manager"],
+  ["analytics", "Analytics"],
+  ["media", "Media Library"]
+];
+
+const nav = $("adminNav");
+
+upgradeTabs.forEach(([id, label]) => {
+  const button = document.createElement("button");
+  button.dataset.tab = id;
+  button.textContent = label;
+  nav.append(button);
+  const panel = document.createElement("section");
+  panel.className = "panel tab";
+  panel.id = "tab-" + id;
+  $("dashboard").append(panel);
+});
+
+nav.addEventListener("click", e => {
+  const b = e.target.closest("[data-tab]");
+  if (b) switchTab(b.dataset.tab);
+});
+
+/* BRANDING AND LOGO CONTROLS */
+$("tab-design").innerHTML = `
+<h2>Branding & Logo Studio</h2>
+<p class="help">Adjust your magazine logo and header independently for desktop and mobile.</p>
+
+<label>Desktop logo width (px)</label>
+<input id="desktopLogoWidth" type="number" min="40" max="600">
+
+<label>Mobile logo width (px)</label>
+<input id="mobileLogoWidth" type="number" min="40" max="350">
+
+<label>Desktop header height (px)</label>
+<input id="desktopHeaderHeight" type="number" min="40" max="300">
+
+<label>Mobile header height (px)</label>
+<input id="mobileHeaderHeight" type="number" min="40" max="250">
+
+<label>Header spacing (px)</label>
+<input id="headerSpacing" type="number" min="0" max="100">
+
+<button id="saveBranding">Save Branding Settings</button>
+<div id="brandingMessage" class="notice hidden"></div>
+`;
+
+function loadBrandingSettings() {
+  $("desktopLogoWidth").value = settings.desktop_logo_width || 180;
+  $("mobileLogoWidth").value = settings.mobile_logo_width || 130;
+  $("desktopHeaderHeight").value = settings.desktop_header_height || 100;
+  $("mobileHeaderHeight").value = settings.mobile_header_height || 80;
+  $("headerSpacing").value = settings.header_spacing || 15;
+}
+
+async function saveExtraSettings(changes, messageId) {
+  if (currentRole !== "admin") {
+    msg(messageId, "Administrator permission required.", true);
+    return;
+  }
+
+  try {
+    const next = { ...settings, ...changes };
+
+    const { error } = await db.from("site_settings").upsert({
+      id: "main",
+      settings: next,
+      updated_at: new Date().toISOString()
+    }, { onConflict: "id" });
+
+    if (error) throw error;
+
+    settings = next;
+    msg(messageId, "Settings saved successfully.");
+  } catch (err) {
+    msg(messageId, err.message, true);
+  }
+}
+
+$("saveBranding").onclick = () => {
+  const values = [
+    ["desktopLogoWidth", 40, 600],
+    ["mobileLogoWidth", 40, 350],
+    ["desktopHeaderHeight", 40, 300],
+    ["mobileHeaderHeight", 40, 250],
+    ["headerSpacing", 0, 100]
+  ];
+
+  const changes = {};
+
+  for (const [id, min, max] of values) {
+    const value = Number($(id).value);
+    if (!Number.isFinite(value) || value < min || value > max) {
+      return msg("brandingMessage", "Please enter valid dimensions.", true);
+    }
+  }
+
+  changes.desktop_logo_width = Number($("desktopLogoWidth").value);
+  changes.mobile_logo_width = Number($("mobileLogoWidth").value);
+  changes.desktop_header_height = Number($("desktopHeaderHeight").value);
+  changes.mobile_header_height = Number($("mobileHeaderHeight").value);
+  changes.header_spacing = Number($("headerSpacing").value);
+
+  saveExtraSettings(changes, "brandingMessage");
+};
+
+/* THEME MANAGER */
+$("tab-themes").innerHTML = `
+<h2>Theme & Skin Manager</h2>
+<p class="help">Choose a preset or use your existing colour controls to create a custom theme.</p>
+
+<label>Choose a theme</label>
+<select id="themePreset">
+<option value="classic">Classic Magazine - Pink & Black</option>
+<option value="dark">Dark Edition</option>
+<option value="gold">Elegant Gold</option>
+<option value="blue">Modern Blue</option>
+<option value="custom">Custom Theme</option>
+</select>
+
+<div class="grid">
+<div><label>Primary colour</label><input id="presetPrimary" type="color"></div>
+<div><label>Dark colour</label><input id="presetDark" type="color"></div>
+<div><label>Light colour</label><input id="presetLight" type="color"></div>
+<div><label>Background colour</label><input id="presetBackground" type="color"></div>
+<div><label>Text colour</label><input id="presetText" type="color"></div>
+</div>
+
+<label>Font</label>
+<select id="presetFont">
+<option>Arial</option>
+<option>Georgia</option>
+<option>Verdana</option>
+<option>Tahoma</option>
+<option>Trebuchet MS</option>
+</select>
+
+<div id="themePreview" class="panel">
+<h3>Theme Preview</h3>
+<p>People's Choice Magazine</p>
+<button type="button">Preview Button</button>
+</div>
+
+<button id="previewTheme" class="secondary">Preview Theme</button>
+<button id="activateTheme">Activate Theme</button>
+<div id="themeMessage" class="notice hidden"></div>
+`;
+
+const themePresets = {
+  classic: {
+    primary: "#e7549b",
+    dark: "#171717",
+    light: "#fff1f7",
+    background: "#f5f5f5",
+    text: "#171717",
+    font: "Arial"
+  },
+  dark: {
+    primary: "#e7549b",
+    dark: "#080808",
+    light: "#292929",
+    background: "#151515",
+    text: "#ffffff",
+    font: "Arial"
+  },
+  gold: {
+    primary: "#c6a04a",
+    dark: "#111111",
+    light: "#f6edda",
+    background: "#faf8f2",
+    text: "#171717",
+    font: "Georgia"
+  },
+  blue: {
+    primary: "#2677c9",
+    dark: "#10243b",
+    light: "#eaf3ff",
+    background: "#f4f8fc",
+    text: "#17283a",
+    font: "Arial"
+  }
+};
+
+function getThemeValues() {
+  return {
+    theme_primary: $("presetPrimary").value,
+    theme_dark: $("presetDark").value,
+    theme_light: $("presetLight").value,
+    theme_background: $("presetBackground").value,
+    theme_text: $("presetText").value,
+    font_family: $("presetFont").value
+  };
+}
+
+function showThemePreview() {
+  const t = getThemeValues();
+  const p = $("themePreview");
+
+  p.style.background = t.theme_background;
+  p.style.color = t.theme_text;
+  p.style.fontFamily = t.font_family;
+  p.style.border = "1px solid " + t.theme_primary;
+  p.querySelector("button").style.background = t.theme_primary;
+}
+
+function loadThemePreset(name) {
+  const t = themePresets[name];
+  if (!t) return;
+
+  $("presetPrimary").value = t.primary;
+  $("presetDark").value = t.dark;
+  $("presetLight").value = t.light;
+  $("presetBackground").value = t.background;
+  $("presetText").value = t.text;
+  $("presetFont").value = t.font;
+
+  showThemePreview();
+}
+
+$("themePreset").onchange = () => {
+  if ($("themePreset").value !== "custom") {
+    loadThemePreset($("themePreset").value);
+  }
+};
+
+["presetPrimary", "presetDark", "presetLight", "presetBackground", "presetText", "presetFont"]
+.forEach(id => $(id).addEventListener("input", () => {
+  $("themePreset").value = "custom";
+  showThemePreview();
+}));
+
+$("previewTheme").onclick = showThemePreview;
+
+$("activateTheme").onclick = async () => {
+  const t = getThemeValues();
+
+  const changes = {
+    ...t,
+    active_theme: $("themePreset").value
+  };
+
+  await saveExtraSettings(changes, "themeMessage");
+
+  $("theme_primary").value = t.theme_primary;
+  $("theme_dark").value = t.theme_dark;
+  $("theme_light").value = t.theme_light;
+  $("theme_background").value = t.theme_background;
+  $("theme_text").value = t.theme_text;
+  $("font_family").value = t.font_family;
+};
+
+/* TEMPLATE MANAGER */
+$("tab-templates").innerHTML = `
+<h2>Website Template Manager</h2>
+<p class="help">Choose layout styles for your homepage, articles, chart and videos.</p>
+
+<label>Homepage layout</label>
+<select id="homepageTemplate">
+<option value="magazine">Magazine Grid</option>
+<option value="editorial">Editorial Layout</option>
+<option value="modern">Modern Cards</option>
+</select>
+
+<label>Article layout</label>
+<select id="articleTemplate">
+<option value="classic">Classic Article</option>
+<option value="wide">Wide Feature Article</option>
+<option value="compact">Compact Article</option>
+</select>
+
+<label>Chart layout</label>
+<select id="chartTemplate">
+<option value="list">Ranked List</option>
+<option value="cards">Music Cards</option>
+<option value="compact">Compact Chart</option>
+</select>
+
+<label>Video layout</label>
+<select id="videoTemplate">
+<option value="grid">Video Grid</option>
+<option value="featured">Featured Video</option>
+<option value="compact">Compact Video Cards</option>
+</select>
+
+<button id="saveTemplates">Save Template Choices</button>
+<div id="templateMessage" class="notice hidden"></div>
+`;
+
+function loadTemplates() {
+  $("homepageTemplate").value = settings.homepage_template || "magazine";
+  $("articleTemplate").value = settings.article_template || "classic";
+  $("chartTemplate").value = settings.chart_template || "list";
+  $("videoTemplate").value = settings.video_template || "grid";
+}
+
+$("saveTemplates").onclick = () => saveExtraSettings({
+  homepage_template: $("homepageTemplate").value,
+  article_template: $("articleTemplate").value,
+  chart_template: $("chartTemplate").value,
+  video_template: $("videoTemplate").value
+}, "templateMessage");
+
+/* ANALYTICS */
+$("tab-analytics").innerHTML = `
+<h2>Website Analytics</h2>
+<p class="help">Article view statistics will appear here after view tracking is installed on the public website.</p>
+
+<div class="stats">
+<div class="stat"><strong id="analyticsViews">0</strong><small>Article Views</small></div>
+<div class="stat"><strong id="analyticsArticles">0</strong><small>Articles Published</small></div>
+<div class="stat"><strong id="analyticsPopular">-</strong><small>Most Viewed Article</small></div>
+</div>
+
+<button id="refreshAnalytics">Refresh Analytics</button>
+<div id="analyticsMessage" class="notice hidden"></div>
+<h3>Popular Articles</h3>
+<div id="popularArticles"></div>
+`;
+
+async function loadAnalytics() {
+  if (currentRole !== "admin") return;
+
+  $("popularArticles").textContent = "Loading analytics...";
+
+  try {
+    const { data, error } = await db
+      .from("article_views")
+      .select("article_id");
+
+    if (error) throw error;
+
+    const counts = {};
+
+    (data || []).forEach(v => {
+      counts[v.article_id] = (counts[v.article_id] || 0) + 1;
+    });
+
+    const ranked = Object.entries(counts)
+      .sort((a, b) => b[1] - a[1]);
+
+    $("analyticsViews").textContent = (data || []).length;
+    $("analyticsArticles").textContent =
+      articles.filter(a => a.status === "published").length;
+
+    const popular = articles.find(a => a.id === ranked[0]?.[0]);
+
+    $("analyticsPopular").textContent = popular
+      ? popular.title.slice(0, 20)
+      : "-";
+
+    $("popularArticles").innerHTML = "";
+
+    if (!ranked.length) {
+      $("popularArticles").textContent = "No article views recorded yet.";
+      return;
+    }
+
+    ranked.forEach(([id, count], index) => {
+      const article = articles.find(a => a.id === id);
+      if (!article) return;
+
+      const div = document.createElement("div");
+      div.className = "item";
+
+      const title = document.createElement("strong");
+      title.textContent = (index + 1) + ". " + article.title;
+
+      const views = document.createElement("p");
+      views.textContent = count + " views";
+
+      div.append(title, views);
+      $("popularArticles").append(div);
+    });
+
+    msg("analyticsMessage", "Analytics loaded.");
+  } catch (err) {
+    $("popularArticles").textContent = "Analytics are not available yet.";
+    msg("analyticsMessage",
+      "Analytics table not found or access denied. Install the analytics database code before using this feature.",
+      true
+    );
+  }
+}
+
+$("refreshAnalytics").onclick = loadAnalytics;
+
+/* MEDIA LIBRARY */
+$("tab-media").innerHTML = `
+<h2>Media Library</h2>
+<p class="help">Browse images and videos stored in your magazine's Supabase storage buckets.</p>
+
+<label>Choose media folder</label>
+<select id="mediaBucket">
+<option value="article-images">Magazine Images</option>
+<option value="magazine-videos">Magazine Videos</option>
+</select>
+
+<button id="loadMedia">Load Media</button>
+<div id="mediaMessage" class="notice hidden"></div>
+<div id="mediaList"></div>
+`;
+
+async function loadMediaLibrary() {
+  const bucket = $("mediaBucket").value;
+  $("mediaList").textContent = "Loading media...";
+
+  try {
+    const { data, error } = await db.storage
+      .from(bucket)
+      .list("", {
+        limit: 100,
+        sortBy: { column: "name", order: "desc" }
+      });
+
+    if (error) throw error;
+
+    $("mediaList").innerHTML = "";
+
+    const files = (data || []).filter(f => f.name && !f.id === false);
+
+    if (!files.length) {
+      $("mediaList").textContent =
+        "No files found in this folder. Some folders may require opening their folder path.";
+      return;
+    }
+
+    files.forEach(file => {
+      const path = file.name;
+      const url = db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+
+      const div = document.createElement("div");
+      div.className = "media-item";
+
+      const img = document.createElement("img");
+      img.src = url;
+      img.alt = file.name;
+
+      const info = document.createElement("div");
+      const name = document.createElement("strong");
+      name.textContent = file.name;
+
+      const copy = document.createElement("button");
+      copy.className = "secondary";
+      copy.textContent = "Copy URL";
+      copy.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(url);
+          msg("mediaMessage", "Media URL copied.");
+        } catch {
+          msg("mediaMessage", url);
+        }
+      };
+
+      const open = document.createElement("button");
+      open.className = "secondary";
+      open.textContent = "Open";
+      open.onclick = () => window.open(url, "_blank", "noopener");
+
+      info.append(name, document.createElement("br"), copy, open);
+      div.append(img, info);
+      $("mediaList").append(div);
+    });
+
+    msg("mediaMessage", "Media loaded.");
+  } catch (err) {
+    $("mediaList").textContent = err.message;
+    msg("mediaMessage", err.message, true);
+  }
+}
+
+$("loadMedia").onclick = loadMediaLibrary;
+
+/* HYBRID TOP 5: MANUAL RANKING */
+function getHybridRanking(counts = {}) {
+  const eligible = songs.filter(s => s.is_approved && s.is_active);
+
+  const pinned = eligible
+    .filter(s => Number.isInteger(Number(s.manual_position)) &&
+      Number(s.manual_position) >= 1 &&
+      Number(s.manual_position) <= 5)
+    .sort((a, b) => a.manual_position - b.manual_position);
+
+  const pinnedIds = new Set(pinned.map(s => s.id));
+
+  const automatic = eligible
+    .filter(s => !pinnedIds.has(s.id))
+    .sort((a, b) =>
+      (counts[b.id] || 0) - (counts[a.id] || 0) ||
+      (a.sort_order || 0) - (b.sort_order || 0)
+    );
+
+  const result = [];
+  for (let position = 1; position <= 5; position++) {
+    const manual = pinned.find(s => Number(s.manual_position) === position);
+    result.push(manual || automatic.shift() || null);
+  }
+
+  return result.filter(Boolean);
+}
+
+async function setManualPosition(song, position) {
+  if (currentRole !== "admin") {
+    alert("Administrator permission required.");
+    return;
+  }
+
+  try {
+    const { error } = await db.from("chart_songs")
+      .update({
+        manual_position: position === "" ? null : Number(position),
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", song.id);
+
+    if (error) throw error;
+
+    await loadSongs();
+    msg("chartMessage", "Manual chart position updated.");
+  } catch (err) {
+    msg("chartMessage", err.message, true);
+  }
+}
+
+const originalRenderSongs = renderSongs;
+
+renderSongs = function(counts = {}) {
+  $("chartSongList").innerHTML = "";
+
+  if (!songs.length) {
+    $("chartSongList").textContent = "No songs for this week.";
+    return;
+  }
+
+  const ranking = getHybridRanking(counts);
+  const rankingIds = new Set(ranking.map(s => s.id));
+
+  const remaining = songs
+    .filter(s => !rankingIds.has(s.id))
+    .sort((a, b) =>
+      (counts[b.id] || 0) - (counts[a.id] || 0) ||
+      (a.sort_order || 0) - (b.sort_order || 0)
+    );
+
+  const ordered = [...ranking, ...remaining];
+
+  ordered.forEach((s, i) => {
+    const d = document.createElement("div");
+    d.className = "song";
+
+    const im = document.createElement("img");
+    im.src = s.cover_url || "";
+
+    const info = document.createElement("div");
+    const h = document.createElement("h3");
+    h.textContent = (i + 1) + ". " + s.title;
+
+    const p = document.createElement("p");
+    p.textContent = s.artist + " · Votes: " + (counts[s.id] || 0);
+
+    const status = document.createElement("p");
+    status.className = "help";
+    status.textContent =
+      (s.is_approved ? "Approved" : "Pending") +
+      " · " + (s.is_active ? "Active" : "Inactive");
+
+    const label = document.createElement("label");
+    label.textContent = "Manual chart position";
+
+    const select = document.createElement("select");
+
+    [
+      ["", "Automatic voting position"],
+      ["1", "Position 1"],
+      ["2", "Position 2"],
+      ["3", "Position 3"],
+      ["4", "Position 4"],
+      ["5", "Position 5"]
+    ].forEach(([value, text]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = text;
+      select.append(option);
+    });
+
+    select.value = s.manual_position == null ? "" : String(s.manual_position);
+    select.onchange = () => setManualPosition(s, select.value);
+
+    const ed = document.createElement("button");
+    ed.textContent = "Edit";
+    ed.className = "secondary";
+    ed.onclick = () => editSong(s);
+
+    const ap = document.createElement("button");
+    ap.textContent = s.is_approved ? "Unapprove" : "Approve";
+    ap.className = "success";
+    ap.onclick = () => updateSong(s, { is_approved: !s.is_approved });
+
+    const ac = document.createElement("button");
+    ac.textContent = s.is_active ? "Deactivate" : "Activate";
+    ac.className = "secondary";
+    ac.onclick = () => updateSong(s, { is_active: !s.is_active });
+
+    const del = document.createElement("button");
+    del.textContent = "Delete";
+    del.className = "danger";
+    del.onclick = () => deleteSong(s);
+
+    info.append(h, p, status, label, select, ed, ap, ac, del);
+    d.append(im, info);
+    $("chartSongList").append(d);
+  });
+};
+
+/* LOAD UPGRADE SETTINGS */
+const originalLoadSettings = loadSettings;
+
+loadSettings = async function() {
+  await originalLoadSettings();
+
+  loadBrandingSettings();
+  loadTemplates();
+
+  const active = settings.active_theme || "classic";
+  $("themePreset").value = themePresets[active] ? active : "custom";
+
+  if (themePresets[active]) {
+    loadThemePreset(active);
+  } else {
+    $("presetPrimary").value = settings.theme_primary || "#e7549b";
+    $("presetDark").value = settings.theme_dark || "#171717";
+    $("presetLight").value = settings.theme_light || "#fff1f7";
+    $("presetBackground").value = settings.theme_background || "#f5f5f5";
+    $("presetText").value = settings.theme_text || "#171717";
+    $("presetFont").value = settings.font_family || "Arial";
+    showThemePreview();
+  }
+};
+
+/* ACCESS CONTROL */
+async function openUpgradeTab(name) {
+  if (currentRole !== "admin") return;
+  switchTab(name);
+
+  if (name === "analytics") {
+    await loadAnalytics();
+  }
+
+  if (name === "media") {
+    await loadMediaLibrary();
+  }
+}
+
+upgradeTabs.forEach(([name]) => {
+  const button = nav.querySelector(`[data-tab="${name}"]`);
+  button.addEventListener("click", () => openUpgradeTab(name));
+});
+
+/* END DASHBOARD UPGRADE */ 
 db.auth.onAuthStateChange(event=>{
 if(event==="SIGNED_OUT"){
 currentUser=null;currentRole=null;
