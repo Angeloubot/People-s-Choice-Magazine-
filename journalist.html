@@ -948,8 +948,26 @@ button:hover {
           </div>
 
           <div class="wide">
-            <label>Cover image URL (optional)</label>
-            <input id="articleImage" placeholder="https://example.com/image.jpg">
+  <label>Upload Article Cover Image</label>
+
+  <input
+    type="file"
+    id="articleImageFile"
+    accept="image/jpeg,image/png,image/webp"
+    onchange="previewArticleImage()"
+  >
+
+  <div id="imagePreviewContainer" class="hidden">
+    <p>Image preview:</p>
+    <img
+      id="imagePreview"
+      style="width:100%;max-width:350px;border-radius:12px;display:block;margin-bottom:12px;"
+      alt="Article cover preview"
+    >
+  </div>
+
+  <label>Or enter an image URL (optional)</label>
+  <input id="articleImage" placeholder="https://example.com/image.jpg">
           </div>
 
           <div class="wide">
