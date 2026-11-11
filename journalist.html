@@ -1225,7 +1225,37 @@ async function loadDashboard() {
   await loadStories();
 }
 
+function previewArticleImage() {
+  const file = document.getElementById("articleImageFile").files[0];
+  const container = document.getElementById("imagePreviewContainer");
+  const preview = document.getElementById("imagePreview");
 
+  if (!file) {
+    container.classList.add("hidden");
+    preview.removeAttribute("src");
+    return;
+  }
+
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+  if (!allowedTypes.includes(file.type)) {
+    alert("Please select a JPG, PNG or WEBP image.");
+    document.getElementById("articleImageFile").value = "";
+    container.classList.add("hidden");
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Please choose an image smaller than 5 MB.");
+    document.getElementById("articleImageFile").value = "";
+    container.classList.add("hidden");
+    return;
+  }
+
+  preview.src = URL.createObjectURL(file);
+  container.classList.remove("hidden");
+    }
+  
 // ARTICLE DATA
 
 function getArticlePayload(status) {
