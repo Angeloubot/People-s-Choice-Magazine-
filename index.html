@@ -553,7 +553,7 @@ return;
 }
 
 $("chart-grid").innerHTML=chartSongs.map(s=>`
-<article class="chart-card">
+<article class="chart-card" id="song-${esc(s.id)}">
 <div class="chart-cover-wrap">
 <img class="chart-cover" src="${esc(safeImage(s.cover_url))}" alt="${esc(s.title)} cover artwork" loading="lazy">
 <div class="chart-rank">#${esc(s.rank_position??"")}</div>
