@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
 
 const SITE_URL = "https://peopleschoicemagazine.co.zw";
 const OUTPUT_DIR = "share";
