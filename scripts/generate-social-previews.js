@@ -7,6 +7,7 @@ const SUPABASE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
 
 const SITE_URL = "https://peopleschoicemagazine.co.zw";
 const OUTPUT_DIR = "share";
+const DEFAULT_IMAGE = `${SITE_URL}/logo.png`;
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
   throw new Error("Supabase secrets are missing.");
@@ -22,15 +23,30 @@ function escapeHTML(value = "") {
   })[char]);
 }
 
-function safeImage(url) {
-  try {
-    const parsed = new URL(url);
-    return ["https:", "http:"].includes(parsed.protocol)
-      ? parsed.href
-      : "";
-  } catch {
-    return "";
+function cleanText(value = "", maxLength = 300) {
+  return String(value)
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function safeImage(...values) {
+  for (const value of values) {
+    try {
+      if (!value) continue;
+
+      const parsed = new URL(value);
+
+      if (parsed.protocol === "https:") {
+        return parsed.href;
+      }
+    } catch {
+      continue;
+    }
   }
+
+  return DEFAULT_IMAGE;
 }
 
 function makeSlug(value) {
@@ -69,68 +85,149 @@ async function getData(table, filters) {
 }
 
 function createHTML(item, type, shareUrl, destination) {
-  const titleText = type === "song"
-    ? `${item.title || ""} - ${item.artist || ""}`
-    : item.title || "People's Choice Magazine";
+  const titleText = cleanText(
+    type === "song"
+      ? `${item.title || ""} - ${item.artist || ""}`
+      : item.title || "People's Choice Magazine",
+    150
+  );
 
-  const descriptionText =
+  const descriptionText = cleanText(
     item.excerpt ||
     item.description ||
     (type === "song"
       ? `Listen to ${titleText} on People's Choice Magazine.`
-      : "Discover this on People's Choice Magazine.");
+      : `Discover ${titleText} on People's Choice Magazine.`),
+    300
+  );
 
   const title = escapeHTML(titleText);
   const description = escapeHTML(descriptionText);
-  const image = safeImage(
-    item.image_url || item.cover_url || item.thumbnail_url
+
+  const imageUrl = safeImage(
+    item.image_url,
+    item.cover_url,
+    item.thumbnail_url,
+    item.featured_image,
+    item.cover_image,
+    item.image
   );
+
+  const image = escapeHTML(imageUrl);
+  const safeShareUrl = escapeHTML(shareUrl);
+  const safeDestination = escapeHTML(destination);
+
+  const ogType = type === "article"
+    ? "article"
+    : "website";
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>${title} | People's Choice Magazine</title>
+
 <meta name="description" content="${description}">
 <meta name="robots" content="index,follow,max-image-preview:large">
 
-<meta property="og:type" content="website">
+<meta name="theme-color" content="#171717">
+
+<!-- OPEN GRAPH / WHATSAPP / FACEBOOK -->
+
+<meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="People's Choice Magazine">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${description}">
-<meta property="og:url" content="${escapeHTML(shareUrl)}">
-
-${image ? `
-<meta property="og:image" content="${escapeHTML(image)}">
-<meta property="og:image:secure_url" content="${escapeHTML(image)}">
+<meta property="og:url" content="${safeShareUrl}">
+<meta property="og:image" content="${image}">
+<meta property="og:image:secure_url" content="${image}">
 <meta property="og:image:alt" content="${title}">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="${escapeHTML(image)}">
-` : `
-<meta name="twitter:card" content="summary">
-`}
+<meta property="og:locale" content="en_ZW">
 
+<!-- TWITTER / X -->
+
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${description}">
+<meta name="twitter:image" content="${image}">
+<meta name="twitter:image:alt" content="${title}">
 
-<link rel="canonical" href="${escapeHTML(shareUrl)}">
+<!-- CANONICAL URL -->
 
-<meta http-equiv="refresh" content="1;url=${escapeHTML(destination)}">
+<link rel="canonical" href="${safeShareUrl}">
+
+<!-- WEBSITE ICON -->
+
+<link rel="icon" type="image/png" href="${DEFAULT_IMAGE}">
+
 </head>
-<body>
-<h1>${title}</h1>
-<p>${description}</p>
 
-${image ? `<img src="${escapeHTML(image)}" alt="${title}" style="max-width:100%">` : ""}
+<body style="
+  margin:0;
+  padding:30px 15px;
+  background:#171717;
+  color:white;
+  font-family:Arial,sans-serif;
+  text-align:center;
+">
 
-<p>You are being redirected to People's Choice Magazine.</p>
-<p><a href="${escapeHTML(destination)}">Continue to the content</a></p>
+<main style="
+  max-width:600px;
+  margin:30px auto;
+  padding:25px;
+  background:#222;
+  border-radius:12px;
+">
 
-<script>
-window.location.replace(${JSON.stringify(destination)});
-</script>
+<img
+  src="${image}"
+  alt="${title}"
+  style="
+    width:100%;
+    max-height:350px;
+    object-fit:cover;
+    border-radius:8px;
+  "
+>
+
+<h1 style="font-size:26px;line-height:1.4;">
+${title}
+</h1>
+
+<p style="
+  color:#ccc;
+  font-size:15px;
+  line-height:1.7;
+">
+${description}
+</p>
+
+<p style="margin-top:25px;">
+<a
+  href="${safeDestination}"
+  style="
+    display:inline-block;
+    padding:14px 25px;
+    background:#e91e63;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+    font-weight:bold;
+  "
+>
+Read More
+</a>
+</p>
+
+<p style="font-size:12px;color:#aaa;">
+People's Choice Magazine
+</p>
+
+</main>
+
 </body>
 </html>`;
 }
@@ -199,16 +296,26 @@ async function generate() {
 
       fs.writeFileSync(
         path.join(folder, "index.html"),
-        createHTML(item, collection.type, shareUrl, destination),
+        createHTML(
+          item,
+          collection.type,
+          shareUrl,
+          destination
+        ),
         "utf8"
       );
 
       total++;
-      console.log(`Generated ${collection.type}: ${titleTextForLog(item)}`);
+
+      console.log(
+        `Generated ${collection.type}: ${titleTextForLog(item)}`
+      );
     }
   }
 
-  console.log(`Successfully generated ${total} sharing pages.`);
+  console.log(
+    `Successfully generated ${total} sharing pages.`
+  );
 }
 
 function titleTextForLog(item) {
