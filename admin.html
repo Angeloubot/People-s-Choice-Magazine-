@@ -169,6 +169,49 @@ main{padding:10px}
 </div>
 
 <hr>
+<h3>Social Sharing Preview</h3>
+<p class="help">This image is intended for WhatsApp and social-media link previews. The public homepage must also read this setting for it to appear in previews.</p>
+<label>Website preview image URL</label>
+<input id="og_image_url" type="url" placeholder="https://...">
+<label>Or upload preview image (max 5MB)</label>
+<input id="og_image_file" type="file" accept="image/*">
+<img id="og_image_preview" class="preview hidden" alt="Website preview image">
+
+<hr>
+<h3>Homepage Section Header Backgrounds</h3>
+<p class="help">Add an image URL or upload an image for each section header. The public homepage must support these settings for the backgrounds to display.</p>
+<div class="grid">
+  <div>
+    <label>Top 5 Chart header background URL</label>
+    <input id="chart_header_bg" type="url" placeholder="https://...">
+    <label>Upload Top 5 header background</label>
+    <input id="chart_header_bg_file" type="file" accept="image/*">
+    <img id="chart_header_bg_preview" class="preview hidden" alt="Top 5 header background preview">
+  </div>
+  <div>
+    <label>Creators' Corner header background URL</label>
+    <input id="creators_header_bg" type="url" placeholder="https://...">
+    <label>Upload Creators' Corner background</label>
+    <input id="creators_header_bg_file" type="file" accept="image/*">
+    <img id="creators_header_bg_preview" class="preview hidden" alt="Creators header background preview">
+  </div>
+  <div>
+    <label>Local News header background URL</label>
+    <input id="local_header_bg" type="url" placeholder="https://...">
+    <label>Upload Local News background</label>
+    <input id="local_header_bg_file" type="file" accept="image/*">
+    <img id="local_header_bg_preview" class="preview hidden" alt="Local News header background preview">
+  </div>
+  <div>
+    <label>National News header background URL</label>
+    <input id="national_header_bg" type="url" placeholder="https://...">
+    <label>Upload National News background</label>
+    <input id="national_header_bg_file" type="file" accept="image/*">
+    <img id="national_header_bg_preview" class="preview hidden" alt="National News header background preview">
+  </div>
+</div>
+
+<hr>
 <h3>Contact and Footer</h3>
 <div class="grid">
 <div><label>Contact Heading</label><input id="contact_heading"></div>
@@ -356,7 +399,7 @@ row.append(name,up,down);box.append(row);
 }
 function swapOrder(i,delta){const j=i+delta;if(j<0||j>=sectionOrder.length)return;[sectionOrder[i],sectionOrder[j]]=[sectionOrder[j],sectionOrder[i]];buildOrder();}
 
-const settingIds=["site_name","tagline","topbar_text","logo_url","theme_primary","theme_dark","theme_light","theme_background","theme_text","font_family","latest_heading","creators_heading","local_heading","national_heading","chart_heading","chart_description","creators_description","local_description","national_description","contact_heading","contact_email","contact_intro","contact_description","footer_text"];
+const settingIds=["site_name","tagline","topbar_text","logo_url","og_image_url","chart_header_bg","creators_header_bg","local_header_bg","national_header_bg","theme_primary","theme_dark","theme_light","theme_background","theme_text","font_family","latest_heading","creators_heading","local_heading","national_heading","chart_heading","chart_description","creators_description","local_description","national_description","contact_heading","contact_email","contact_intro","contact_description","footer_text"];
 
 async function loadSettings(){
 const {data,error}=await db.from("site_settings").select("settings").eq("id","main").maybeSingle();
@@ -367,6 +410,8 @@ settingIds.forEach(id=>{if($(id))$(id).value=settings[id]??($(id).type==="color"
 if(!settings[id])$(id).value=({theme_primary:"#e7549b",theme_dark:"#171717",theme_light:"#fff1f7",theme_background:"#f5f5f5",theme_text:"#171717"})[id];
 });
 preview("logo_preview",settings.logo_url);
+preview("og_image_preview",settings.og_image_url);
+["chart_header_bg","creators_header_bg","local_header_bg","national_header_bg"].forEach(id=>preview(id+"_preview",settings[id]));
 visibility=settings.section_visibility||{};
 sectionOrder=Array.isArray(settings.section_order)?settings.section_order.slice():sectionKeys.map(x=>x[0]);
 sectionKeys.forEach(([k])=>{if(!sectionOrder.includes(k))sectionOrder.push(k)});
@@ -380,6 +425,31 @@ if(!f.type.startsWith("image/")||f.size>5*1024*1024){msg("settingsMessage","Logo
 preview("logo_preview",URL.createObjectURL(f));
 });
 
+const extraImageFields = [
+  ["og_image_url","og_image_file","og_image_preview","Website preview image"],
+  ["chart_header_bg","chart_header_bg_file","chart_header_bg_preview","Top 5 header background"],
+  ["creators_header_bg","creators_header_bg_file","creators_header_bg_preview","Creators' Corner background"],
+  ["local_header_bg","local_header_bg_file","local_header_bg_preview","Local News background"],
+  ["national_header_bg","national_header_bg_file","national_header_bg_preview","National News background"]
+];
+
+extraImageFields.forEach(([urlId,fileId,previewId,label])=>{
+  $(urlId).addEventListener("input",()=>{
+    const value=$(urlId).value.trim();
+    preview(previewId,validUrl(value)?value:"");
+  });
+  $(fileId).addEventListener("change",()=>{
+    const file=$(fileId).files[0];
+    if(!file)return;
+    if(!file.type.startsWith("image/")||file.size>5*1024*1024){
+      msg("settingsMessage",label+" must be an image smaller than 5MB.",true);
+      $(fileId).value="";
+      return;
+    }
+    preview(previewId,URL.createObjectURL(file));
+  });
+});
+
 $("settingsForm").onsubmit=async e=>{
 e.preventDefault();if(currentRole!=="admin")return msg("settingsMessage","Administrator permission required.",true);
 const b=$("settingsSave");b.disabled=true;b.textContent="Saving...";
@@ -389,10 +459,23 @@ settingIds.forEach(id=>next[id]=$(id).value.trim());
 const f=$("logo_file").files[0];
 if(f)next.logo_url=await upload("article-images","site/"+currentUser.id+"/"+Date.now()+"-"+fileName(f.name),f);
 else if(next.logo_url&&!validUrl(next.logo_url))throw Error("Enter a valid logo URL.");
+
+for(const [urlId,fileId,previewId,label] of extraImageFields){
+  const imageFile=$(fileId).files[0];
+  if(imageFile){
+    next[urlId]=await upload("article-images","site/"+currentUser.id+"/"+Date.now()+"-"+fileName(imageFile.name),imageFile);
+  }else if(next[urlId]&&!validUrl(next[urlId])){
+    throw Error("Enter a valid URL for "+label+".");
+  }
+}
 next.section_visibility=visibility;next.section_order=sectionOrder;
 const {error}=await db.from("site_settings").upsert({id:"main",settings:next,updated_at:new Date().toISOString()},{onConflict:"id"});
 if(error)throw error;
 settings=next;$("logo_file").value="";preview("logo_preview",next.logo_url);
+extraImageFields.forEach(([urlId,fileId,previewId])=>{
+  $(fileId).value="";
+  preview(previewId,next[urlId]);
+});
 msg("settingsMessage","All website settings saved. Refresh your public homepage to see the changes.");
 }catch(err){msg("settingsMessage",err.message,true)}
 finally{b.disabled=false;b.textContent="Save All Website Changes";}
