@@ -195,9 +195,30 @@ async function loadArticle() {
     return;
   }
 
+  // GET THE SELECTED JOURNALIST'S NAME
+  let journalistName = "";
+
+  if (data.journalist_id) {
+    const {data: journalist, error: journalistError} = await db
+      .from("journalists")
+      .select("name")
+      .eq("id", data.journalist_id)
+      .maybeSingle();
+
+    if (!journalistError && journalist) {
+      journalistName = journalist.name || "";
+    }
+  }
+
   const title = safe(data.title);
   const excerpt = safe(data.excerpt);
-  const author = safe(data.author || "People's Choice Editorial Team");
+
+  const author = safe(
+    journalistName ||
+    data.author ||
+    "People's Choice Editorial Team"
+  );
+
   const category = safe(data.category);
   const section = safe(data.section);
   const content = safe(data.content);
@@ -213,16 +234,20 @@ async function loadArticle() {
     <div class="category">${category} · ${section}</div>
     <h1>${title}</h1>
     <div class="meta">By ${author} · ${date}</div>
+
     ${image ? `<img class="featured" src="${image}" alt="${title}">` : ""}
+
     <div class="excerpt">${excerpt}</div>
     <div class="content">${content}</div>
 
     <div class="share">
       <strong>Share this story:</strong><br>
+
       <a target="_blank" rel="noopener"
         href="https://wa.me/?text=${encodeURIComponent(title + " " + url)}">
         WhatsApp
       </a>
+
       <a target="_blank" rel="noopener"
         href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}">
         Facebook
