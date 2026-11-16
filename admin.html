@@ -1,12 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171717">
 <title>People's Choice | Admin Dashboard</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="config.js"></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f5f7;color:#222}
@@ -56,7 +59,14 @@ hr{border:0;border-top:1px solid #eee;margin:22px 0}
 .tab.active{display:block}
 .order-row{display:flex;gap:10px;align-items:center;margin:8px 0}
 .order-row select{margin:0}
-.order-row button{min-width:42px}
+.screenshot-card{border:1px solid #eee;border-radius:9px;padding:14px;margin:14px 0;display:grid;grid-template-columns:180px 1fr;gap:15px;align-items:start}
+.screenshot-card img{width:100%;max-height:180px;object-fit:contain;background:#f5f5f5;border-radius:6px}
+.screenshot-card h3{margin-top:3px}
+.screenshot-actions{display:flex;gap:5px;flex-wrap:wrap}
+.studio-intro{background:#fff1f7;padding:15px;border-radius:8px;line-height:1.6}
+.studio-status{padding:13px;background:#f5f5f5;border-radius:6px;white-space:pre-wrap;line-height:1.5;margin-top:12px}
+.studio-progress{height:7px;background:#eee;border-radius:10px;overflow:hidden;margin:12px 0}
+.studio-progress span{display:block;height:100%;width:0;background:#e7549b;transition:width .2s}
 @media(max-width:600px){
 main{padding:10px}
 .panel{padding:16px}
@@ -67,9 +77,12 @@ main{padding:10px}
 .media-item img,.media-item video{width:100%;height:180px}
 .song{grid-template-columns:65px 1fr}
 .song img{width:65px;height:65px}
+.screenshot-card{grid-template-columns:1fr}
+.screenshot-card img{max-height:220px}
 }
 </style>
 </head>
+
 <body>
 <header>
 <strong>PEOPLE'S <span>CHOICE</span> MAGAZINE</strong>
@@ -77,6 +90,7 @@ main{padding:10px}
 </header>
 
 <main>
+
 <section id="login" class="panel">
 <h2>Admin & Editor Login</h2>
 <p>Sign in to manage your magazine.</p>
@@ -91,6 +105,7 @@ main{padding:10px}
 </section>
 
 <section id="dashboard" class="hidden">
+
 <div class="panel">
 <div class="row">
 <div>
@@ -145,11 +160,7 @@ main{padding:10px}
 <div>
 <label>Website font</label>
 <select id="font_family">
-<option>Arial</option>
-<option>Georgia</option>
-<option>Verdana</option>
-<option>Tahoma</option>
-<option>Trebuchet MS</option>
+<option>Arial</option><option>Georgia</option><option>Verdana</option><option>Tahoma</option><option>Trebuchet MS</option>
 </select>
 </div>
 </div>
@@ -170,7 +181,6 @@ main{padding:10px}
 
 <hr>
 <h3>Social Sharing Preview</h3>
-<p class="help">This image is intended for WhatsApp and social-media link previews. The public homepage must also read this setting for it to appear in previews.</p>
 <label>Website preview image URL</label>
 <input id="og_image_url" type="url" placeholder="https://...">
 <label>Or upload preview image (max 5MB)</label>
@@ -179,36 +189,35 @@ main{padding:10px}
 
 <hr>
 <h3>Homepage Section Header Backgrounds</h3>
-<p class="help">Add an image URL or upload an image for each section header. The public homepage must support these settings for the backgrounds to display.</p>
 <div class="grid">
-  <div>
-    <label>Top 5 Chart header background URL</label>
-    <input id="chart_header_bg" type="url" placeholder="https://...">
-    <label>Upload Top 5 header background</label>
-    <input id="chart_header_bg_file" type="file" accept="image/*">
-    <img id="chart_header_bg_preview" class="preview hidden" alt="Top 5 header background preview">
-  </div>
-  <div>
-    <label>Creators' Corner header background URL</label>
-    <input id="creators_header_bg" type="url" placeholder="https://...">
-    <label>Upload Creators' Corner background</label>
-    <input id="creators_header_bg_file" type="file" accept="image/*">
-    <img id="creators_header_bg_preview" class="preview hidden" alt="Creators header background preview">
-  </div>
-  <div>
-    <label>Local News header background URL</label>
-    <input id="local_header_bg" type="url" placeholder="https://...">
-    <label>Upload Local News background</label>
-    <input id="local_header_bg_file" type="file" accept="image/*">
-    <img id="local_header_bg_preview" class="preview hidden" alt="Local News header background preview">
-  </div>
-  <div>
-    <label>National News header background URL</label>
-    <input id="national_header_bg" type="url" placeholder="https://...">
-    <label>Upload National News background</label>
-    <input id="national_header_bg_file" type="file" accept="image/*">
-    <img id="national_header_bg_preview" class="preview hidden" alt="National News header background preview">
-  </div>
+<div>
+<label>Top 5 Chart header background URL</label>
+<input id="chart_header_bg" type="url">
+<label>Upload Top 5 header background</label>
+<input id="chart_header_bg_file" type="file" accept="image/*">
+<img id="chart_header_bg_preview" class="preview hidden" alt="Top 5 header background">
+</div>
+<div>
+<label>Creators' Corner header background URL</label>
+<input id="creators_header_bg" type="url">
+<label>Upload Creators' Corner background</label>
+<input id="creators_header_bg_file" type="file" accept="image/*">
+<img id="creators_header_bg_preview" class="preview hidden" alt="Creators header background">
+</div>
+<div>
+<label>Local News header background URL</label>
+<input id="local_header_bg" type="url">
+<label>Upload Local News background</label>
+<input id="local_header_bg_file" type="file" accept="image/*">
+<img id="local_header_bg_preview" class="preview hidden" alt="Local News header background">
+</div>
+<div>
+<label>National News header background URL</label>
+<input id="national_header_bg" type="url">
+<label>Upload National News background</label>
+<input id="national_header_bg_file" type="file" accept="image/*">
+<img id="national_header_bg_preview" class="preview hidden" alt="National News header background">
+</div>
 </div>
 
 <hr>
@@ -227,7 +236,6 @@ main{padding:10px}
 
 <hr>
 <h3>Homepage section order</h3>
-<p class="help">Use the arrows to rearrange sections. The homepage follows this order.</p>
 <div id="sectionOrder"></div>
 
 <button type="submit" id="settingsSave">Save All Website Changes</button>
@@ -299,7 +307,7 @@ main{padding:10px}
 
 <section class="panel tab" id="tab-chart">
 <h2>Top 5 Music Chart Manager</h2>
-<p class="help">Vote totals are visible here to administrators only. The public RPC must return song ranking data without vote counts.</p>
+<p class="help">Vote totals are visible here to administrators only.</p>
 <div class="stats">
 <div class="stat"><strong id="chartSongCount">0</strong><small>Songs</small></div>
 <div class="stat"><strong id="chartApprovedCount">0</strong><small>Approved & active</small></div>
@@ -313,7 +321,7 @@ main{padding:10px}
 <label>Chart week (Monday)</label><input id="chartWeek" type="date" required>
 <label>Cover image URL</label><input id="chartCoverUrl" type="url">
 <label>Upload cover (max 5MB)</label><input id="chartCoverFile" type="file" accept="image/*">
-<label>Audio preview / streaming URL</label><input id="chartStreamUrl" type="url" placeholder="Use a direct audio URL for in-page playback; a normal streaming page opens externally">
+<label>Audio preview / streaming URL</label><input id="chartStreamUrl" type="url">
 <label>Sort order for ties</label><input id="chartSortOrder" type="number" value="0">
 <div class="check"><input id="chartApproved" type="checkbox"><label for="chartApproved">Approve song</label></div>
 <div class="check"><input id="chartActive" type="checkbox" checked><label for="chartActive">Active</label></div>
@@ -354,29 +362,57 @@ main{padding:10px}
 </div>
 <div id="articles">Loading articles...</div>
 </section>
+
 </section>
 </main>
 
 <script>
 "use strict";
+
 if(!window.supabase||typeof SUPABASE_URL==="undefined"||typeof SUPABASE_PUBLISHABLE_KEY==="undefined")throw new Error("Check Supabase library and config.js.");
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY),$=id=>document.getElementById(id);
-let currentUser=null,currentRole=null,settings={},articles=[],banners=[],videos=[],songs=[],editArticleId=null,articleImage=null,editBannerId=null,bannerImage=null,editVideoId=null,videoUrl=null,thumbnailUrl=null,editSongId=null,coverUrl=null;
+
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const $=id=>document.getElementById(id);
+
+let currentUser=null,currentRole=null,settings={},articles=[],banners=[],videos=[],songs=[];
+let editArticleId=null,articleImage=null,editBannerId=null,bannerImage=null;
+let editVideoId=null,videoUrl=null,thumbnailUrl=null,editSongId=null,coverUrl=null;
+
 const sectionKeys=[["latest","Latest stories"],["top-stories","Top stories sidebar"],["chart","Top 5 music chart"],["creators","Creators' Corner"],["local","Local news"],["national","National news"],["contact","Contact section"],["hero","Hero banner"]];
 let sectionOrder=sectionKeys.map(x=>x[0]),visibility={};
 
-function msg(id,t,bad=false){$(id).textContent=t;$(id).style.color=bad?"#b42318":"#222";$(id).classList.remove("hidden");}
-function validUrl(v){try{return ["http:","https:"].includes(new URL(v).protocol)}catch{return false}}
+function msg(id,t,bad=false){
+$(id).textContent=t;
+$(id).style.color=bad?"#b42318":"#222";
+$(id).classList.remove("hidden");
+}
+function validUrl(v){
+try{return ["http:","https:"].includes(new URL(v).protocol)}catch{return false}
+}
 function fileName(n){return n.replace(/[^a-zA-Z0-9._-]/g,"-")}
-async function upload(bucket,path,file){const {error}=await db.storage.from(bucket).upload(path,file,{upsert:false});if(error)throw error;return db.storage.from(bucket).getPublicUrl(path).data.publicUrl;}
-function preview(id,url){if(url){$(id).src=url;$(id).classList.remove("hidden")}else{$(id).removeAttribute("src");$(id).classList.add("hidden")}}
-function monday(){const d=new Date(),day=d.getDay();d.setDate(d.getDate()+(day===0?-6:1-day));return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
+async function upload(bucket,path,file){
+const {error}=await db.storage.from(bucket).upload(path,file,{upsert:false});
+if(error)throw error;
+return db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+}
+function preview(id,url){
+if(url){$(id).src=url;$(id).classList.remove("hidden")}
+else{$(id).removeAttribute("src");$(id).classList.add("hidden")}
+}
+function monday(){
+const d=new Date(),day=d.getDay();
+d.setDate(d.getDate()+(day===0?-6:1-day));
+return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
 
 function switchTab(name){
 document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.id==="tab-"+name));
 document.querySelectorAll("#adminNav button").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
 }
-$("adminNav").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b)switchTab(b.dataset.tab)});
+$("adminNav").addEventListener("click",e=>{
+const b=e.target.closest("[data-tab]");
+if(b)switchTab(b.dataset.tab);
+});
 
 function buildVisibility(){
 const box=$("visibilityControls");box.innerHTML="";
@@ -384,20 +420,26 @@ sectionKeys.forEach(([key,label])=>{
 const wrap=document.createElement("div");wrap.className="check";
 const input=document.createElement("input");input.type="checkbox";input.id="vis_"+key;input.checked=visibility[key]!==false;
 const l=document.createElement("label");l.htmlFor=input.id;l.textContent=label+" visible";
-wrap.append(input,l);box.append(wrap);input.onchange=()=>visibility[key]=input.checked;
+wrap.append(input,l);box.append(wrap);
+input.onchange=()=>visibility[key]=input.checked;
 });
 }
 function buildOrder(){
 const box=$("sectionOrder");box.innerHTML="";
 sectionOrder.forEach((key,i)=>{
 const row=document.createElement("div");row.className="order-row";
-const name=document.createElement("strong");name.textContent=(i+1)+". "+(sectionKeys.find(x=>x[0]===key)?.[1]||key);
+const name=document.createElement("strong");
+name.textContent=(i+1)+". "+(sectionKeys.find(x=>x[0]===key)?.[1]||key);
 const up=document.createElement("button");up.textContent="↑";up.className="secondary";up.disabled=i===0;up.onclick=()=>swapOrder(i,-1);
 const down=document.createElement("button");down.textContent="↓";down.className="secondary";down.disabled=i===sectionOrder.length-1;down.onclick=()=>swapOrder(i,1);
 row.append(name,up,down);box.append(row);
 });
 }
-function swapOrder(i,delta){const j=i+delta;if(j<0||j>=sectionOrder.length)return;[sectionOrder[i],sectionOrder[j]]=[sectionOrder[j],sectionOrder[i]];buildOrder();}
+function swapOrder(i,delta){
+const j=i+delta;if(j<0||j>=sectionOrder.length)return;
+[sectionOrder[i],sectionOrder[j]]=[sectionOrder[j],sectionOrder[i]];
+buildOrder();
+}
 
 const settingIds=["site_name","tagline","topbar_text","logo_url","og_image_url","chart_header_bg","creators_header_bg","local_header_bg","national_header_bg","theme_primary","theme_dark","theme_light","theme_background","theme_text","font_family","latest_heading","creators_heading","local_heading","national_heading","chart_heading","chart_description","creators_description","local_description","national_description","contact_heading","contact_email","contact_intro","contact_description","footer_text"];
 
@@ -405,7 +447,9 @@ async function loadSettings(){
 const {data,error}=await db.from("site_settings").select("settings").eq("id","main").maybeSingle();
 if(error){msg("settingsMessage","Could not load settings: "+error.message,true);return;}
 settings=data?.settings||{};
-settingIds.forEach(id=>{if($(id))$(id).value=settings[id]??($(id).type==="color"?"#171717":"");});
+settingIds.forEach(id=>{
+if($(id))$(id).value=settings[id]??($(id).type==="color"?"#171717":"");
+});
 ["theme_primary","theme_dark","theme_light","theme_background","theme_text"].forEach(id=>{
 if(!settings[id])$(id).value=({theme_primary:"#e7549b",theme_dark:"#171717",theme_light:"#fff1f7",theme_background:"#f5f5f5",theme_text:"#171717"})[id];
 });
@@ -421,37 +465,39 @@ buildVisibility();buildOrder();
 $("logo_url").addEventListener("input",()=>preview("logo_preview",validUrl($("logo_url").value)?$("logo_url").value:""));
 $("logo_file").addEventListener("change",()=>{
 const f=$("logo_file").files[0];if(!f)return;
-if(!f.type.startsWith("image/")||f.size>5*1024*1024){msg("settingsMessage","Logo must be an image smaller than 5MB.",true);$("logo_file").value="";return;}
+if(!f.type.startsWith("image/")||f.size>5*1024*1024){
+msg("settingsMessage","Logo must be an image smaller than 5MB.",true);
+$("logo_file").value="";return;
+}
 preview("logo_preview",URL.createObjectURL(f));
 });
 
-const extraImageFields = [
-  ["og_image_url","og_image_file","og_image_preview","Website preview image"],
-  ["chart_header_bg","chart_header_bg_file","chart_header_bg_preview","Top 5 header background"],
-  ["creators_header_bg","creators_header_bg_file","creators_header_bg_preview","Creators' Corner background"],
-  ["local_header_bg","local_header_bg_file","local_header_bg_preview","Local News background"],
-  ["national_header_bg","national_header_bg_file","national_header_bg_preview","National News background"]
+const extraImageFields=[
+["og_image_url","og_image_file","og_image_preview","Website preview image"],
+["chart_header_bg","chart_header_bg_file","chart_header_bg_preview","Top 5 header background"],
+["creators_header_bg","creators_header_bg_file","creators_header_bg_preview","Creators' Corner background"],
+["local_header_bg","local_header_bg_file","local_header_bg_preview","Local News background"],
+["national_header_bg","national_header_bg_file","national_header_bg_preview","National News background"]
 ];
 
 extraImageFields.forEach(([urlId,fileId,previewId,label])=>{
-  $(urlId).addEventListener("input",()=>{
-    const value=$(urlId).value.trim();
-    preview(previewId,validUrl(value)?value:"");
-  });
-  $(fileId).addEventListener("change",()=>{
-    const file=$(fileId).files[0];
-    if(!file)return;
-    if(!file.type.startsWith("image/")||file.size>5*1024*1024){
-      msg("settingsMessage",label+" must be an image smaller than 5MB.",true);
-      $(fileId).value="";
-      return;
-    }
-    preview(previewId,URL.createObjectURL(file));
-  });
+$(urlId).addEventListener("input",()=>{
+const value=$(urlId).value.trim();
+preview(previewId,validUrl(value)?value:"");
+});
+$(fileId).addEventListener("change",()=>{
+const file=$(fileId).files[0];if(!file)return;
+if(!file.type.startsWith("image/")||file.size>5*1024*1024){
+msg("settingsMessage",label+" must be an image smaller than 5MB.",true);
+$(fileId).value="";return;
+}
+preview(previewId,URL.createObjectURL(file));
+});
 });
 
 $("settingsForm").onsubmit=async e=>{
-e.preventDefault();if(currentRole!=="admin")return msg("settingsMessage","Administrator permission required.",true);
+e.preventDefault();
+if(currentRole!=="admin")return msg("settingsMessage","Administrator permission required.",true);
 const b=$("settingsSave");b.disabled=true;b.textContent="Saving...";
 try{
 const next={...settings};
@@ -461,22 +507,17 @@ if(f)next.logo_url=await upload("article-images","site/"+currentUser.id+"/"+Date
 else if(next.logo_url&&!validUrl(next.logo_url))throw Error("Enter a valid logo URL.");
 
 for(const [urlId,fileId,previewId,label] of extraImageFields){
-  const imageFile=$(fileId).files[0];
-  if(imageFile){
-    next[urlId]=await upload("article-images","site/"+currentUser.id+"/"+Date.now()+"-"+fileName(imageFile.name),imageFile);
-  }else if(next[urlId]&&!validUrl(next[urlId])){
-    throw Error("Enter a valid URL for "+label+".");
-  }
+const imageFile=$(fileId).files[0];
+if(imageFile){
+next[urlId]=await upload("article-images","site/"+currentUser.id+"/"+Date.now()+"-"+fileName(imageFile.name),imageFile);
+}else if(next[urlId]&&!validUrl(next[urlId]))throw Error("Enter a valid URL for "+label+".");
 }
 next.section_visibility=visibility;next.section_order=sectionOrder;
 const {error}=await db.from("site_settings").upsert({id:"main",settings:next,updated_at:new Date().toISOString()},{onConflict:"id"});
 if(error)throw error;
 settings=next;$("logo_file").value="";preview("logo_preview",next.logo_url);
-extraImageFields.forEach(([urlId,fileId,previewId])=>{
-  $(fileId).value="";
-  preview(previewId,next[urlId]);
-});
-msg("settingsMessage","All website settings saved. Refresh your public homepage to see the changes.");
+extraImageFields.forEach(([urlId,fileId,previewId])=>{$(fileId).value="";preview(previewId,next[urlId]);});
+msg("settingsMessage","All website settings saved.");
 }catch(err){msg("settingsMessage",err.message,true)}
 finally{b.disabled=false;b.textContent="Save All Website Changes";}
 };
@@ -497,10 +538,14 @@ if(pe||!p){$("loginMessage").textContent="Could not load your profile. Contact t
 currentUser=user;currentRole=p.role;
 $("userInfo").textContent=(p.full_name||user.email)+" · "+String(p.role).toUpperCase();
 $("login").classList.add("hidden");$("dashboard").classList.remove("hidden");
+
 if(currentRole==="admin"){
 await Promise.all([loadSettings(),loadBanners(),loadVideos(),initChart()]);
 }else{
-["website","banners","videos","chart"].forEach(t=>document.querySelector(`[data-tab="${t}"]`).classList.add("hidden"));
+["website","banners","videos","chart","screenshots"].forEach(t=>{
+const button=document.querySelector(`[data-tab="${t}"]`);
+if(button)button.classList.add("hidden");
+});
 }
 await loadJournalists();await loadArticles();
 }
@@ -508,7 +553,9 @@ async function loadJournalists(){
 const {data,error}=await db.from("journalists").select("id,name").order("name");
 if(error){console.warn(error);return;}
 $("journalist").innerHTML='<option value="">No journalist selected</option>';
-(data||[]).forEach(j=>{const o=document.createElement("option");o.value=j.id;o.textContent=j.name;$("journalist").append(o);});
+(data||[]).forEach(j=>{
+const o=document.createElement("option");o.value=j.id;o.textContent=j.name;$("journalist").append(o);
+});
 }
 
 /* ARTICLE MANAGER */
@@ -549,6 +596,7 @@ $("totalCount").textContent=articles.length;
 $("publishedCount").textContent=articles.filter(a=>a.status==="published").length;
 $("draftCount").textContent=articles.filter(a=>a.status==="draft").length;
 renderArticles();
+if(currentRole==="admin")refreshScreenshotArticleOptions();
 }
 function renderArticles(){
 const q=$("searchArticles").value.toLowerCase(),st=$("statusFilter").value,cat=$("categoryFilter").value;
@@ -759,9 +807,13 @@ finally{b.disabled=false;}
 };
 
 /* TOP 5 CHART MANAGER */
-async function initChart(){const w=monday();$("chartWeek").value=w;$("chartFilterWeek").value=w;await loadSongs();}
+async function initChart(){
+const w=monday();$("chartWeek").value=w;$("chartFilterWeek").value=w;
+await loadSongs();
+}
 async function loadSongs(){
-const week=$("chartFilterWeek").value||monday();$("chartSongList").textContent="Loading...";
+const week=$("chartFilterWeek").value||monday();
+$("chartSongList").textContent="Loading...";
 const [sr,vr]=await Promise.all([
 db.from("chart_songs").select("*").eq("chart_week",week).order("sort_order").order("created_at"),
 db.from("song_votes").select("song_id,user_id").eq("chart_week",week)
@@ -846,125 +898,77 @@ if(error)alert(error.message);else loadSongs();
 }
 $("chartFilterWeek").onchange=()=>{$("chartWeek").value=$("chartFilterWeek").value;loadSongs();};
 
- /* ==========================================
-   PEOPLE'S CHOICE MAGAZINE - DASHBOARD UPGRADE
-========================================== */
-
-/* ADDITIONAL DASHBOARD TABS */
-const upgradeTabs = [
-  ["design", "Branding & Logo"],
-  ["themes", "Theme Manager"],
-  ["templates", "Template Manager"],
-  ["analytics", "Analytics"],
-  ["media", "Media Library"]
+/* DASHBOARD UPGRADE TABS */
+const upgradeTabs=[
+["design","Branding & Logo"],
+["themes","Theme Manager"],
+["templates","Template Manager"],
+["analytics","Analytics"],
+["media","Media Library"],
+["screenshots","Screenshot Studio"]
 ];
 
-const nav = $("adminNav");
+const nav=$("adminNav");
 
-upgradeTabs.forEach(([id, label]) => {
-  const button = document.createElement("button");
-  button.dataset.tab = id;
-  button.textContent = label;
-  nav.append(button);
-  const panel = document.createElement("section");
-  panel.className = "panel tab";
-  panel.id = "tab-" + id;
-  $("dashboard").append(panel);
+upgradeTabs.forEach(([id,label])=>{
+const button=document.createElement("button");
+button.dataset.tab=id;button.textContent=label;nav.append(button);
+const panel=document.createElement("section");
+panel.className="panel tab";panel.id="tab-"+id;
+$("dashboard").append(panel);
 });
 
-nav.addEventListener("click", e => {
-  const b = e.target.closest("[data-tab]");
-  if (b) switchTab(b.dataset.tab);
+nav.addEventListener("click",e=>{
+const b=e.target.closest("[data-tab]");
+if(b)switchTab(b.dataset.tab);
 });
 
-/* BRANDING AND LOGO CONTROLS */
-$("tab-design").innerHTML = `
+/* BRANDING */
+$("tab-design").innerHTML=`
 <h2>Branding & Logo Studio</h2>
 <p class="help">Adjust your magazine logo and header independently for desktop and mobile.</p>
-
-<label>Desktop logo width (px)</label>
-<input id="desktopLogoWidth" type="number" min="40" max="600">
-
-<label>Mobile logo width (px)</label>
-<input id="mobileLogoWidth" type="number" min="40" max="350">
-
-<label>Desktop header height (px)</label>
-<input id="desktopHeaderHeight" type="number" min="40" max="300">
-
-<label>Mobile header height (px)</label>
-<input id="mobileHeaderHeight" type="number" min="40" max="250">
-
-<label>Header spacing (px)</label>
-<input id="headerSpacing" type="number" min="0" max="100">
-
+<label>Desktop logo width (px)</label><input id="desktopLogoWidth" type="number" min="40" max="600">
+<label>Mobile logo width (px)</label><input id="mobileLogoWidth" type="number" min="40" max="350">
+<label>Desktop header height (px)</label><input id="desktopHeaderHeight" type="number" min="40" max="300">
+<label>Mobile header height (px)</label><input id="mobileHeaderHeight" type="number" min="40" max="250">
+<label>Header spacing (px)</label><input id="headerSpacing" type="number" min="0" max="100">
 <button id="saveBranding">Save Branding Settings</button>
-<div id="brandingMessage" class="notice hidden"></div>
-`;
+<div id="brandingMessage" class="notice hidden"></div>`;
 
-function loadBrandingSettings() {
-  $("desktopLogoWidth").value = settings.desktop_logo_width || 180;
-  $("mobileLogoWidth").value = settings.mobile_logo_width || 130;
-  $("desktopHeaderHeight").value = settings.desktop_header_height || 100;
-  $("mobileHeaderHeight").value = settings.mobile_header_height || 80;
-  $("headerSpacing").value = settings.header_spacing || 15;
+function loadBrandingSettings(){
+$("desktopLogoWidth").value=settings.desktop_logo_width||180;
+$("mobileLogoWidth").value=settings.mobile_logo_width||130;
+$("desktopHeaderHeight").value=settings.desktop_header_height||100;
+$("mobileHeaderHeight").value=settings.mobile_header_height||80;
+$("headerSpacing").value=settings.header_spacing||15;
 }
-
-async function saveExtraSettings(changes, messageId) {
-  if (currentRole !== "admin") {
-    msg(messageId, "Administrator permission required.", true);
-    return;
-  }
-
-  try {
-    const next = { ...settings, ...changes };
-
-    const { error } = await db.from("site_settings").upsert({
-      id: "main",
-      settings: next,
-      updated_at: new Date().toISOString()
-    }, { onConflict: "id" });
-
-    if (error) throw error;
-
-    settings = next;
-    msg(messageId, "Settings saved successfully.");
-  } catch (err) {
-    msg(messageId, err.message, true);
-  }
+async function saveExtraSettings(changes,messageId){
+if(currentRole!=="admin"){msg(messageId,"Administrator permission required.",true);return;}
+try{
+const next={...settings,...changes};
+const {error}=await db.from("site_settings").upsert({id:"main",settings:next,updated_at:new Date().toISOString()},{onConflict:"id"});
+if(error)throw error;
+settings=next;msg(messageId,"Settings saved successfully.");
+}catch(err){msg(messageId,err.message,true);}
 }
-
-$("saveBranding").onclick = () => {
-  const values = [
-    ["desktopLogoWidth", 40, 600],
-    ["mobileLogoWidth", 40, 350],
-    ["desktopHeaderHeight", 40, 300],
-    ["mobileHeaderHeight", 40, 250],
-    ["headerSpacing", 0, 100]
-  ];
-
-  const changes = {};
-
-  for (const [id, min, max] of values) {
-    const value = Number($(id).value);
-    if (!Number.isFinite(value) || value < min || value > max) {
-      return msg("brandingMessage", "Please enter valid dimensions.", true);
-    }
-  }
-
-  changes.desktop_logo_width = Number($("desktopLogoWidth").value);
-  changes.mobile_logo_width = Number($("mobileLogoWidth").value);
-  changes.desktop_header_height = Number($("desktopHeaderHeight").value);
-  changes.mobile_header_height = Number($("mobileHeaderHeight").value);
-  changes.header_spacing = Number($("headerSpacing").value);
-
-  saveExtraSettings(changes, "brandingMessage");
+$("saveBranding").onclick=()=>{
+const values=[["desktopLogoWidth",40,600],["mobileLogoWidth",40,350],["desktopHeaderHeight",40,300],["mobileHeaderHeight",40,250],["headerSpacing",0,100]];
+const changes={};
+for(const [id,min,max] of values){
+const value=Number($(id).value);
+if(!Number.isFinite(value)||value<min||value>max)return msg("brandingMessage","Please enter valid dimensions.",true);
+}
+changes.desktop_logo_width=Number($("desktopLogoWidth").value);
+changes.mobile_logo_width=Number($("mobileLogoWidth").value);
+changes.desktop_header_height=Number($("desktopHeaderHeight").value);
+changes.mobile_header_height=Number($("mobileHeaderHeight").value);
+changes.header_spacing=Number($("headerSpacing").value);
+saveExtraSettings(changes,"brandingMessage");
 };
 
 /* THEME MANAGER */
-$("tab-themes").innerHTML = `
+$("tab-themes").innerHTML=`
 <h2>Theme & Skin Manager</h2>
-<p class="help">Choose a preset or use your existing colour controls to create a custom theme.</p>
-
 <label>Choose a theme</label>
 <select id="themePreset">
 <option value="classic">Classic Magazine - Pink & Black</option>
@@ -973,7 +977,6 @@ $("tab-themes").innerHTML = `
 <option value="blue">Modern Blue</option>
 <option value="custom">Custom Theme</option>
 </select>
-
 <div class="grid">
 <div><label>Primary colour</label><input id="presetPrimary" type="color"></div>
 <div><label>Dark colour</label><input id="presetDark" type="color"></div>
@@ -981,544 +984,672 @@ $("tab-themes").innerHTML = `
 <div><label>Background colour</label><input id="presetBackground" type="color"></div>
 <div><label>Text colour</label><input id="presetText" type="color"></div>
 </div>
-
 <label>Font</label>
-<select id="presetFont">
-<option>Arial</option>
-<option>Georgia</option>
-<option>Verdana</option>
-<option>Tahoma</option>
-<option>Trebuchet MS</option>
-</select>
-
-<div id="themePreview" class="panel">
-<h3>Theme Preview</h3>
-<p>People's Choice Magazine</p>
-<button type="button">Preview Button</button>
-</div>
-
+<select id="presetFont"><option>Arial</option><option>Georgia</option><option>Verdana</option><option>Tahoma</option><option>Trebuchet MS</option></select>
+<div id="themePreview" class="panel"><h3>Theme Preview</h3><p>People's Choice Magazine</p><button type="button">Preview Button</button></div>
 <button id="previewTheme" class="secondary">Preview Theme</button>
 <button id="activateTheme">Activate Theme</button>
-<div id="themeMessage" class="notice hidden"></div>
-`;
+<div id="themeMessage" class="notice hidden"></div>`;
 
-const themePresets = {
-  classic: {
-    primary: "#e7549b",
-    dark: "#171717",
-    light: "#fff1f7",
-    background: "#f5f5f5",
-    text: "#171717",
-    font: "Arial"
-  },
-  dark: {
-    primary: "#e7549b",
-    dark: "#080808",
-    light: "#292929",
-    background: "#151515",
-    text: "#ffffff",
-    font: "Arial"
-  },
-  gold: {
-    primary: "#c6a04a",
-    dark: "#111111",
-    light: "#f6edda",
-    background: "#faf8f2",
-    text: "#171717",
-    font: "Georgia"
-  },
-  blue: {
-    primary: "#2677c9",
-    dark: "#10243b",
-    light: "#eaf3ff",
-    background: "#f4f8fc",
-    text: "#17283a",
-    font: "Arial"
-  }
+const themePresets={
+classic:{primary:"#e7549b",dark:"#171717",light:"#fff1f7",background:"#f5f5f5",text:"#171717",font:"Arial"},
+dark:{primary:"#e7549b",dark:"#080808",light:"#292929",background:"#151515",text:"#ffffff",font:"Arial"},
+gold:{primary:"#c6a04a",dark:"#111111",light:"#f6edda",background:"#faf8f2",text:"#171717",font:"Georgia"},
+blue:{primary:"#2677c9",dark:"#10243b",light:"#eaf3ff",background:"#f4f8fc",text:"#17283a",font:"Arial"}
 };
-
-function getThemeValues() {
-  return {
-    theme_primary: $("presetPrimary").value,
-    theme_dark: $("presetDark").value,
-    theme_light: $("presetLight").value,
-    theme_background: $("presetBackground").value,
-    theme_text: $("presetText").value,
-    font_family: $("presetFont").value
-  };
+function getThemeValues(){
+return{theme_primary:$("presetPrimary").value,theme_dark:$("presetDark").value,theme_light:$("presetLight").value,theme_background:$("presetBackground").value,theme_text:$("presetText").value,font_family:$("presetFont").value};
 }
-
-function showThemePreview() {
-  const t = getThemeValues();
-  const p = $("themePreview");
-
-  p.style.background = t.theme_background;
-  p.style.color = t.theme_text;
-  p.style.fontFamily = t.font_family;
-  p.style.border = "1px solid " + t.theme_primary;
-  p.querySelector("button").style.background = t.theme_primary;
+function showThemePreview(){
+const t=getThemeValues(),p=$("themePreview");
+p.style.background=t.theme_background;p.style.color=t.theme_text;p.style.fontFamily=t.font_family;
+p.style.border="1px solid "+t.theme_primary;p.querySelector("button").style.background=t.theme_primary;
 }
-
-function loadThemePreset(name) {
-  const t = themePresets[name];
-  if (!t) return;
-
-  $("presetPrimary").value = t.primary;
-  $("presetDark").value = t.dark;
-  $("presetLight").value = t.light;
-  $("presetBackground").value = t.background;
-  $("presetText").value = t.text;
-  $("presetFont").value = t.font;
-
-  showThemePreview();
+function loadThemePreset(name){
+const t=themePresets[name];if(!t)return;
+$("presetPrimary").value=t.primary;$("presetDark").value=t.dark;$("presetLight").value=t.light;
+$("presetBackground").value=t.background;$("presetText").value=t.text;$("presetFont").value=t.font;
+showThemePreview();
 }
-
-$("themePreset").onchange = () => {
-  if ($("themePreset").value !== "custom") {
-    loadThemePreset($("themePreset").value);
-  }
-};
-
-["presetPrimary", "presetDark", "presetLight", "presetBackground", "presetText", "presetFont"]
-.forEach(id => $(id).addEventListener("input", () => {
-  $("themePreset").value = "custom";
-  showThemePreview();
-}));
-
-$("previewTheme").onclick = showThemePreview;
-
-$("activateTheme").onclick = async () => {
-  const t = getThemeValues();
-
-  const changes = {
-    ...t,
-    active_theme: $("themePreset").value
-  };
-
-  await saveExtraSettings(changes, "themeMessage");
-
-  $("theme_primary").value = t.theme_primary;
-  $("theme_dark").value = t.theme_dark;
-  $("theme_light").value = t.theme_light;
-  $("theme_background").value = t.theme_background;
-  $("theme_text").value = t.theme_text;
-  $("font_family").value = t.font_family;
+$("themePreset").onchange=()=>{if($("themePreset").value!=="custom")loadThemePreset($("themePreset").value);};
+["presetPrimary","presetDark","presetLight","presetBackground","presetText","presetFont"].forEach(id=>$(id).addEventListener("input",()=>{$("themePreset").value="custom";showThemePreview();}));
+$("previewTheme").onclick=showThemePreview;
+$("activateTheme").onclick=async()=>{
+const t=getThemeValues();
+await saveExtraSettings({...t,active_theme:$("themePreset").value},"themeMessage");
+$("theme_primary").value=t.theme_primary;$("theme_dark").value=t.theme_dark;
+$("theme_light").value=t.theme_light;$("theme_background").value=t.theme_background;
+$("theme_text").value=t.theme_text;$("font_family").value=t.font_family;
 };
 
 /* TEMPLATE MANAGER */
-$("tab-templates").innerHTML = `
+$("tab-templates").innerHTML=`
 <h2>Website Template Manager</h2>
-<p class="help">Choose layout styles for your homepage, articles, chart and videos.</p>
-
 <label>Homepage layout</label>
-<select id="homepageTemplate">
-<option value="magazine">Magazine Grid</option>
-<option value="editorial">Editorial Layout</option>
-<option value="modern">Modern Cards</option>
-</select>
-
+<select id="homepageTemplate"><option value="magazine">Magazine Grid</option><option value="editorial">Editorial Layout</option><option value="modern">Modern Cards</option></select>
 <label>Article layout</label>
-<select id="articleTemplate">
-<option value="classic">Classic Article</option>
-<option value="wide">Wide Feature Article</option>
-<option value="compact">Compact Article</option>
-</select>
-
+<select id="articleTemplate"><option value="classic">Classic Article</option><option value="wide">Wide Feature Article</option><option value="compact">Compact Article</option></select>
 <label>Chart layout</label>
-<select id="chartTemplate">
-<option value="list">Ranked List</option>
-<option value="cards">Music Cards</option>
-<option value="compact">Compact Chart</option>
-</select>
-
+<select id="chartTemplate"><option value="list">Ranked List</option><option value="cards">Music Cards</option><option value="compact">Compact Chart</option></select>
 <label>Video layout</label>
-<select id="videoTemplate">
-<option value="grid">Video Grid</option>
-<option value="featured">Featured Video</option>
-<option value="compact">Compact Video Cards</option>
-</select>
-
+<select id="videoTemplate"><option value="grid">Video Grid</option><option value="featured">Featured Video</option><option value="compact">Compact Video Cards</option></select>
 <button id="saveTemplates">Save Template Choices</button>
-<div id="templateMessage" class="notice hidden"></div>
-`;
+<div id="templateMessage" class="notice hidden"></div>`;
 
-function loadTemplates() {
-  $("homepageTemplate").value = settings.homepage_template || "magazine";
-  $("articleTemplate").value = settings.article_template || "classic";
-  $("chartTemplate").value = settings.chart_template || "list";
-  $("videoTemplate").value = settings.video_template || "grid";
+function loadTemplates(){
+$("homepageTemplate").value=settings.homepage_template||"magazine";
+$("articleTemplate").value=settings.article_template||"classic";
+$("chartTemplate").value=settings.chart_template||"list";
+$("videoTemplate").value=settings.video_template||"grid";
 }
-
-$("saveTemplates").onclick = () => saveExtraSettings({
-  homepage_template: $("homepageTemplate").value,
-  article_template: $("articleTemplate").value,
-  chart_template: $("chartTemplate").value,
-  video_template: $("videoTemplate").value
-}, "templateMessage");
+$("saveTemplates").onclick=()=>saveExtraSettings({
+homepage_template:$("homepageTemplate").value,
+article_template:$("articleTemplate").value,
+chart_template:$("chartTemplate").value,
+video_template:$("videoTemplate").value
+},"templateMessage");
 
 /* ANALYTICS */
-$("tab-analytics").innerHTML = `
+$("tab-analytics").innerHTML=`
 <h2>Website Analytics</h2>
 <p class="help">Article view statistics will appear here after view tracking is installed on the public website.</p>
-
 <div class="stats">
 <div class="stat"><strong id="analyticsViews">0</strong><small>Article Views</small></div>
 <div class="stat"><strong id="analyticsArticles">0</strong><small>Articles Published</small></div>
 <div class="stat"><strong id="analyticsPopular">-</strong><small>Most Viewed Article</small></div>
 </div>
-
 <button id="refreshAnalytics">Refresh Analytics</button>
 <div id="analyticsMessage" class="notice hidden"></div>
-<h3>Popular Articles</h3>
-<div id="popularArticles"></div>
-`;
+<h3>Popular Articles</h3><div id="popularArticles"></div>`;
 
-async function loadAnalytics() {
-  if (currentRole !== "admin") return;
-
-  $("popularArticles").textContent = "Loading analytics...";
-
-  try {
-    const { data, error } = await db
-      .from("article_views")
-      .select("article_id");
-
-    if (error) throw error;
-
-    const counts = {};
-
-    (data || []).forEach(v => {
-      counts[v.article_id] = (counts[v.article_id] || 0) + 1;
-    });
-
-    const ranked = Object.entries(counts)
-      .sort((a, b) => b[1] - a[1]);
-
-    $("analyticsViews").textContent = (data || []).length;
-    $("analyticsArticles").textContent =
-      articles.filter(a => a.status === "published").length;
-
-    const popular = articles.find(a => a.id === ranked[0]?.[0]);
-
-    $("analyticsPopular").textContent = popular
-      ? popular.title.slice(0, 20)
-      : "-";
-
-    $("popularArticles").innerHTML = "";
-
-    if (!ranked.length) {
-      $("popularArticles").textContent = "No article views recorded yet.";
-      return;
-    }
-
-    ranked.forEach(([id, count], index) => {
-      const article = articles.find(a => a.id === id);
-      if (!article) return;
-
-      const div = document.createElement("div");
-      div.className = "item";
-
-      const title = document.createElement("strong");
-      title.textContent = (index + 1) + ". " + article.title;
-
-      const views = document.createElement("p");
-      views.textContent = count + " views";
-
-      div.append(title, views);
-      $("popularArticles").append(div);
-    });
-
-    msg("analyticsMessage", "Analytics loaded.");
-  } catch (err) {
-    $("popularArticles").textContent = "Analytics are not available yet.";
-    msg("analyticsMessage",
-      "Analytics table not found or access denied. Install the analytics database code before using this feature.",
-      true
-    );
-  }
+async function loadAnalytics(){
+if(currentRole!=="admin")return;
+$("popularArticles").textContent="Loading analytics...";
+try{
+const {data,error}=await db.from("article_views").select("article_id");
+if(error)throw error;
+const counts={};(data||[]).forEach(v=>counts[v.article_id]=(counts[v.article_id]||0)+1);
+const ranked=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+$("analyticsViews").textContent=(data||[]).length;
+$("analyticsArticles").textContent=articles.filter(a=>a.status==="published").length;
+const popular=articles.find(a=>a.id===ranked[0]?.[0]);
+$("analyticsPopular").textContent=popular?popular.title.slice(0,20):"-";
+$("popularArticles").innerHTML="";
+if(!ranked.length){$("popularArticles").textContent="No article views recorded yet.";return;}
+ranked.forEach(([id,count],index)=>{
+const article=articles.find(a=>a.id===id);if(!article)return;
+const div=document.createElement("div");div.className="item";
+const title=document.createElement("strong");title.textContent=(index+1)+". "+article.title;
+const views=document.createElement("p");views.textContent=count+" views";
+div.append(title,views);$("popularArticles").append(div);
+});
+msg("analyticsMessage","Analytics loaded.");
+}catch(err){
+$("popularArticles").textContent="Analytics are not available yet.";
+msg("analyticsMessage","Analytics table not found or access denied. Install the analytics database code before using this feature.",true);
 }
-
-$("refreshAnalytics").onclick = loadAnalytics;
+}
+$("refreshAnalytics").onclick=loadAnalytics;
 
 /* MEDIA LIBRARY */
-$("tab-media").innerHTML = `
+$("tab-media").innerHTML=`
 <h2>Media Library</h2>
 <p class="help">Browse images and videos stored in your magazine's Supabase storage buckets.</p>
-
 <label>Choose media folder</label>
-<select id="mediaBucket">
-<option value="article-images">Magazine Images</option>
-<option value="magazine-videos">Magazine Videos</option>
-</select>
-
+<select id="mediaBucket"><option value="article-images">Magazine Images</option><option value="magazine-videos">Magazine Videos</option></select>
 <button id="loadMedia">Load Media</button>
-<div id="mediaMessage" class="notice hidden"></div>
-<div id="mediaList"></div>
-`;
+<div id="mediaMessage" class="notice hidden"></div><div id="mediaList"></div>`;
 
-async function loadMediaLibrary() {
-  const bucket = $("mediaBucket").value;
-  $("mediaList").textContent = "Loading media...";
-
-  try {
-    const { data, error } = await db.storage
-      .from(bucket)
-      .list("", {
-        limit: 100,
-        sortBy: { column: "name", order: "desc" }
-      });
-
-    if (error) throw error;
-
-    $("mediaList").innerHTML = "";
-
-    const files = (data || []).filter(f => f.name && !f.id === false);
-
-    if (!files.length) {
-      $("mediaList").textContent =
-        "No files found in this folder. Some folders may require opening their folder path.";
-      return;
-    }
-
-    files.forEach(file => {
-      const path = file.name;
-      const url = db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
-
-      const div = document.createElement("div");
-      div.className = "media-item";
-
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = file.name;
-
-      const info = document.createElement("div");
-      const name = document.createElement("strong");
-      name.textContent = file.name;
-
-      const copy = document.createElement("button");
-      copy.className = "secondary";
-      copy.textContent = "Copy URL";
-      copy.onclick = async () => {
-        try {
-          await navigator.clipboard.writeText(url);
-          msg("mediaMessage", "Media URL copied.");
-        } catch {
-          msg("mediaMessage", url);
-        }
-      };
-
-      const open = document.createElement("button");
-      open.className = "secondary";
-      open.textContent = "Open";
-      open.onclick = () => window.open(url, "_blank", "noopener");
-
-      info.append(name, document.createElement("br"), copy, open);
-      div.append(img, info);
-      $("mediaList").append(div);
-    });
-
-    msg("mediaMessage", "Media loaded.");
-  } catch (err) {
-    $("mediaList").textContent = err.message;
-    msg("mediaMessage", err.message, true);
-  }
+async function loadMediaLibrary(){
+const bucket=$("mediaBucket").value;$("mediaList").textContent="Loading media...";
+try{
+const {data,error}=await db.storage.from(bucket).list("",{limit:100,sortBy:{column:"name",order:"desc"}});
+if(error)throw error;
+$("mediaList").innerHTML="";
+const files=(data||[]).filter(f=>f.name&&f.id);
+if(!files.length){$("mediaList").textContent="No files found in this folder.";return;}
+files.forEach(file=>{
+const path=file.name;
+const url=db.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+const div=document.createElement("div");div.className="media-item";
+const img=document.createElement("img");img.src=url;img.alt=file.name;
+const info=document.createElement("div"),name=document.createElement("strong");name.textContent=file.name;
+const copy=document.createElement("button");copy.className="secondary";copy.textContent="Copy URL";
+copy.onclick=async()=>{try{await navigator.clipboard.writeText(url);msg("mediaMessage","Media URL copied.");}catch{msg("mediaMessage",url);}};
+const open=document.createElement("button");open.className="secondary";open.textContent="Open";open.onclick=()=>window.open(url,"_blank","noopener");
+info.append(name,document.createElement("br"),copy,open);div.append(img,info);$("mediaList").append(div);
+});
+msg("mediaMessage","Media loaded.");
+}catch(err){$("mediaList").textContent=err.message;msg("mediaMessage",err.message,true);}
 }
-
-$("loadMedia").onclick = loadMediaLibrary;
+$("loadMedia").onclick=loadMediaLibrary;
 
 /* HYBRID TOP 5: MANUAL RANKING */
-function getHybridRanking(counts = {}) {
-  const eligible = songs.filter(s => s.is_approved && s.is_active);
-
-  const pinned = eligible
-    .filter(s => Number.isInteger(Number(s.manual_position)) &&
-      Number(s.manual_position) >= 1 &&
-      Number(s.manual_position) <= 5)
-    .sort((a, b) => a.manual_position - b.manual_position);
-
-  const pinnedIds = new Set(pinned.map(s => s.id));
-
-  const automatic = eligible
-    .filter(s => !pinnedIds.has(s.id))
-    .sort((a, b) =>
-      (counts[b.id] || 0) - (counts[a.id] || 0) ||
-      (a.sort_order || 0) - (b.sort_order || 0)
-    );
-
-  const result = [];
-  for (let position = 1; position <= 5; position++) {
-    const manual = pinned.find(s => Number(s.manual_position) === position);
-    result.push(manual || automatic.shift() || null);
-  }
-
-  return result.filter(Boolean);
+function getHybridRanking(counts={}){
+const eligible=songs.filter(s=>s.is_approved&&s.is_active);
+const pinned=eligible.filter(s=>Number.isInteger(Number(s.manual_position))&&Number(s.manual_position)>=1&&Number(s.manual_position)<=5).sort((a,b)=>a.manual_position-b.manual_position);
+const pinnedIds=new Set(pinned.map(s=>s.id));
+const automatic=eligible.filter(s=>!pinnedIds.has(s.id)).sort((a,b)=>(counts[b.id]||0)-(counts[a.id]||0)||(a.sort_order||0)-(b.sort_order||0));
+const result=[];
+for(let position=1;position<=5;position++){
+const manual=pinned.find(s=>Number(s.manual_position)===position);
+result.push(manual||automatic.shift()||null);
 }
-
-async function setManualPosition(song, position) {
-  if (currentRole !== "admin") {
-    alert("Administrator permission required.");
-    return;
-  }
-
-  try {
-    const { error } = await db.from("chart_songs")
-      .update({
-        manual_position: position === "" ? null : Number(position),
-        updated_at: new Date().toISOString()
-      })
-      .eq("id", song.id);
-
-    if (error) throw error;
-
-    await loadSongs();
-    msg("chartMessage", "Manual chart position updated.");
-  } catch (err) {
-    msg("chartMessage", err.message, true);
-  }
+return result.filter(Boolean);
 }
-
-const originalRenderSongs = renderSongs;
-
-renderSongs = function(counts = {}) {
-  $("chartSongList").innerHTML = "";
-
-  if (!songs.length) {
-    $("chartSongList").textContent = "No songs for this week.";
-    return;
-  }
-
-  const ranking = getHybridRanking(counts);
-  const rankingIds = new Set(ranking.map(s => s.id));
-
-  const remaining = songs
-    .filter(s => !rankingIds.has(s.id))
-    .sort((a, b) =>
-      (counts[b.id] || 0) - (counts[a.id] || 0) ||
-      (a.sort_order || 0) - (b.sort_order || 0)
-    );
-
-  const ordered = [...ranking, ...remaining];
-
-  ordered.forEach((s, i) => {
-    const d = document.createElement("div");
-    d.className = "song";
-
-    const im = document.createElement("img");
-    im.src = s.cover_url || "";
-
-    const info = document.createElement("div");
-    const h = document.createElement("h3");
-    h.textContent = (i + 1) + ". " + s.title;
-
-    const p = document.createElement("p");
-    p.textContent = s.artist + " · Votes: " + (counts[s.id] || 0);
-
-    const status = document.createElement("p");
-    status.className = "help";
-    status.textContent =
-      (s.is_approved ? "Approved" : "Pending") +
-      " · " + (s.is_active ? "Active" : "Inactive");
-
-    const label = document.createElement("label");
-    label.textContent = "Manual chart position";
-
-    const select = document.createElement("select");
-
-    [
-      ["", "Automatic voting position"],
-      ["1", "Position 1"],
-      ["2", "Position 2"],
-      ["3", "Position 3"],
-      ["4", "Position 4"],
-      ["5", "Position 5"]
-    ].forEach(([value, text]) => {
-      const option = document.createElement("option");
-      option.value = value;
-      option.textContent = text;
-      select.append(option);
-    });
-
-    select.value = s.manual_position == null ? "" : String(s.manual_position);
-    select.onchange = () => setManualPosition(s, select.value);
-
-    const ed = document.createElement("button");
-    ed.textContent = "Edit";
-    ed.className = "secondary";
-    ed.onclick = () => editSong(s);
-
-    const ap = document.createElement("button");
-    ap.textContent = s.is_approved ? "Unapprove" : "Approve";
-    ap.className = "success";
-    ap.onclick = () => updateSong(s, { is_approved: !s.is_approved });
-
-    const ac = document.createElement("button");
-    ac.textContent = s.is_active ? "Deactivate" : "Activate";
-    ac.className = "secondary";
-    ac.onclick = () => updateSong(s, { is_active: !s.is_active });
-
-    const del = document.createElement("button");
-    del.textContent = "Delete";
-    del.className = "danger";
-    del.onclick = () => deleteSong(s);
-
-    info.append(h, p, status, label, select, ed, ap, ac, del);
-    d.append(im, info);
-    $("chartSongList").append(d);
-  });
+async function setManualPosition(song,position){
+if(currentRole!=="admin")return alert("Administrator permission required.");
+try{
+const {error}=await db.from("chart_songs").update({manual_position:position===""?null:Number(position),updated_at:new Date().toISOString()}).eq("id",song.id);
+if(error)throw error;
+await loadSongs();msg("chartMessage","Manual chart position updated.");
+}catch(err){msg("chartMessage",err.message,true);}
+}
+renderSongs=function(counts={}){
+$("chartSongList").innerHTML="";
+if(!songs.length){$("chartSongList").textContent="No songs for this week.";return;}
+const ranking=getHybridRanking(counts),rankingIds=new Set(ranking.map(s=>s.id));
+const remaining=songs.filter(s=>!rankingIds.has(s.id)).sort((a,b)=>(counts[b.id]||0)-(counts[a.id]||0)||(a.sort_order||0)-(b.sort_order||0));
+[...ranking,...remaining].forEach((s,i)=>{
+const d=document.createElement("div");d.className="song";
+const im=document.createElement("img");im.src=s.cover_url||"";
+const info=document.createElement("div"),h=document.createElement("h3");h.textContent=(i+1)+". "+s.title;
+const p=document.createElement("p");p.textContent=s.artist+" · Votes: "+(counts[s.id]||0);
+const status=document.createElement("p");status.className="help";status.textContent=(s.is_approved?"Approved":"Pending")+" · "+(s.is_active?"Active":"Inactive");
+const label=document.createElement("label");label.textContent="Manual chart position";
+const select=document.createElement("select");
+[["","Automatic voting position"],["1","Position 1"],["2","Position 2"],["3","Position 3"],["4","Position 4"],["5","Position 5"]].forEach(([value,text])=>{
+const option=document.createElement("option");option.value=value;option.textContent=text;select.append(option);
+});
+select.value=s.manual_position==null?"":String(s.manual_position);
+select.onchange=()=>setManualPosition(s,select.value);
+const ed=document.createElement("button");ed.textContent="Edit";ed.className="secondary";ed.onclick=()=>editSong(s);
+const ap=document.createElement("button");ap.textContent=s.is_approved?"Unapprove":"Approve";ap.className="success";ap.onclick=()=>updateSong(s,{is_approved:!s.is_approved});
+const ac=document.createElement("button");ac.textContent=s.is_active?"Deactivate":"Activate";ac.className="secondary";ac.onclick=()=>updateSong(s,{is_active:!s.is_active});
+const del=document.createElement("button");del.textContent="Delete";del.className="danger";del.onclick=()=>deleteSong(s);
+info.append(h,p,status,label,select,ed,ap,ac,del);d.append(im,info);$("chartSongList").append(d);
+});
 };
 
-/* LOAD UPGRADE SETTINGS */
-const originalLoadSettings = loadSettings;
-
-loadSettings = async function() {
-  await originalLoadSettings();
-
-  loadBrandingSettings();
-  loadTemplates();
-
-  const active = settings.active_theme || "classic";
-  $("themePreset").value = themePresets[active] ? active : "custom";
-
-  if (themePresets[active]) {
-    loadThemePreset(active);
-  } else {
-    $("presetPrimary").value = settings.theme_primary || "#e7549b";
-    $("presetDark").value = settings.theme_dark || "#171717";
-    $("presetLight").value = settings.theme_light || "#fff1f7";
-    $("presetBackground").value = settings.theme_background || "#f5f5f5";
-    $("presetText").value = settings.theme_text || "#171717";
-    $("presetFont").value = settings.font_family || "Arial";
-    showThemePreview();
-  }
+/* LOAD EXTRA SETTINGS */
+const originalLoadSettings=loadSettings;
+loadSettings=async function(){
+await originalLoadSettings();
+loadBrandingSettings();loadTemplates();
+const active=settings.active_theme||"classic";
+$("themePreset").value=themePresets[active]?active:"custom";
+if(themePresets[active])loadThemePreset(active);
+else{
+$("presetPrimary").value=settings.theme_primary||"#e7549b";
+$("presetDark").value=settings.theme_dark||"#171717";
+$("presetLight").value=settings.theme_light||"#fff1f7";
+$("presetBackground").value=settings.theme_background||"#f5f5f5";
+$("presetText").value=settings.theme_text||"#171717";
+$("presetFont").value=settings.font_family||"Arial";
+showThemePreview();
+}
 };
 
-/* ACCESS CONTROL */
-async function openUpgradeTab(name) {
-  if (currentRole !== "admin") return;
-  switchTab(name);
+/* =====================================================
+   SCREENSHOT STUDIO
+===================================================== */
 
-  if (name === "analytics") {
-    await loadAnalytics();
-  }
+$("tab-screenshots").innerHTML=`
+<h2>Screenshot Studio</h2>
 
-  if (name === "media") {
-    await loadMediaLibrary();
-  }
+<div class="studio-intro">
+<strong>People's Choice Magazine — Screenshot Studio</strong>
+<p>Capture full-page magazine screenshots, the Top 5 Chart, and individual published articles. Captures can be downloaded to your device and saved in your private screenshot gallery.</p>
+</div>
+
+<hr>
+
+<h3>1. Choose what to capture</h3>
+
+<label>Capture type</label>
+<select id="screenshotType">
+<option value="homepage">Full Homepage</option>
+<option value="top5">Top 5 Music Chart</option>
+<option value="article">Individual Published Article</option>
+</select>
+
+<div id="screenshotArticleWrap" class="hidden">
+<label>Choose published article</label>
+<select id="screenshotArticle">
+<option value="">Loading published articles...</option>
+</select>
+</div>
+
+<hr>
+
+<h3>2. Choose screenshot layout</h3>
+
+<label>Page width</label>
+<select id="screenshotViewport">
+<option value="1440">Desktop — 1440px</option>
+<option value="1200">Laptop — 1200px</option>
+<option value="768">Tablet — 768px</option>
+<option value="390">Mobile — 390px</option>
+</select>
+
+<p class="help">The screenshot captures the complete selected page or section vertically. A branded magazine footer is added to the resulting PNG.</p>
+
+<button id="captureScreenshot">Capture Screenshot</button>
+
+<div class="studio-progress"><span id="screenshotProgress"></span></div>
+<div id="screenshotStatus" class="studio-status">Ready to capture.</div>
+
+<hr>
+
+<h3>3. Screenshot Gallery</h3>
+<p class="help">Saved screenshots are stored in your private Supabase bucket. Only administrators with the required permissions can view them.</p>
+
+<button id="refreshScreenshotGallery" class="secondary">Refresh Gallery</button>
+<div id="screenshotGalleryStatus" class="help"></div>
+<div id="screenshotGallery"></div>
+`;
+
+function refreshScreenshotArticleOptions(){
+const select=$("screenshotArticle");
+if(!select)return;
+const published=articles.filter(a=>a.status==="published");
+select.innerHTML='<option value="">Choose an article</option>';
+published.forEach(a=>{
+const option=document.createElement("option");
+option.value=a.id;
+option.textContent=a.title;
+select.append(option);
+});
 }
 
-upgradeTabs.forEach(([name]) => {
-  const button = nav.querySelector(`[data-tab="${name}"]`);
-  button.addEventListener("click", () => openUpgradeTab(name));
+$("screenshotType").onchange=()=>{
+$("screenshotArticleWrap").classList.toggle("hidden",$("screenshotType").value!=="article");
+};
+
+function setScreenshotStatus(text,progress){
+$("screenshotStatus").textContent=text;
+$("screenshotProgress").style.width=Math.max(0,Math.min(100,progress||0))+"%";
+}
+
+function wait(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+
+async function waitForPageContent(doc,type){
+const selector=type==="top5"?"#music-chart":type==="article"?"#article":"body";
+const start=Date.now();
+while(Date.now()-start<25000){
+const target=doc.querySelector(selector);
+if(target){
+if(type==="article"&&target.innerText.trim().length<50){await wait(500);continue;}
+if(type==="top5"&&target.innerText.trim().length<20){await wait(500);continue;}
+return target;
+}
+await wait(400);
+}
+throw new Error("The selected page content did not load in time. Please check the public page.");
+}
+
+async function prepareImages(doc,win){
+const images=Array.from(doc.images||[]);
+images.forEach(img=>{
+img.loading="eager";
+img.setAttribute("loading","eager");
+});
+const maxHeight=Math.max(doc.documentElement.scrollHeight,doc.body.scrollHeight);
+for(let y=0;y<maxHeight;y+=700){
+win.scrollTo(0,y);
+await wait(100);
+}
+win.scrollTo(0,0);
+await Promise.all(images.map(async img=>{
+try{
+if(!img.complete)await new Promise(resolve=>{
+img.addEventListener("load",resolve,{once:true});
+img.addEventListener("error",resolve,{once:true});
+setTimeout(resolve,5000);
+});
+if(img.decode)await img.decode();
+}catch(e){}
+}));
+try{if(doc.fonts&&doc.fonts.ready)await doc.fonts.ready;}catch(e){}
+await wait(1200);
+}
+
+function downloadBlob(blob,name){
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download=name;
+document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),30000);
+}
+
+function addScreenshotBranding(sourceCanvas){
+const footerHeight=65;
+const result=document.createElement("canvas");
+result.width=sourceCanvas.width;
+result.height=sourceCanvas.height+footerHeight;
+const ctx=result.getContext("2d");
+ctx.fillStyle="#ffffff";
+ctx.fillRect(0,0,result.width,result.height);
+ctx.drawImage(sourceCanvas,0,0);
+ctx.fillStyle="#171717";
+ctx.fillRect(0,sourceCanvas.height,result.width,footerHeight);
+ctx.fillStyle="#e7549b";
+ctx.fillRect(0,sourceCanvas.height,result.width,5);
+const scale=result.width/1440;
+ctx.fillStyle="#ffffff";
+ctx.font=`bold ${Math.max(15,20*scale)}px Arial`;
+ctx.textBaseline="middle";
+ctx.fillText("PEOPLE'S CHOICE MAGAZINE",24*scale,sourceCanvas.height+35*scale);
+ctx.textAlign="right";
+ctx.fillStyle="#dddddd";
+ctx.font=`${Math.max(10,13*scale)}px Arial`;
+ctx.fillText(new Date().toLocaleDateString(),result.width-24*scale,sourceCanvas.height+35*scale);
+return result;
+}
+
+async function createCaptureFrame(url,width){
+const iframe=document.createElement("iframe");
+iframe.setAttribute("aria-hidden","true");
+iframe.style.position="fixed";
+iframe.style.left="-20000px";
+iframe.style.top="0";
+iframe.style.width=width+"px";
+iframe.style.height="1000px";
+iframe.style.border="0";
+iframe.style.background="#ffffff";
+document.body.appendChild(iframe);
+
+try{
+await new Promise((resolve,reject)=>{
+iframe.onload=resolve;
+iframe.onerror=()=>reject(new Error("Could not open the magazine page."));
+iframe.src=url;
+setTimeout(()=>reject(new Error("The magazine page took too long to open.")),30000);
+});
+}catch(error){
+iframe.remove();
+throw error;
+}
+return iframe;
+}
+
+async function captureScreenshot(){
+if(currentRole!=="admin")throw new Error("Administrator access is required.");
+if(!window.html2canvas)throw new Error("Screenshot library did not load. Refresh the dashboard and try again.");
+
+const type=$("screenshotType").value;
+const width=Number($("screenshotViewport").value);
+let article=null;
+let pageUrl;
+let title;
+
+if(type==="homepage"){
+pageUrl=new URL("index.html",location.href).href;
+title="People's Choice Magazine — Homepage";
+}
+if(type==="top5"){
+pageUrl=new URL("index.html",location.href).href;
+title="People's Choice Magazine — Top 5 Chart";
+}
+if(type==="article"){
+const id=$("screenshotArticle").value;
+if(!id)throw new Error("Please choose a published article.");
+article=articles.find(a=>a.id===id&&a.status==="published");
+if(!article)throw new Error("The selected article is no longer published.");
+const u=new URL("article.html",location.href);
+u.searchParams.set("id",article.id);
+pageUrl=u.href;
+title=article.title;
+}
+
+setScreenshotStatus("Opening the magazine page...",10);
+
+const iframe=await createCaptureFrame(pageUrl,width);
+try{
+const win=iframe.contentWindow;
+const doc=iframe.contentDocument;
+if(!doc)throw new Error("Could not access the magazine page.");
+
+await waitForPageContent(doc,type);
+setScreenshotStatus("Loading images and page content...",25);
+await prepareImages(doc,win);
+
+let target;
+if(type==="top5"){
+target=doc.querySelector("#music-chart");
+if(!target)throw new Error("Could not find #music-chart on the homepage.");
+}else{
+target=doc.documentElement;
+}
+
+const fullWidth=Math.max(width,doc.documentElement.scrollWidth,doc.body.scrollWidth);
+const fullHeight=type==="top5"
+?Math.max(target.scrollHeight,target.offsetHeight)
+:Math.max(doc.documentElement.scrollHeight,doc.body.scrollHeight);
+
+if(fullWidth>2500)throw new Error("The capture width is too large.");
+if(fullHeight>30000)throw new Error("This page is too long for a reliable mobile-browser screenshot. Try a narrower page or a shorter section.");
+if(fullWidth*fullHeight>40000000)throw new Error("This capture is too large for your device's available memory. Try a smaller page width.");
+
+setScreenshotStatus("Rendering the full screenshot...",50);
+
+const canvas=await html2canvas(target,{
+backgroundColor:"#ffffff",
+scale:1,
+useCORS:true,
+allowTaint:false,
+logging:false,
+width:type==="top5"?target.scrollWidth:fullWidth,
+height:type==="top5"?fullHeight:fullHeight,
+windowWidth:width,
+windowHeight:Math.max(900,win.innerHeight),
+scrollX:0,
+scrollY:0
 });
 
-/* END DASHBOARD UPGRADE */ 
+if(!canvas.width||!canvas.height)throw new Error("The screenshot image could not be generated.");
+
+setScreenshotStatus("Adding magazine branding...",75);
+const branded=addScreenshotBranding(canvas);
+
+const blob=await new Promise(resolve=>branded.toBlob(resolve,"image/png"));
+if(!blob)throw new Error("Could not create the PNG image.");
+
+const safeTitle=title.replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"").toLowerCase();
+const date=new Date().toISOString().slice(0,10);
+const filename=`peoples-choice-${safeTitle}-${date}.png`;
+
+setScreenshotStatus("Downloading PNG to your device...",85);
+downloadBlob(blob,filename);
+
+setScreenshotStatus("Saving screenshot to your private gallery...",92);
+await saveScreenshotToGallery({
+blob,
+title,
+type,
+pageUrl,
+articleId:article?.id||null,
+filename
+});
+
+setScreenshotStatus("Screenshot captured, downloaded and saved to your gallery.",100);
+await loadScreenshotGallery();
+return true;
+
+}finally{
+iframe.remove();
+}
+}
+
+async function saveScreenshotToGallery({blob,title,type,pageUrl,articleId,filename}){
+const unique=crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(36).slice(2);
+const storagePath=`${new Date().toISOString().slice(0,10)}/${unique}-${filename}`;
+
+const {error:uploadError}=await db.storage
+.from("magazine-screenshots")
+.upload(storagePath,blob,{
+contentType:"image/png",
+upsert:false
+});
+
+if(uploadError)throw uploadError;
+
+const {error:insertError}=await db.from("screenshot_gallery").insert({
+title,
+page_type:type,
+page_url:pageUrl,
+storage_path:storagePath,
+article_id:articleId,
+created_by:currentUser.id
+});
+
+if(insertError){
+await db.storage.from("magazine-screenshots").remove([storagePath]);
+throw insertError;
+}
+}
+
+async function loadScreenshotGallery(){
+if(currentRole!=="admin")return;
+$("screenshotGalleryStatus").textContent="Loading your screenshot gallery...";
+$("screenshotGallery").innerHTML="";
+
+const {data,error}=await db.from("screenshot_gallery")
+.select("*")
+.order("created_at",{ascending:false})
+.limit(50);
+
+if(error){
+$("screenshotGalleryStatus").textContent="Could not load gallery: "+error.message;
+return;
+}
+if(!data||!data.length){
+$("screenshotGalleryStatus").textContent="Your screenshot gallery is empty. Capture your first magazine screenshot above.";
+return;
+}
+
+$("screenshotGalleryStatus").textContent=data.length+" screenshot(s) in your gallery.";
+
+for(const item of data){
+const {data:signed,error:signedError}=await db.storage
+.from("magazine-screenshots")
+.createSignedUrl(item.storage_path,3600);
+
+const card=document.createElement("div");
+card.className="screenshot-card";
+
+const image=document.createElement("img");
+image.alt=item.title||"Magazine screenshot";
+if(!signedError&&signed?.signedUrl)image.src=signed.signedUrl;
+else image.alt="Preview unavailable. Try refreshing the gallery.";
+
+const details=document.createElement("div");
+const heading=document.createElement("h3");
+heading.textContent=item.title||"Magazine screenshot";
+
+const meta=document.createElement("p");
+meta.className="help";
+meta.textContent=(item.page_type||"").toUpperCase()+" · "+new Date(item.created_at).toLocaleString();
+
+const actions=document.createElement("div");
+actions.className="screenshot-actions";
+
+const download=document.createElement("button");
+download.textContent="Download PNG";
+download.className="secondary";
+download.disabled=!!signedError||!signed?.signedUrl;
+download.onclick=async()=>{
+try{
+download.disabled=true;
+const response=await fetch(signed.signedUrl);
+if(!response.ok)throw new Error("Could not download screenshot.");
+const blob=await response.blob();
+const name=(item.title||"magazine-screenshot").replace(/[^a-z0-9]+/gi,"-").toLowerCase()+".png";
+downloadBlob(blob,name);
+}catch(err){alert(err.message);}
+finally{download.disabled=false;}
+};
+
+const open=document.createElement("button");
+open.textContent="Open Preview";
+open.className="secondary";
+open.disabled=!!signedError||!signed?.signedUrl;
+open.onclick=()=>window.open(signed.signedUrl,"_blank","noopener");
+
+const del=document.createElement("button");
+del.textContent="Delete";
+del.className="danger";
+del.onclick=()=>deleteScreenshot(item);
+
+actions.append(download,open,del);
+details.append(heading,meta,actions);
+card.append(image,details);
+$("screenshotGallery").append(card);
+}
+}
+
+async function deleteScreenshot(item){
+if(currentRole!=="admin")return alert("Administrator permission required.");
+if(!confirm("Permanently delete this screenshot from the gallery?"))return;
+
+try{
+const {error:storageError}=await db.storage
+.from("magazine-screenshots")
+.remove([item.storage_path]);
+if(storageError)throw storageError;
+
+const {error:rowError}=await db.from("screenshot_gallery")
+.delete().eq("id",item.id);
+if(rowError)throw rowError;
+
+await loadScreenshotGallery();
+}catch(err){
+alert("Could not delete screenshot: "+err.message);
+}
+}
+
+$("captureScreenshot").onclick=async()=>{
+const button=$("captureScreenshot");
+button.disabled=true;
+try{
+await captureScreenshot();
+}catch(err){
+setScreenshotStatus("Capture failed: "+err.message,0);
+}catchErrorFallback();
+finally{
+button.disabled=false;
+}
+};
+
+function catchErrorFallback(){
+$("screenshotProgress").style.width="0%";
+}
+
+$("refreshScreenshotGallery").onclick=loadScreenshotGallery;
+
+/* ACCESS CONTROL AND UPGRADE TABS */
+async function openUpgradeTab(name){
+if(currentRole!=="admin")return;
+switchTab(name);
+if(name==="analytics")await loadAnalytics();
+if(name==="media")await loadMediaLibrary();
+if(name==="screenshots")await loadScreenshotGallery();
+}
+upgradeTabs.forEach(([name])=>{
+const button=nav.querySelector(`[data-tab="${name}"]`);
+button.addEventListener("click",()=>openUpgradeTab(name));
+});
+
+/* AUTHENTICATION */
 db.auth.onAuthStateChange(event=>{
 if(event==="SIGNED_OUT"){
 currentUser=null;currentRole=null;
-$("dashboard").classList.add("hidden");$("login").classList.remove("hidden");
+$("dashboard").classList.add("hidden");
+$("login").classList.remove("hidden");
 }
 });
+
 startDashboard();
 </script>
 </body>
-</html>
+  </html>
