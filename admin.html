@@ -1611,15 +1611,17 @@ alert("Could not delete screenshot: "+err.message);
 $("captureScreenshot").onclick=async()=>{
 const button=$("captureScreenshot");
 button.disabled=true;
+
 try{
 await captureScreenshot();
 }catch(err){
 setScreenshotStatus("Capture failed: "+err.message,0);
-}catchErrorFallback();
-finally{
+catchErrorFallback();
+}finally{
 button.disabled=false;
 }
 };
+
 
 function catchErrorFallback(){
 $("screenshotProgress").style.width="0%";
