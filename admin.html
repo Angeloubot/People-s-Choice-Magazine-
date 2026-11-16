@@ -1191,7 +1191,7 @@ showThemePreview();
 };
 
 /* =====================================================
-   SCREENSHOT STUDIO
+   SCREENSHOT STUDIO — 3840PX EXPORT
 ===================================================== */
 
 $("tab-screenshots").innerHTML=`
@@ -1199,7 +1199,7 @@ $("tab-screenshots").innerHTML=`
 
 <div class="studio-intro">
 <strong>People's Choice Magazine — Screenshot Studio</strong>
-<p>Capture full-page magazine screenshots, the Top 5 Chart, and individual published articles. Captures can be downloaded to your device and saved in your private screenshot gallery.</p>
+<p>Capture full-page magazine screenshots, the Top 5 Chart, and individual published articles. Exports are 3840px wide, with proportional height and a branded footer. Captures can be downloaded to your device and saved in your private screenshot gallery.</p>
 </div>
 
 <hr>
@@ -1232,9 +1232,9 @@ $("tab-screenshots").innerHTML=`
 <option value="390">Mobile — 390px</option>
 </select>
 
-<p class="help">The screenshot captures the complete selected page or section vertically. A branded magazine footer is added to the resulting PNG.</p>
+<p class="help">The selected width controls the responsive page layout. The exported PNG is 3840 pixels wide, with its height scaled proportionally. A branded magazine footer is added to the PNG. Mobile and tablet layouts are enlarged to the export width; this does not create additional original image detail.</p>
 
-<button id="captureScreenshot">Capture Screenshot</button>
+<button id="captureScreenshot">Capture 3840px Screenshot</button>
 
 <div class="studio-progress"><span id="screenshotProgress"></span></div>
 <div id="screenshotStatus" class="studio-status">Ready to capture.</div>
@@ -1322,28 +1322,47 @@ document.body.appendChild(a);a.click();a.remove();
 setTimeout(()=>URL.revokeObjectURL(url),30000);
 }
 
+/* 4K FOOTER: ALL FOOTER DIMENSIONS SCALE WITH THE OUTPUT WIDTH */
 function addScreenshotBranding(sourceCanvas){
-const footerHeight=65;
+const scale=sourceCanvas.width/1440;
+const footerHeight=Math.round(65*scale);
 const result=document.createElement("canvas");
+
 result.width=sourceCanvas.width;
 result.height=sourceCanvas.height+footerHeight;
+
 const ctx=result.getContext("2d");
+if(!ctx)throw new Error("Could not create the branded screenshot canvas.");
+
 ctx.fillStyle="#ffffff";
 ctx.fillRect(0,0,result.width,result.height);
 ctx.drawImage(sourceCanvas,0,0);
+
 ctx.fillStyle="#171717";
 ctx.fillRect(0,sourceCanvas.height,result.width,footerHeight);
+
 ctx.fillStyle="#e7549b";
-ctx.fillRect(0,sourceCanvas.height,result.width,5);
-const scale=result.width/1440;
+ctx.fillRect(0,sourceCanvas.height,result.width,Math.max(5,Math.round(5*scale)));
+
 ctx.fillStyle="#ffffff";
-ctx.font=`bold ${Math.max(15,20*scale)}px Arial`;
+ctx.font=`bold ${Math.round(20*scale)}px Arial`;
 ctx.textBaseline="middle";
-ctx.fillText("PEOPLE'S CHOICE MAGAZINE",24*scale,sourceCanvas.height+35*scale);
+ctx.textAlign="left";
+ctx.fillText(
+"PEOPLE'S CHOICE MAGAZINE",
+Math.round(24*scale),
+sourceCanvas.height+Math.round(35*scale)
+);
+
 ctx.textAlign="right";
 ctx.fillStyle="#dddddd";
-ctx.font=`${Math.max(10,13*scale)}px Arial`;
-ctx.fillText(new Date().toLocaleDateString(),result.width-24*scale,sourceCanvas.height+35*scale);
+ctx.font=`${Math.round(13*scale)}px Arial`;
+ctx.fillText(
+new Date().toLocaleDateString(),
+result.width-Math.round(24*scale),
+sourceCanvas.height+Math.round(35*scale)
+);
+
 return result;
 }
 
@@ -1361,10 +1380,28 @@ document.body.appendChild(iframe);
 
 try{
 await new Promise((resolve,reject)=>{
-iframe.onload=resolve;
-iframe.onerror=()=>reject(new Error("Could not open the magazine page."));
+let finished=false;
+const timeout=setTimeout(()=>{
+if(finished)return;
+finished=true;
+reject(new Error("The magazine page took too long to open."));
+},30000);
+
+iframe.onload=()=>{
+if(finished)return;
+finished=true;
+clearTimeout(timeout);
+resolve();
+};
+
+iframe.onerror=()=>{
+if(finished)return;
+finished=true;
+clearTimeout(timeout);
+reject(new Error("Could not open the magazine page."));
+};
+
 iframe.src=url;
-setTimeout(()=>reject(new Error("The magazine page took too long to open.")),30000);
 });
 }catch(error){
 iframe.remove();
@@ -1379,6 +1416,17 @@ if(!window.html2canvas)throw new Error("Screenshot library did not load. Refresh
 
 const type=$("screenshotType").value;
 const width=Number($("screenshotViewport").value);
+
+if(![1440,1200,768,390].includes(width)){
+throw new Error("Please select one of the available screenshot widths.");
+}
+
+const OUTPUT_WIDTH=3840;
+
+/* Memory safety limit: approximately 35 million output pixels. */
+const MAX_OUTPUT_PIXELS=35000000;
+const MAX_SOURCE_HEIGHT=30000;
+
 let article=null;
 let pageUrl;
 let title;
@@ -1387,15 +1435,19 @@ if(type==="homepage"){
 pageUrl=new URL("index.html",location.href).href;
 title="People's Choice Magazine — Homepage";
 }
+
 if(type==="top5"){
 pageUrl=new URL("index.html",location.href).href;
 title="People's Choice Magazine — Top 5 Chart";
 }
+
 if(type==="article"){
 const id=$("screenshotArticle").value;
 if(!id)throw new Error("Please choose a published article.");
+
 article=articles.find(a=>a.id===id&&a.status==="published");
 if(!article)throw new Error("The selected article is no longer published.");
+
 const u=new URL("article.html",location.href);
 u.searchParams.set("id",article.id);
 pageUrl=u.href;
@@ -1405,16 +1457,20 @@ title=article.title;
 setScreenshotStatus("Opening the magazine page...",10);
 
 const iframe=await createCaptureFrame(pageUrl,width);
+
 try{
 const win=iframe.contentWindow;
 const doc=iframe.contentDocument;
+
 if(!doc)throw new Error("Could not access the magazine page.");
 
 await waitForPageContent(doc,type);
-setScreenshotStatus("Loading images and page content...",25);
+
+setScreenshotStatus("Preparing page images and content...",20);
 await prepareImages(doc,win);
 
 let target;
+
 if(type==="top5"){
 target=doc.querySelector("#music-chart");
 if(!target)throw new Error("Could not find #music-chart on the homepage.");
@@ -1422,47 +1478,132 @@ if(!target)throw new Error("Could not find #music-chart on the homepage.");
 target=doc.documentElement;
 }
 
-const fullWidth=Math.max(width,doc.documentElement.scrollWidth,doc.body.scrollWidth);
+const documentWidth=Math.max(
+width,
+doc.documentElement.scrollWidth,
+doc.body.scrollWidth
+);
+
+const captureWidth=type==="top5"
+?Math.max(width,target.scrollWidth)
+:documentWidth;
+
 const fullHeight=type==="top5"
 ?Math.max(target.scrollHeight,target.offsetHeight)
 :Math.max(doc.documentElement.scrollHeight,doc.body.scrollHeight);
 
-if(fullWidth>2500)throw new Error("The capture width is too large.");
-if(fullHeight>30000)throw new Error("This page is too long for a reliable mobile-browser screenshot. Try a narrower page or a shorter section.");
-if(fullWidth*fullHeight>40000000)throw new Error("This capture is too large for your device's available memory. Try a smaller page width.");
+if(!Number.isFinite(captureWidth)||captureWidth<=0){
+throw new Error("Could not determine the page width.");
+}
 
-setScreenshotStatus("Rendering the full screenshot...",50);
+if(!Number.isFinite(fullHeight)||fullHeight<=0){
+throw new Error("Could not determine the page height.");
+}
 
+if(captureWidth>2500){
+throw new Error("The page is wider than expected. Please check the selected viewport and public page layout.");
+}
+
+if(fullHeight>MAX_SOURCE_HEIGHT){
+throw new Error("This page is too long to capture reliably. Try capturing a shorter page or section.");
+}
+
+/*
+  Calculate the exact scale needed to produce a 3840px-wide PNG.
+  The selected viewport still controls the responsive page layout.
+*/
+const renderScale=OUTPUT_WIDTH/captureWidth;
+const outputContentHeight=Math.ceil(fullHeight*renderScale);
+
+/* Footer height is also included in the memory calculation. */
+const outputFooterHeight=Math.round(65*(OUTPUT_WIDTH/1440));
+const estimatedPixels=OUTPUT_WIDTH*(outputContentHeight+outputFooterHeight);
+
+if(estimatedPixels>MAX_OUTPUT_PIXELS){
+const estimatedHeight=outputContentHeight+outputFooterHeight;
+throw new Error(
+"This 3840px capture would be too large for reliable rendering on your device ("+
+estimatedHeight.toLocaleString()+
+"px tall). Try the Mobile or Tablet layout, or capture a shorter page."
+);
+}
+
+if(outputContentHeight>30000){
+throw new Error("The resulting 4K image would be too tall for reliable browser rendering. Capture a shorter page.");
+}
+
+setScreenshotStatus(
+"Rendering 3840px-wide screenshot ("+
+OUTPUT_WIDTH+
+" × approximately "+
+outputContentHeight.toLocaleString()+
+" pixels)...",
+45
+);
+
+/* Render at the calculated scale to produce a 3840px-wide canvas. */
 const canvas=await html2canvas(target,{
 backgroundColor:"#ffffff",
-scale:1,
+scale:renderScale,
 useCORS:true,
 allowTaint:false,
 logging:false,
-width:type==="top5"?target.scrollWidth:fullWidth,
-height:type==="top5"?fullHeight:fullHeight,
+width:captureWidth,
+height:fullHeight,
 windowWidth:width,
 windowHeight:Math.max(900,win.innerHeight),
 scrollX:0,
 scrollY:0
 });
 
-if(!canvas.width||!canvas.height)throw new Error("The screenshot image could not be generated.");
+if(!canvas.width||!canvas.height){
+throw new Error("The screenshot image could not be generated.");
+}
 
-setScreenshotStatus("Adding magazine branding...",75);
+/* Confirm that the browser returned the requested width. */
+if(canvas.width!==OUTPUT_WIDTH){
+throw new Error(
+"The browser generated a "+canvas.width+
+"px-wide image instead of 3840px. Please try again."
+);
+}
+
+setScreenshotStatus("Adding full-size magazine branding...",70);
+
 const branded=addScreenshotBranding(canvas);
 
-const blob=await new Promise(resolve=>branded.toBlob(resolve,"image/png"));
+/* Release the original canvas before PNG encoding where possible. */
+canvas.width=1;
+canvas.height=1;
+
+setScreenshotStatus("Preparing high-resolution PNG...",78);
+
+const blob=await new Promise((resolve,reject)=>{
+try{
+branded.toBlob(result=>{
+if(result)resolve(result);
+else reject(new Error("Could not create the PNG image."));
+},"image/png");
+}catch(error){
+reject(error);
+}
+});
+
 if(!blob)throw new Error("Could not create the PNG image.");
 
-const safeTitle=title.replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"").toLowerCase();
-const date=new Date().toISOString().slice(0,10);
-const filename=`peoples-choice-${safeTitle}-${date}.png`;
+const safeTitle=title
+.replace(/[^a-z0-9]+/gi,"-")
+.replace(/^-|-$/g,"")
+.toLowerCase();
 
-setScreenshotStatus("Downloading PNG to your device...",85);
+const date=new Date().toISOString().slice(0,10);
+const filename=`peoples-choice-${safeTitle}-${date}-3840px.png`;
+
+setScreenshotStatus("Downloading 3840px PNG to your device...",85);
 downloadBlob(blob,filename);
 
 setScreenshotStatus("Saving screenshot to your private gallery...",92);
+
 await saveScreenshotToGallery({
 blob,
 title,
@@ -1472,7 +1613,11 @@ articleId:article?.id||null,
 filename
 });
 
-setScreenshotStatus("Screenshot captured, downloaded and saved to your gallery.",100);
+setScreenshotStatus(
+"3840px screenshot captured, downloaded and saved to your private gallery.",
+100
+);
+
 await loadScreenshotGallery();
 return true;
 
@@ -1482,7 +1627,10 @@ iframe.remove();
 }
 
 async function saveScreenshotToGallery({blob,title,type,pageUrl,articleId,filename}){
-const unique=crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(36).slice(2);
+const unique=crypto.randomUUID
+?crypto.randomUUID()
+:Date.now()+"-"+Math.random().toString(36).slice(2);
+
 const storagePath=`${new Date().toISOString().slice(0,10)}/${unique}-${filename}`;
 
 const {error:uploadError}=await db.storage
@@ -1511,6 +1659,7 @@ throw insertError;
 
 async function loadScreenshotGallery(){
 if(currentRole!=="admin")return;
+
 $("screenshotGalleryStatus").textContent="Loading your screenshot gallery...";
 $("screenshotGallery").innerHTML="";
 
@@ -1523,6 +1672,7 @@ if(error){
 $("screenshotGalleryStatus").textContent="Could not load gallery: "+error.message;
 return;
 }
+
 if(!data||!data.length){
 $("screenshotGalleryStatus").textContent="Your screenshot gallery is empty. Capture your first magazine screenshot above.";
 return;
@@ -1540,10 +1690,15 @@ card.className="screenshot-card";
 
 const image=document.createElement("img");
 image.alt=item.title||"Magazine screenshot";
-if(!signedError&&signed?.signedUrl)image.src=signed.signedUrl;
-else image.alt="Preview unavailable. Try refreshing the gallery.";
+
+if(!signedError&&signed?.signedUrl){
+image.src=signed.signedUrl;
+}else{
+image.alt="Preview unavailable. Try refreshing the gallery.";
+}
 
 const details=document.createElement("div");
+
 const heading=document.createElement("h3");
 heading.textContent=item.title||"Magazine screenshot";
 
@@ -1558,16 +1713,24 @@ const download=document.createElement("button");
 download.textContent="Download PNG";
 download.className="secondary";
 download.disabled=!!signedError||!signed?.signedUrl;
+
 download.onclick=async()=>{
 try{
 download.disabled=true;
 const response=await fetch(signed.signedUrl);
 if(!response.ok)throw new Error("Could not download screenshot.");
+
 const blob=await response.blob();
-const name=(item.title||"magazine-screenshot").replace(/[^a-z0-9]+/gi,"-").toLowerCase()+".png";
+const name=(item.title||"magazine-screenshot")
+.replace(/[^a-z0-9]+/gi,"-")
+.toLowerCase()+".png";
+
 downloadBlob(blob,name);
-}catch(err){alert(err.message);}
-finally{download.disabled=false;}
+}catch(err){
+alert(err.message);
+}finally{
+download.disabled=false;
+}
 };
 
 const open=document.createElement("button");
@@ -1584,6 +1747,7 @@ del.onclick=()=>deleteScreenshot(item);
 actions.append(download,open,del);
 details.append(heading,meta,actions);
 card.append(image,details);
+
 $("screenshotGallery").append(card);
 }
 }
@@ -1596,13 +1760,16 @@ try{
 const {error:storageError}=await db.storage
 .from("magazine-screenshots")
 .remove([item.storage_path]);
+
 if(storageError)throw storageError;
 
 const {error:rowError}=await db.from("screenshot_gallery")
 .delete().eq("id",item.id);
+
 if(rowError)throw rowError;
 
 await loadScreenshotGallery();
+
 }catch(err){
 alert("Could not delete screenshot: "+err.message);
 }
@@ -1616,12 +1783,11 @@ try{
 await captureScreenshot();
 }catch(err){
 setScreenshotStatus("Capture failed: "+err.message,0);
-catchErrorFallback();
+}catchErrorFallback();
 }finally{
 button.disabled=false;
 }
 };
-
 
 function catchErrorFallback(){
 $("screenshotProgress").style.width="0%";
@@ -1632,11 +1798,14 @@ $("refreshScreenshotGallery").onclick=loadScreenshotGallery;
 /* ACCESS CONTROL AND UPGRADE TABS */
 async function openUpgradeTab(name){
 if(currentRole!=="admin")return;
+
 switchTab(name);
+
 if(name==="analytics")await loadAnalytics();
 if(name==="media")await loadMediaLibrary();
 if(name==="screenshots")await loadScreenshotGallery();
 }
+
 upgradeTabs.forEach(([name])=>{
 const button=nav.querySelector(`[data-tab="${name}"]`);
 button.addEventListener("click",()=>openUpgradeTab(name));
@@ -1645,7 +1814,8 @@ button.addEventListener("click",()=>openUpgradeTab(name));
 /* AUTHENTICATION */
 db.auth.onAuthStateChange(event=>{
 if(event==="SIGNED_OUT"){
-currentUser=null;currentRole=null;
+currentUser=null;
+currentRole=null;
 $("dashboard").classList.add("hidden");
 $("login").classList.remove("hidden");
 }
@@ -1654,4 +1824,4 @@ $("login").classList.remove("hidden");
 startDashboard();
 </script>
 </body>
-  </html>
+   </html>
