@@ -42,8 +42,10 @@
   --white:#fff;
   --gray:#777;
   --page:#f5f5f5;
-  --chart-orange:#ffa323;
-  --chart-gold:#ffc46b;
+
+  /* WEEKLY TOP 5 BRAND COLOURS */
+  --chart-orange:#e7549b;
+  --chart-gold:#ffb6d5;
   --chart-black:#222;
 }
 
@@ -386,37 +388,33 @@ nav a:hover {
   border:0;
   border-radius:0;
   margin:0 -14px 18px;
-  padding:20px 24px;
+  padding:28px 24px;
   background-size:cover;
   background-position:center;
-  text-align:right;
-}
-
-#music-chart .chart-heading:before {
-  content:"PEOPLE'S CHOICE MAGAZINE  •  WEEKLY MUSIC CHART";
-  display:block;
-  color:var(--chart-gold);
-  font-size:11px;
-  font-weight:bold;
-  letter-spacing:1px;
   text-align:left;
-  margin-bottom:15px;
 }
 
+/* REMOVE THE SMALL LABEL ABOVE THE HEADING */
+#music-chart .chart-heading:before {
+  content:none;
+  display:none;
+}
+
+/* LARGE LEFT-ALIGNED WEEKLY TOP 5 HEADING */
 #music-chart .chart-heading h2 {
   color:var(--chart-orange);
   font-family:Arial,Helvetica,sans-serif;
-  font-size:clamp(28px,5vw,49px);
+  font-size:clamp(38px,6vw,58px);
   line-height:1;
   font-weight:900;
+  text-align:left;
   text-transform:uppercase;
+  margin:0;
 }
 
+/* DESCRIPTION REMOVED FROM THE DESIGN */
 #music-chart .chart-heading p {
-  color:#eee;
-  font-size:12px;
-  line-height:1.6;
-  margin-top:10px;
+  display:none;
 }
 
 .chart-auth {
@@ -526,7 +524,7 @@ nav a:hover {
 }
 
 .chart-info h3 {
-  color:var(--chart-pink);
+  color:var(--chart-orange);
   font:bold clamp(14px,1.5vw,19px)/1.3 Arial,sans-serif;
   margin-bottom:8px;
   overflow-wrap:anywhere;
@@ -560,7 +558,7 @@ nav a:hover {
 }
 
 .chart-vote:hover {
-  background:#ffbd58;
+  background:#ffb6d5;
 }
 
 .chart-vote:disabled {
@@ -841,7 +839,11 @@ footer {
   }
 
   #music-chart .chart-heading {
-    padding:18px;
+    padding:22px 18px;
+  }
+
+  #music-chart .chart-heading h2 {
+    font-size:clamp(36px,8vw,48px);
   }
 }
 
@@ -873,8 +875,12 @@ footer {
     font-size:9px;
   }
 
+  #music-chart .chart-heading {
+    padding:22px 16px;
+  }
+
   #music-chart .chart-heading h2 {
-    font-size:27px;
+    font-size:34px;
   }
 }
 
@@ -947,9 +953,6 @@ alt="Featured story">
 
 <div class="chart-heading" id="chart-header">
 <h2 id="chart-heading">WEEKLY TOP 5</h2>
-<p id="chart-description">
-Your favourite music. Your choice. Discover this week's top five songs and vote for the music you love.
-</p>
 </div>
 
 <div class="chart-auth">
