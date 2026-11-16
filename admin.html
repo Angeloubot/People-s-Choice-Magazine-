@@ -1775,23 +1775,25 @@ alert("Could not delete screenshot: "+err.message);
 }
 }
 
-$("captureScreenshot").onclick=async()=>{
-const button=$("captureScreenshot");
-button.disabled=true;
 
-try{
-await captureScreenshot();
-}catch(err){
-setScreenshotStatus("Capture failed: "+err.message,0);
-}catchErrorFallback();
-}finally{
-button.disabled=false;
-}
+$("captureScreenshot").onclick=async()=>{
+    const button=$("captureScreenshot");
+    button.disabled=true;
+
+    try{
+        await captureScreenshot();
+    }catch(err){
+        setScreenshotStatus("Capture failed: "+err.message,0);
+        catchErrorFallback();
+    }finally{
+        button.disabled=false;
+    }
 };
 
 function catchErrorFallback(){
-$("screenshotProgress").style.width="0%";
+    $("screenshotProgress").style.width="0%";
 }
+
 
 $("refreshScreenshotGallery").onclick=loadScreenshotGallery;
 
