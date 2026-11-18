@@ -1745,55 +1745,124 @@ async function initialiseChartAuth() {
 
 /* VOTE SUBMISSION */
 
+let voteSubmitting=false;
+
 $("chart-grid").addEventListener("click",async e=>{
 
   const b=e.target.closest("[data-vote]");
 
-  if(!b)return;
+  if(!b || voteSubmitting || b.disabled)return;
 
   if(!chartUser) {
     setChartMessage(
-      "Voting session is not ready. Refresh the page and try again."
+      "Your voting session is not ready. Please refresh the page and try again."
     );
     return;
   }
 
+  const songId=b.dataset.vote;
+  const chartWeek=b.dataset.week;
+  const voterId=chartUser.id;
+
+  if(!songId || !chartWeek || !voterId) {
+    setChartMessage("We couldn't verify your voting details. Please refresh and try again.");
+    return;
+  }
+
+  voteSubmitting=true;
   b.disabled=true;
   b.textContent="SUBMITTING...";
+  setChartMessage("Submitting your vote. Please wait...");
 
-  const {error}=await db.from("song_votes").insert({
+  const controller=new AbortController();
+  let timedOut=false;
+  const timeoutId=setTimeout(()=>{
+    timedOut=true;
+    controller.abort();
+  },15000);
 
-    song_id:b.dataset.vote,
+  try {
 
-    user_id:chartUser.id,
+    /* Confirm that the anonymous/authenticated session is still active. */
+    const {data:sessionData,error:sessionError}=await db.auth.getSession();
 
-    chart_week:b.dataset.week
+    if(sessionError || !sessionData?.session?.user) {
+      throw new Error("Your voting session has expired. Please refresh the page.");
+    }
 
-  });
+    const activeUser=sessionData.session.user;
 
-  if(error) {
+    if(activeUser.id!==voterId) {
+      chartUser=activeUser;
+    }
 
-    console.error(error);
+    const {error}=await db.from("song_votes").insert({
+      song_id:songId,
+      user_id:activeUser.id,
+      chart_week:chartWeek
+    }).abortSignal(controller.signal);
+
+    if(error) {
+
+      console.error("Vote submission:",error);
+
+      if(error.code==="23505") {
+        setChartMessage("Our records show that you have already voted this chart week. Thank you!");
+        document.querySelectorAll("[data-vote]").forEach(button=>{
+          if(button.dataset.week===chartWeek) {
+            button.disabled=true;
+            button.textContent="VOTE USED";
+          }
+        });
+        return;
+      }
+
+      if(error.code==="42501") {
+        setChartMessage("Voting is temporarily unavailable because the submission was not authorised. Please contact the magazine.");
+      } else {
+        setChartMessage("Your vote was not accepted. Please try again.");
+      }
+
+      b.disabled=false;
+      b.textContent="VOTE";
+      return;
+    }
 
     setChartMessage(
-      error.code==="23505"
-        ?"You have already voted this chart week. Thank you!"
-        :"Your vote could not be submitted. Please try again."
+      "SUCCESS! Your vote has been recorded. Thank you for supporting your favourite music!"
     );
+
+    document.querySelectorAll("[data-vote]").forEach(button=>{
+      if(button.dataset.week===chartWeek) {
+        button.disabled=true;
+        button.textContent=button.dataset.vote===songId
+          ?"VOTE RECEIVED"
+          :"VOTE USED";
+      }
+    });
+
+  } catch(error) {
+
+    console.error("Vote submission failed:",error);
+
+    if(timedOut) {
+      setChartMessage("The request took too long, so we couldn't confirm the result. Please refresh the page before trying again.");
+    } else {
+      setChartMessage(error?.message||"We couldn't confirm your vote. Please refresh the page and try again.");
+    }
 
     b.disabled=false;
     b.textContent="VOTE";
 
-    return;
+  } finally {
+
+    clearTimeout(timeoutId);
+    voteSubmitting=false;
+
   }
 
-  setChartMessage(
-    "Your vote has been submitted. Thank you for supporting your favourite music!"
-  );
-
-  b.textContent="VOTE RECEIVED";
-
 });
+
 
 /* VIDEOS AND SKITS */
 
