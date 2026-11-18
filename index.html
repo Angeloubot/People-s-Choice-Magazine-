@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,10 +42,16 @@
   --gray:#777;
   --page:#f5f5f5;
 
-  /* WEEKLY TOP 10 BRAND COLOURS */
+  /* WEEKLY TOP 10 CHART COLOURS */
   --chart-orange:#e7549b;
   --chart-gold:#ffb6d5;
   --chart-black:#222;
+  --chart-background:#e7549b;
+  --chart-header-background:#222;
+  --chart-accent:#e7549b;
+  --chart-title-color:#e7549b;
+  --chart-secondary:#ffb6d5;
+  --chart-card-background:#222;
 }
 
 * {
@@ -371,19 +376,17 @@ nav a:hover {
   margin-top:6px;
 }
 
-/* =========================================
-   PEOPLE'S CHOICE WEEKLY TOP 10 CHART
-========================================= */
+/* PEOPLE'S CHOICE WEEKLY TOP 10 CHART */
 
 #music-chart {
   margin-top:45px;
   padding:0 14px 20px;
-  background:var(--chart-orange);
+  background:var(--chart-background);
   overflow:hidden;
 }
 
 #music-chart .chart-heading {
-  background:var(--chart-black);
+  background:var(--chart-header-background);
   color:white;
   border:0;
   border-radius:0;
@@ -394,15 +397,13 @@ nav a:hover {
   text-align:left;
 }
 
-/* REMOVE THE SMALL LABEL ABOVE THE HEADING */
 #music-chart .chart-heading:before {
   content:none;
   display:none;
 }
 
-/* LARGE LEFT-ALIGNED WEEKLY TOP 5 HEADING */
 #music-chart .chart-heading h2 {
-  color:var(--chart-orange);
+  color:var(--chart-title-color);
   font-family:Arial,Helvetica,sans-serif;
   font-size:clamp(38px,6vw,58px);
   line-height:1;
@@ -412,13 +413,12 @@ nav a:hover {
   margin:0;
 }
 
-/* DESCRIPTION REMOVED FROM THE DESIGN */
 #music-chart .chart-heading p {
   display:none;
 }
 
 .chart-auth {
-  background:var(--chart-black);
+  background:var(--chart-header-background);
   color:white;
   border:0;
   padding:15px;
@@ -428,7 +428,7 @@ nav a:hover {
 .chart-auth p,
 .chart-auth .chart-message,
 .chart-auth .chart-user-status {
-  color:var(--chart-gold);
+  color:var(--chart-secondary);
 }
 
 .chart-auth-fields {
@@ -475,7 +475,7 @@ nav a:hover {
   align-items:stretch;
   min-width:0;
   min-height:170px;
-  background:var(--chart-black);
+  background:var(--chart-card-background);
   border:0;
   border-radius:0;
   overflow:hidden;
@@ -507,7 +507,7 @@ nav a:hover {
   display:grid;
   place-items:center;
   border-radius:0;
-  background:var(--chart-orange);
+  background:var(--chart-accent);
   color:#171717;
   font-weight:900;
   font-size:19px;
@@ -520,18 +520,18 @@ nav a:hover {
   display:flex;
   flex-direction:column;
   justify-content:center;
-  background:var(--chart-black);
+  background:var(--chart-card-background);
 }
 
 .chart-info h3 {
-  color:var(--chart-orange);
+  color:var(--chart-title-color);
   font:bold clamp(14px,1.5vw,19px)/1.3 Arial,sans-serif;
   margin-bottom:8px;
   overflow-wrap:anywhere;
 }
 
 .chart-info p {
-  color:var(--chart-gold);
+  color:var(--chart-secondary);
   font-size:12px;
   margin-bottom:12px;
   overflow-wrap:anywhere;
@@ -548,7 +548,7 @@ nav a:hover {
 .chart-vote {
   width:auto;
   border:0;
-  background:var(--chart-orange);
+  background:var(--chart-accent);
   color:#171717;
   padding:9px 11px;
   font-size:10px;
@@ -558,7 +558,7 @@ nav a:hover {
 }
 
 .chart-vote:hover {
-  background:#ffb6d5;
+  filter:brightness(1.08);
 }
 
 .chart-vote:disabled {
@@ -569,8 +569,8 @@ nav a:hover {
 .chart-stream {
   display:block;
   text-align:center;
-  border:1px solid var(--chart-gold);
-  color:var(--chart-gold);
+  border:1px solid var(--chart-secondary);
+  color:var(--chart-secondary);
   padding:8px 9px;
   font-size:9px;
   font-weight:bold;
@@ -580,22 +580,22 @@ nav a:hover {
 .chart-card .share-button {
   margin-top:0;
   background:transparent;
-  color:var(--chart-gold);
-  border:1px solid var(--chart-gold);
+  color:var(--chart-secondary);
+  border:1px solid var(--chart-secondary);
   border-radius:0;
   padding:8px 9px;
   font-size:9px;
 }
 
 .chart-card .share-button:hover {
-  background:var(--chart-orange);
+  background:var(--chart-accent);
   color:#171717;
-  border-color:var(--chart-orange);
+  border-color:var(--chart-accent);
 }
 
 .chart-empty {
-  background:var(--chart-black);
-  color:var(--chart-gold);
+  background:var(--chart-card-background);
+  color:var(--chart-secondary);
   padding:25px;
   text-align:center;
   grid-column:1/-1;
@@ -610,9 +610,7 @@ nav a:hover {
   line-height:1.5;
 }
 
-/* =========================================
-   END TOP 10 CHART
-========================================= */
+/* END TOP 10 CHART */
 
 #creators {
   margin-top:45px;
@@ -883,7 +881,6 @@ footer {
     font-size:34px;
   }
 }
-
 </style>
 </head>
 
@@ -903,7 +900,7 @@ Your Voice. Your Stories. Your Choice.
 <a href="#home">HOME</a>
 <a href="#local">LOCAL NEWS</a>
 <a href="#national">NATIONAL NEWS</a>
-<a href="#music-chart">TOP 5 CHART</a>
+<a href="#music-chart">TOP 10 CHART</a>
 <a href="#creators">VIDEOS & SKITS</a>
 <a href="#contact">CONTACT US</a>
 </nav>
@@ -947,12 +944,12 @@ alt="Featured story">
 
 </div>
 
-<!-- WEEKLY TOP 5 MUSIC CHART -->
+<!-- WEEKLY TOP 10 MUSIC CHART -->
 
 <section id="music-chart">
 
 <div class="chart-heading" id="chart-header">
-<h2 id="chart-heading">WEEKLY TOP 5</h2>
+<h2 id="chart-heading">WEEKLY TOP 10</h2>
 </div>
 
 <div class="chart-auth">
@@ -966,7 +963,7 @@ Connecting...
 </div>
 
 <div class="chart-grid" id="chart-grid">
-<div class="chart-empty">Loading this week's Top 5 songs...</div>
+<div class="chart-empty">Loading this week's Top 10 songs...</div>
 </div>
 
 <p class="chart-note">
@@ -1237,6 +1234,32 @@ function applySectionBackground(elementId,imageUrl) {
   }
 }
 
+/* ADMIN-EDITABLE CHART COLOURS */
+
+function applyChartColours(settings) {
+
+  const root=document.documentElement;
+
+  const colourSettings={
+    chart_bg_color:"--chart-background",
+    chart_header_color:"--chart-header-background",
+    chart_accent_color:"--chart-accent",
+    chart_title_color:"--chart-title-color",
+    chart_secondary_color:"--chart-secondary",
+    chart_card_color:"--chart-card-background"
+  };
+
+  Object.entries(colourSettings).forEach(([setting,cssVariable])=>{
+
+    const colour=settings[setting];
+
+    if(typeof colour==="string"&&/^#[0-9a-f]{6}$/i.test(colour)) {
+      root.style.setProperty(cssVariable,colour);
+    }
+
+  });
+}
+
 function applySocialPreview(imageUrl) {
   if(!imageUrl||!/^https?:\/\//i.test(imageUrl))return;
 
@@ -1268,6 +1291,9 @@ async function loadSiteSettings() {
   applySectionBackground("local-header",s.local_header_bg);
   applySectionBackground("national-header",s.national_header_bg);
 
+  /* APPLY ADMIN CHART COLOUR SETTINGS */
+  applyChartColours(s);
+
   setText("site-name",s.site_name);
   setText("site-tagline",s.tagline);
   setText("site-topbar",s.topbar_text);
@@ -1277,7 +1303,12 @@ async function loadSiteSettings() {
   setText("local-heading",s.local_heading);
   setText("national-heading",s.national_heading);
 
-  setText("chart-heading",s.chart_heading);
+  /* KEEP OLD TOP 5 SETTINGS COMPATIBLE */
+  if(typeof s.chart_heading==="string"&&s.chart_heading.trim()) {
+    const heading=s.chart_heading.replace(/TOP\s*5/i,"TOP 10");
+    setText("chart-heading",heading);
+  }
+
   setText("chart-description",s.chart_description);
 
   setText("creators-description",s.creators_description);
@@ -1550,23 +1581,24 @@ async function loadArticles() {
     :"<p>No national stories published yet.</p>";
 }
 
-/* =========================================
-   TOP 5 MUSIC CHART
-========================================= */
+/* WEEKLY TOP 10 MUSIC CHART */
 
 function renderMusicChart() {
 
-  if(!chartSongs.length) {
+  /* LIMIT PUBLIC DISPLAY TO TEN SONGS */
+  const songsToDisplay=chartSongs.slice(0,10);
+
+  if(!songsToDisplay.length) {
     $("chart-grid").innerHTML=`
       <div class="chart-empty">
         <h3>No songs in the chart yet.</h3>
-        <p>Check back soon for this week's Top 5.</p>
+        <p>Check back soon for this week's Top 10.</p>
       </div>
     `;
     return;
   }
 
-  $("chart-grid").innerHTML=chartSongs.map(s=>`
+  $("chart-grid").innerHTML=songsToDisplay.map(s=>`
 
     <article class="chart-card" id="song-${esc(s.id)}">
 
@@ -1623,7 +1655,7 @@ function renderMusicChart() {
             data-share-type="song"
             data-share-id="${esc(s.id)}"
             data-share-title="${esc(s.title+" - "+s.artist)}"
-            data-share-description="Listen and vote on the People's Choice Top 5 chart."
+            data-share-description="Listen and vote on the People's Choice Top 10 chart."
             data-share-image="${esc(safeImage(s.cover_url))}"
           >
             SHARE ↗
@@ -1642,6 +1674,11 @@ function renderMusicChart() {
 
 async function loadMusicChart() {
 
+  /*
+   * TEMPORARILY KEEP THE EXISTING RPC.
+   * The Supabase function must subsequently be updated
+   * to return ten songs instead of five.
+   */
   const {data,error}=await db.rpc("get_public_top5");
 
   if(error) {
@@ -1656,7 +1693,7 @@ async function loadMusicChart() {
     return;
   }
 
-  chartSongs=data||[];
+  chartSongs=(data||[]).slice(0,10);
 
   renderMusicChart();
 }
