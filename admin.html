@@ -127,7 +127,7 @@ main{padding:10px}
 <button data-tab="website" class="active">Visual Website Builder</button>
 <button data-tab="banners">Banners</button>
 <button data-tab="videos">Videos</button>
-<button data-tab="chart">Top 5 Chart</button>
+<button data-tab="chart">Top 10 Chart</button>
 <button data-tab="articles">Articles</button>
 </div>
 
@@ -172,8 +172,8 @@ main{padding:10px}
 <div><label>Creators Corner Heading</label><input id="creators_heading"></div>
 <div><label>Local News Heading</label><input id="local_heading"></div>
 <div><label>National News Heading</label><input id="national_heading"></div>
-<div><label>Top 5 Chart Heading</label><input id="chart_heading"></div>
-<div class="full"><label>Top 5 Chart Description</label><textarea id="chart_description"></textarea></div>
+<div><label>Top 10 Chart Heading</label><input id="chart_heading"></div>
+<div class="full"><label>Top 10 Chart Description</label><textarea id="chart_description"></textarea></div>
 <div class="full"><label>Creators Corner Description</label><textarea id="creators_description"></textarea></div>
 <div><label>Local News Description</label><textarea id="local_description"></textarea></div>
 <div><label>National News Description</label><textarea id="national_description"></textarea></div>
@@ -193,9 +193,9 @@ main{padding:10px}
 <div>
 <label>Top 5 Chart header background URL</label>
 <input id="chart_header_bg" type="url">
-<label>Upload Top 5 header background</label>
+<label>Upload Top 10 header background</label>
 <input id="chart_header_bg_file" type="file" accept="image/*">
-<img id="chart_header_bg_preview" class="preview hidden" alt="Top 5 header background">
+<img id="chart_header_bg_preview" class="preview hidden" alt="Top 10 header background">
 </div>
 <div>
 <label>Creators' Corner header background URL</label>
@@ -306,7 +306,7 @@ main{padding:10px}
 </section>
 
 <section class="panel tab" id="tab-chart">
-<h2>Top 5 Music Chart Manager</h2>
+<h2>Top 10 Music Chart Manager</h2>
 <p class="help">Vote totals are visible here to administrators only.</p>
 <div class="stats">
 <div class="stat"><strong id="chartSongCount">0</strong><small>Songs</small></div>
@@ -334,6 +334,19 @@ main{padding:10px}
 <label>Filter chart week</label>
 <input id="chartFilterWeek" type="date">
 <div id="chartSongList"></div>
+<hr>
+<h3>Top 10 Chart Colours</h3>
+<p class="help">Change the colours used by the public weekly chart. These settings are saved to site_settings.</p>
+<div class="grid">
+<div><label>Chart background</label><input id="chart_bg_color" type="color" value="#171717"></div>
+<div><label>Chart header</label><input id="chart_header_color" type="color" value="#e7549b"></div>
+<div><label>Chart accent</label><input id="chart_accent_color" type="color" value="#e7549b"></div>
+<div><label>Chart title text</label><input id="chart_title_color" type="color" value="#ffffff"></div>
+<div><label>Secondary text</label><input id="chart_secondary_color" type="color" value="#cccccc"></div>
+<div><label>Song card background</label><input id="chart_card_color" type="color" value="#222222"></div>
+</div>
+<button id="saveChartColours">Save Chart Colours</button>
+<div id="chartColoursMessage" class="notice hidden"></div>
 </section>
 
 <section class="panel tab" id="tab-articles">
@@ -378,7 +391,7 @@ let currentUser=null,currentRole=null,settings={},articles=[],banners=[],videos=
 let editArticleId=null,articleImage=null,editBannerId=null,bannerImage=null;
 let editVideoId=null,videoUrl=null,thumbnailUrl=null,editSongId=null,coverUrl=null;
 
-const sectionKeys=[["latest","Latest stories"],["top-stories","Top stories sidebar"],["chart","Top 5 music chart"],["creators","Creators' Corner"],["local","Local news"],["national","National news"],["contact","Contact section"],["hero","Hero banner"]];
+const sectionKeys=[["latest","Latest stories"],["top-stories","Top stories sidebar"],["chart","Top 10 music chart"],["creators","Creators' Corner"],["local","Local news"],["national","National news"],["contact","Contact section"],["hero","Hero banner"]];
 let sectionOrder=sectionKeys.map(x=>x[0]),visibility={};
 
 function msg(id,t,bad=false){
@@ -447,6 +460,9 @@ async function loadSettings(){
 const {data,error}=await db.from("site_settings").select("settings").eq("id","main").maybeSingle();
 if(error){msg("settingsMessage","Could not load settings: "+error.message,true);return;}
 settings=data?.settings||{};
+["chart_bg_color","chart_header_color","chart_accent_color","chart_title_color","chart_secondary_color","chart_card_color"].forEach(id=>{
+if($(id))$(id).value=settings[id]||({chart_bg_color:"#171717",chart_header_color:"#e7549b",chart_accent_color:"#e7549b",chart_title_color:"#ffffff",chart_secondary_color:"#cccccc",chart_card_color:"#222222"})[id];
+});
 settingIds.forEach(id=>{
 if($(id))$(id).value=settings[id]??($(id).type==="color"?"#171717":"");
 });
@@ -474,7 +490,7 @@ preview("logo_preview",URL.createObjectURL(f));
 
 const extraImageFields=[
 ["og_image_url","og_image_file","og_image_preview","Website preview image"],
-["chart_header_bg","chart_header_bg_file","chart_header_bg_preview","Top 5 header background"],
+["chart_header_bg","chart_header_bg_file","chart_header_bg_preview","Top 10 header background"],
 ["creators_header_bg","creators_header_bg_file","creators_header_bg_preview","Creators' Corner background"],
 ["local_header_bg","local_header_bg_file","local_header_bg_preview","Local News background"],
 ["national_header_bg","national_header_bg_file","national_header_bg_preview","National News background"]
@@ -951,6 +967,11 @@ if(error)throw error;
 settings=next;msg(messageId,"Settings saved successfully.");
 }catch(err){msg(messageId,err.message,true);}
 }
+$("saveChartColours").onclick=()=>{
+const changes={};
+["chart_bg_color","chart_header_color","chart_accent_color","chart_title_color","chart_secondary_color","chart_card_color"].forEach(id=>changes[id]=$(id).value);
+saveExtraSettings(changes,"chartColoursMessage");
+};
 $("saveBranding").onclick=()=>{
 const values=[["desktopLogoWidth",40,600],["mobileLogoWidth",40,350],["desktopHeaderHeight",40,300],["mobileHeaderHeight",40,250],["headerSpacing",0,100]];
 const changes={};
