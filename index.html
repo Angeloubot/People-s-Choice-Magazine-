@@ -881,6 +881,14 @@ footer {
     font-size:34px;
   }
 }
+
+.ad-slot:empty{display:none}
+.ad-slot{margin:20px 0}
+.ad-campaign{padding:10px;background:var(--light,#fff);border-radius:12px;overflow:hidden}
+.ad-campaign img{width:100%;height:auto;display:block;border-radius:8px}
+.ad-campaign video{width:100%;display:block;border-radius:8px}
+.ad-campaign a{display:block}
+.ad-label{font-size:11px;letter-spacing:1px;color:#777;margin-bottom:6px}
 </style>
 </head>
 
@@ -928,6 +936,9 @@ alt="Featured story">
 </div>
 </div>
 
+<div id="ad-homepage" class="ad-slot"></div>
+<div id="ad-articles" class="ad-slot"></div>
+
 <div class="news-layout" id="latest-section">
 
 <section>
@@ -972,6 +983,7 @@ Vote totals are not displayed publicly.
 </p>
 
 </section>
+<div id="ad-top10" class="ad-slot"></div>
 
 <!-- CREATORS CORNER -->
 
@@ -1956,6 +1968,34 @@ async function loadVideos() {
   requestAnimationFrame(scrollToSharedItem);
 }
 
+/* AD CAMPAIGNS */
+async function loadAdvertisements(){
+  const now=new Date().toISOString();
+  const {data,error}=await db.from("advertisements")
+    .select("id,brand_name,title,media_type,image_url,video_url,target_url,placement,start_date,end_date,status")
+    .eq("status","active");
+  if(error){console.warn("Ads could not be loaded",error);return;}
+  const ads=(data||[]).filter(a=>(!a.start_date||a.start_date<=now)&&(!a.end_date||a.end_date>=now));
+  const slots={homepage:"ad-homepage",articles:"ad-articles",top10:"ad-top10"};
+  Object.values(slots).forEach(id=>{if($(id))$(id).innerHTML="";});
+  ads.forEach(a=>{
+    const targets=a.placement==="all"?Object.values(slots):[slots[a.placement]];
+    targets.filter(Boolean).forEach(slotId=>{
+      const slot=$(slotId);if(!slot)return;
+      const media=a.media_type==="video"&&a.video_url
+        ?`<video controls preload="metadata" src="${esc(safeUrl(a.video_url))}"></video>`
+        :a.image_url?`<img loading="lazy" src="${esc(safeImage(a.image_url))}" alt="${esc(a.title||a.brand_name)}">`:"";
+      if(!media)return;
+      const dest=safeUrl(a.target_url,"#");
+      slot.insertAdjacentHTML("beforeend",`<div class="ad-campaign"><div class="ad-label">ADVERTISEMENT · ${esc(a.brand_name)}</div><a href="${esc(dest)}" target="_blank" rel="noopener noreferrer" data-ad-click="${esc(a.id)}">${media}${a.title?`<p>${esc(a.title)}</p>`:""}</a></div>`);
+      db.rpc("record_ad_impression",{ad_id:a.id}).then(({error:e})=>{if(e)console.warn(e);});
+    });
+  });
+  document.querySelectorAll('[data-ad-click]').forEach(el=>el.addEventListener('click',()=>{
+    db.rpc("record_ad_click",{ad_id:el.getAttribute("data-ad-click")}).then(({error})=>{if(error)console.warn(error);});
+  }));
+}
+
 /* HOMEPAGE INITIALISATION */
 
 async function initialiseHomepage() {
@@ -1972,7 +2012,9 @@ async function initialiseHomepage() {
 
     loadMusicChart(),
 
-    initialiseChartAuth()
+    initialiseChartAuth(),
+
+    loadAdvertisements()
 
   ]);
 
