@@ -556,9 +556,9 @@ $("userInfo").textContent=(p.full_name||user.email)+" · "+String(p.role).toUppe
 $("login").classList.add("hidden");$("dashboard").classList.remove("hidden");
 
 if(currentRole==="admin"){
-await Promise.all([loadSettings(),loadBanners(),loadVideos(),initChart()]);
+await Promise.all([loadSettings(),loadBanners(),loadVideos(),initChart(),loadAdverts()]);
 }else{
-["website","banners","videos","chart","screenshots"].forEach(t=>{
+["website","banners","videos","chart","screenshots","advertisers"].forEach(t=>{
 const button=document.querySelector(`[data-tab="${t}"]`);
 if(button)button.classList.add("hidden");
 });
@@ -921,7 +921,8 @@ const upgradeTabs=[
 ["templates","Template Manager"],
 ["analytics","Analytics"],
 ["media","Media Library"],
-["screenshots","Screenshot Studio"]
+["screenshots","Screenshot Studio"],
+["advertisers","Advertisers"]
 ];
 
 const nav=$("adminNav");
@@ -1818,6 +1819,68 @@ function catchErrorFallback(){
 
 $("refreshScreenshotGallery").onclick=loadScreenshotGallery;
 
+/* ADVERTISER MANAGER */
+const advertPanel=$("tab-advertisers");
+advertPanel.innerHTML=`
+<h2>Advertisers & Campaigns</h2>
+<p class="help">Create and manage image or video advertising campaigns. Campaigns are shown publicly only when their status is Active and dates allow it.</p>
+<form id="advertForm">
+<input type="hidden" id="advertId">
+<label>Brand name</label><input id="advertBrand" required maxlength="150">
+<label>Advert title (optional)</label><input id="advertTitle" maxlength="200">
+<label>Media type</label><select id="advertType"><option value="image">Image</option><option value="video">Video</option></select>
+<label>Upload media (image or MP4 video)</label><input id="advertFile" type="file" accept="image/jpeg,image/png,image/webp,video/mp4">
+<label>Or paste media URL</label><input id="advertMediaUrl" type="url" placeholder="https://...">
+<label>Destination link (optional)</label><input id="advertTarget" type="url" placeholder="https://brand...">
+<label>Placement</label><select id="advertPlacement"><option value="homepage">Homepage</option><option value="articles">Articles</option><option value="top10">Top 10 Chart</option><option value="all">All pages</option></select>
+<label>Start date (optional)</label><input id="advertStart" type="date">
+<label>End date (optional)</label><input id="advertEnd" type="date">
+<label>Status</label><select id="advertStatus"><option value="inactive">Inactive</option><option value="active">Active</option></select>
+<button type="submit">Save Campaign</button><button type="button" class="secondary" id="advertReset">Clear form</button>
+</form><div id="advertMessage" class="notice hidden"></div>
+<h3>Campaigns</h3><button type="button" id="refreshAdverts">Refresh campaigns</button><div id="advertList">Loading campaigns...</div>`;
+function resetAdvertForm(){
+$("advertForm").reset();$("advertId").value="";$("advertFile").value="";
+}
+$("advertReset").onclick=resetAdvertForm;
+$("refreshAdverts").onclick=loadAdverts;
+async function loadAdverts(){
+if(currentRole!=="admin")return;
+const list=$("advertList");list.textContent="Loading campaigns...";
+try{
+const {data,error}=await db.from("advertisements").select("*").order("created_at",{ascending:false});
+if(error)throw error;list.innerHTML="";
+if(!data?.length){list.textContent="No advertising campaigns yet.";return;}
+data.forEach(a=>{
+const card=document.createElement("div");card.className="item";
+const h=document.createElement("strong");h.textContent=a.brand_name+(a.title?" — "+a.title:"");
+const meta=document.createElement("p");meta.textContent=`${a.media_type||"image"} · ${a.placement||"homepage"} · ${a.status||"inactive"} · ${a.impressions||0} impressions · ${a.clicks||0} clicks`;
+const url=document.createElement("p");url.textContent=a.image_url||a.video_url||"No media URL";
+const toggle=document.createElement("button");toggle.textContent=a.status==="active"?"Pause":"Activate";toggle.className="secondary";
+toggle.onclick=async()=>{const {error}=await db.from("advertisements").update({status:a.status==="active"?"inactive":"active"}).eq("id",a.id);if(error)alert(error.message);else loadAdverts();};
+const edit=document.createElement("button");edit.textContent="Edit";edit.className="secondary";edit.onclick=()=>{
+$("advertId").value=a.id;$('advertBrand').value=a.brand_name||"";$('advertTitle').value=a.title||"";$('advertType').value=a.media_type||"image";
+$('advertMediaUrl').value=a.image_url||a.video_url||"";$('advertTarget').value=a.target_url||"";$('advertPlacement').value=a.placement||"homepage";
+$('advertStart').value=a.start_date?String(a.start_date).slice(0,10):"";$('advertEnd').value=a.end_date?String(a.end_date).slice(0,10):"";$('advertStatus').value=a.status||"inactive";
+window.scrollTo({top:0,behavior:"smooth"});};
+const del=document.createElement("button");del.textContent="Delete";del.className="danger";del.onclick=async()=>{if(!confirm("Delete this advertising campaign?"))return;const {error}=await db.from("advertisements").delete().eq("id",a.id);if(error)alert(error.message);else loadAdverts();};
+card.append(h,meta,url,toggle,edit,del);list.append(card);
+});
+}catch(err){list.textContent="Could not load campaigns: "+err.message;}
+}
+$("advertForm").onsubmit=async e=>{
+e.preventDefault();if(currentRole!=="admin")return;
+const btn=e.submitter;btn.disabled=true;
+try{
+let mediaUrl=$("advertMediaUrl").value.trim();const type=$("advertType").value;const file=$("advertFile").files[0];
+if(file){const allowed=type==="video"?file.type==="video/mp4":["image/jpeg","image/png","image/webp"].includes(file.type);if(!allowed)throw new Error("Choose a supported file for the selected media type.");
+const path=`${Date.now()}-${fileName(file.name)}`;mediaUrl=await upload("advert-media",path,file);}
+if(!mediaUrl)throw new Error("Upload a media file or enter a media URL.");if(!validUrl(mediaUrl))throw new Error("Media URL must be a valid HTTP or HTTPS URL.");
+const row={brand_name:$('advertBrand').value.trim(),title:$('advertTitle').value.trim()||null,media_type:type,image_url:type==="image"?mediaUrl:null,video_url:type==="video"?mediaUrl:null,target_url:$('advertTarget').value.trim()||null,placement:$('advertPlacement').value,status:$('advertStatus').value,start_date:$('advertStart').value||null,end_date:$('advertEnd').value||null};
+const id=$('advertId').value;const result=id?await db.from("advertisements").update(row).eq("id",id):await db.from("advertisements").insert(row);
+if(result.error)throw result.error;msg("advertMessage",id?"Campaign updated.":"Campaign saved.");resetAdvertForm();await loadAdverts();
+}catch(err){msg("advertMessage",err.message,true);}finally{btn.disabled=false;}
+};
 /* ACCESS CONTROL AND UPGRADE TABS */
 async function openUpgradeTab(name){
 if(currentRole!=="admin")return;
@@ -1827,6 +1890,7 @@ switchTab(name);
 if(name==="analytics")await loadAnalytics();
 if(name==="media")await loadMediaLibrary();
 if(name==="screenshots")await loadScreenshotGallery();
+if(name==="advertisers")await loadAdverts();
 }
 
 upgradeTabs.forEach(([name])=>{
