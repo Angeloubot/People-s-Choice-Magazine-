@@ -42,7 +42,7 @@
   --gray:#777;
   --page:#f5f5f5;
 
-  /* WEEKLY TOP 10 CHART COLOURS */
+  /* TOP 10 CHART COLOURS */
   --chart-orange:#e7549b;
   --chart-gold:#ffb6d5;
   --chart-black:#222;
@@ -376,7 +376,7 @@ nav a:hover {
   margin-top:6px;
 }
 
-/* PEOPLE'S CHOICE WEEKLY TOP 10 CHART */
+/* PEOPLE'S CHOICE TOP 10 CHART */
 
 #music-chart {
   margin-top:45px;
@@ -881,14 +881,6 @@ footer {
     font-size:34px;
   }
 }
-
-.ad-slot:empty{display:none}
-.ad-slot{margin:20px 0}
-.ad-campaign{padding:10px;background:var(--light,#fff);border-radius:12px;overflow:hidden}
-.ad-campaign img{width:100%;height:auto;display:block;border-radius:8px}
-.ad-campaign video{width:100%;display:block;border-radius:8px}
-.ad-campaign a{display:block}
-.ad-label{font-size:11px;letter-spacing:1px;color:#777;margin-bottom:6px}
 </style>
 </head>
 
@@ -936,9 +928,6 @@ alt="Featured story">
 </div>
 </div>
 
-<div id="ad-homepage" class="ad-slot"></div>
-<div id="ad-articles" class="ad-slot"></div>
-
 <div class="news-layout" id="latest-section">
 
 <section>
@@ -955,16 +944,16 @@ alt="Featured story">
 
 </div>
 
-<!-- WEEKLY TOP 10 MUSIC CHART -->
+<!-- TOP 10 MUSIC CHART -->
 
 <section id="music-chart">
 
 <div class="chart-heading" id="chart-header">
-<h2 id="chart-heading">WEEKLY TOP 10</h2>
+<h2 id="chart-heading">TOP 10</h2>
 </div>
 
 <div class="chart-auth">
-<p>Vote once per chart week.</p>
+<p>Vote once per day.</p>
 <div class="chart-message" id="chart-auth-message" aria-live="polite">
 Preparing voting...
 </div>
@@ -978,12 +967,11 @@ Connecting...
 </div>
 
 <p class="chart-note">
-Rankings are based on votes received during the current chart week.
+Rankings are based on votes received during the current chart week. You may vote once per day.
 Vote totals are not displayed publicly.
 </p>
 
 </section>
-<div id="ad-top10" class="ad-slot"></div>
 
 <!-- CREATORS CORNER -->
 
@@ -1593,7 +1581,7 @@ async function loadArticles() {
     :"<p>No national stories published yet.</p>";
 }
 
-/* WEEKLY TOP 10 MUSIC CHART */
+/* TOP 10 MUSIC CHART */
 
 function renderMusicChart() {
 
@@ -1740,7 +1728,7 @@ async function initialiseChartAuth() {
   }
 
   $("chart-user-status").textContent=
-    "Voting session ready. You can cast one vote this chart week.";
+    "Voting session ready. You can cast one vote today.";
 
   setChartMessage("Choose your favourite song below.");
 
@@ -1819,7 +1807,7 @@ $("chart-grid").addEventListener("click",async e=>{
       console.error("Vote submission:",error);
 
       if(error.code==="23505") {
-        setChartMessage("Our records show that you have already voted this chart week. Thank you!");
+        setChartMessage("Our records show that you have already voted today. Thank you!");
         document.querySelectorAll("[data-vote]").forEach(button=>{
           if(button.dataset.week===chartWeek) {
             button.disabled=true;
@@ -1841,7 +1829,7 @@ $("chart-grid").addEventListener("click",async e=>{
     }
 
     setChartMessage(
-      "SUCCESS! Your vote has been recorded. Thank you for supporting your favourite music!"
+      "SUCCESS! Your vote has been recorded for today. Thank you for supporting your favourite music!"
     );
 
     document.querySelectorAll("[data-vote]").forEach(button=>{
@@ -1968,34 +1956,6 @@ async function loadVideos() {
   requestAnimationFrame(scrollToSharedItem);
 }
 
-/* AD CAMPAIGNS */
-async function loadAdvertisements(){
-  const now=new Date().toISOString();
-  const {data,error}=await db.from("advertisements")
-    .select("id,brand_name,title,media_type,image_url,video_url,target_url,placement,start_date,end_date,status")
-    .eq("status","active");
-  if(error){console.warn("Ads could not be loaded",error);return;}
-  const ads=(data||[]).filter(a=>(!a.start_date||a.start_date<=now)&&(!a.end_date||a.end_date>=now));
-  const slots={homepage:"ad-homepage",articles:"ad-articles",top10:"ad-top10"};
-  Object.values(slots).forEach(id=>{if($(id))$(id).innerHTML="";});
-  ads.forEach(a=>{
-    const targets=a.placement==="all"?Object.values(slots):[slots[a.placement]];
-    targets.filter(Boolean).forEach(slotId=>{
-      const slot=$(slotId);if(!slot)return;
-      const media=a.media_type==="video"&&a.video_url
-        ?`<video controls preload="metadata" src="${esc(safeUrl(a.video_url))}"></video>`
-        :a.image_url?`<img loading="lazy" src="${esc(safeImage(a.image_url))}" alt="${esc(a.title||a.brand_name)}">`:"";
-      if(!media)return;
-      const dest=safeUrl(a.target_url,"#");
-      slot.insertAdjacentHTML("beforeend",`<div class="ad-campaign"><div class="ad-label">ADVERTISEMENT · ${esc(a.brand_name)}</div><a href="${esc(dest)}" target="_blank" rel="noopener noreferrer" data-ad-click="${esc(a.id)}">${media}${a.title?`<p>${esc(a.title)}</p>`:""}</a></div>`);
-      db.rpc("record_ad_impression",{ad_id:a.id}).then(({error:e})=>{if(e)console.warn(e);});
-    });
-  });
-  document.querySelectorAll('[data-ad-click]').forEach(el=>el.addEventListener('click',()=>{
-    db.rpc("record_ad_click",{ad_id:el.getAttribute("data-ad-click")}).then(({error})=>{if(error)console.warn(error);});
-  }));
-}
-
 /* HOMEPAGE INITIALISATION */
 
 async function initialiseHomepage() {
@@ -2012,9 +1972,7 @@ async function initialiseHomepage() {
 
     loadMusicChart(),
 
-    initialiseChartAuth(),
-
-    loadAdvertisements()
+    initialiseChartAuth()
 
   ]);
 
