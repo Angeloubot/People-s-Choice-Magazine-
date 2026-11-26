@@ -1197,6 +1197,8 @@ info.append(h,p,status,label,select,ed,ap,ac,del);d.append(im,info);$("chartSong
 const originalLoadSettings=loadSettings;
 loadSettings=async function(){
 await originalLoadSettings();
+if(typeof dsLoad==='function')dsLoad();
+if(settings.imported_template_html){importedHtml=settings.imported_template_html;$('dsImportedFrame').srcdoc=importedHtml;$('dsImportedFrame').classList.remove('hidden');$('dsSample').classList.add('hidden');$('dsImportInfo').textContent='Saved template loaded: '+(settings.imported_template_name||'Imported template');}
 loadBrandingSettings();loadTemplates();
 const active=settings.active_theme||"classic";
 $("themePreset").value=themePresets[active]?active:"custom";
@@ -1944,7 +1946,19 @@ function dsDefaults(){return{dsPrimary:settings.ds_primary||settings.theme_prima
 function dsUpdate(){const v={};dsIds.forEach(id=>v[id]=$(id).value);const sample=$('dsSample');sample.style.background=v.dsBg;sample.style.color=v.dsText;sample.style.fontFamily=v.dsFont;sample.querySelector('header').style.background=v.dsDark;sample.querySelector('header').style.color='#fff';sample.querySelector('nav').style.background=v.dsDark;sample.querySelector('nav').style.fontSize=v.dsNavSize+'px';sample.querySelector('.hero').style.background=v.dsCard;sample.querySelector('.hero').style.padding=v.dsSpace+'px';sample.querySelector('h1').style.color=v.dsHeadline;sample.querySelector('h1').style.fontSize=v.dsHeadlineSize+'px';sample.querySelectorAll('p').forEach(p=>p.style.fontSize=v.dsBodySize+'px');sample.querySelectorAll('article').forEach(a=>{a.style.background=v.dsCard;a.style.borderColor=v.dsBorder;a.style.borderRadius=v.dsRadius+'px'});sample.querySelectorAll('button').forEach(b=>b.style.background=v.dsPrimary);sample.querySelector('.cards').style.gap=v.dsGap+'px';sample.querySelector('.cards').style.padding=v.dsSpace+'px';sample.style.maxWidth=v.dsWidth+'px';sample.style.margin='auto';['dsHeadlineSize','dsBodySize','dsNavSize','dsRadius','dsWidth','dsSpace','dsGap'].forEach(id=>$(id+'Out').textContent=$(id).value+(id==='dsWidth'?'px':'px'));let width=Number($('dsCustomWidth').value)||1200;const device=$('dsDevice').value;if(device==='phone')width=390;else if(device==='tablet')width=768;else if(device==='desktop')width=1200; $('dsCustomWidth').value=width;$('dsFrame').style.width='100%';$('dsSample').style.width=Math.min(width,$('dsFrame').clientWidth||width)+'px';$('dsPreviewLabel').textContent=device+' · '+width+'px';}
 dsIds.forEach(id=>$(id).addEventListener('input',dsUpdate));$('dsDevice').onchange=()=>{const d=$('dsDevice').value;if(d==='phone')$('dsCustomWidth').value=390;else if(d==='tablet')$('dsCustomWidth').value=768;else if(d==='desktop')$('dsCustomWidth').value=1200;dsUpdate()};$('dsCustomWidth').oninput=()=>{$('dsDevice').value='custom';dsUpdate()};
 function dsLoad(){const v=dsDefaults();dsIds.forEach(id=>$(id).value=v[id]);dsUpdate()}
-dsLoad();$('dsReset').onclick=()=>{dsIds.forEach(id=>{if(id in themePresets.classic){} });$('dsPrimary').value='#e7549b';$('dsDark').value='#171717';$('dsBg').value='#f5f5f5';$('dsCard').value='#fff';$('dsText').value='#171717';$('dsHeadline').value='#171717';$('dsBorder').value='#ddd';$('dsFont').value='Arial';$('dsHeadlineSize').value=38;$('dsBodySize').value=16;$('dsNavSize').value=14;$('dsRadius').value=10;$('dsWidth').value=1200;$('dsSpace').value=24;$('dsGap').value=12;dsUpdate()};
+dsLoad();
+function dsResetValues(){
+const defaults={dsPrimary:'#e7549b',dsDark:'#171717',dsBg:'#f5f5f5',dsCard:'#ffffff',dsText:'#171717',dsHeadline:'#171717',dsBorder:'#dddddd',dsFont:'Arial',dsHeadlineSize:38,dsBodySize:16,dsNavSize:14,dsRadius:10,dsWidth:1200,dsSpace:24,dsGap:12};
+Object.entries(defaults).forEach(([id,value])=>$(id).value=value);
+$('dsDevice').value='desktop';$('dsCustomWidth').value=1200;dsUpdate();
+return defaults;
+}
+$('dsReset').onclick=async()=>{
+if(currentRole!=='admin'){msg('dsMessage','Administrator permission required.',true);return;}
+const d=dsResetValues();
+const changes={ds_primary:d.dsPrimary,ds_dark:d.dsDark,ds_bg:d.dsBg,ds_card:d.dsCard,ds_text:d.dsText,ds_headline:d.dsHeadline,ds_border:d.dsBorder,ds_font:d.dsFont,ds_headline_size:d.dsHeadlineSize,ds_body_size:d.dsBodySize,ds_nav_size:d.dsNavSize,ds_radius:d.dsRadius,ds_width:d.dsWidth,ds_space:d.dsSpace,ds_gap:d.dsGap};
+await saveExtraSettings(changes,'dsMessage');
+};
 $('dsSave').onclick=async()=>{const changes={ds_primary:$('dsPrimary').value,ds_dark:$('dsDark').value,ds_bg:$('dsBg').value,ds_card:$('dsCard').value,ds_text:$('dsText').value,ds_headline:$('dsHeadline').value,ds_border:$('dsBorder').value,ds_font:$('dsFont').value,ds_headline_size:+$('dsHeadlineSize').value,ds_body_size:+$('dsBodySize').value,ds_nav_size:+$('dsNavSize').value,ds_radius:+$('dsRadius').value,ds_width:+$('dsWidth').value,ds_space:+$('dsSpace').value,ds_gap:+$('dsGap').value};await saveExtraSettings(changes,'dsMessage')};
 let importedHtml='';$('dsImport').onchange=async()=>{const f=$('dsImport').files[0];if(!f)return;if(f.size>5*1024*1024){$('dsImportInfo').textContent='Please choose a file smaller than 5MB.';return;}importedHtml=await f.text();$('dsImportedFrame').srcdoc=importedHtml;$('dsImportedFrame').classList.remove('hidden');$('dsSample').classList.add('hidden');$('dsSaveImported').disabled=false;$('dsImportInfo').textContent='Preview loaded: '+f.name+' (scripts disabled in preview)'};
 $('dsSaveImported').onclick=async()=>{if(!importedHtml)return;await saveExtraSettings({imported_template_html:importedHtml,imported_template_name:$('dsImport').files[0]?.name||'Imported template'},'dsMessage')};
