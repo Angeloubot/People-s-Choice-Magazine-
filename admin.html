@@ -149,21 +149,7 @@ main{padding:10px}
 <input id="logo_file" type="file" accept="image/*">
 <img id="logo_preview" class="preview hidden" alt="Logo preview">
 
-<hr>
-<h3>Website Colours</h3>
-<div class="grid">
-<div><label>Primary accent</label><input id="theme_primary" type="color" value="#e7549b"></div>
-<div><label>Dark / navigation</label><input id="theme_dark" type="color" value="#171717"></div>
-<div><label>Light accent background</label><input id="theme_light" type="color" value="#fff1f7"></div>
-<div><label>Page background</label><input id="theme_background" type="color" value="#f5f5f5"></div>
-<div><label>Main text colour</label><input id="theme_text" type="color" value="#171717"></div>
-<div>
-<label>Website font</label>
-<select id="font_family">
-<option>Arial</option><option>Georgia</option><option>Verdana</option><option>Tahoma</option><option>Trebuchet MS</option>
-</select>
-</div>
-</div>
+<hr><div class="studio-intro"><strong>Colour and typography editing has moved to the unified Design Studio.</strong> Use the Design Studio tab for independent settings.</div>
 
 <hr>
 <h3>Homepage headings and descriptions</h3>
@@ -605,14 +591,23 @@ resetArticle();await loadArticles();
 finally{b.disabled=false;}
 };
 async function loadArticles(){
-const {data,error}=await db.from("articles").select("*").order("created_at",{ascending:false});
-if(error){$("articles").textContent=error.message;return;}
+const box=$("articles");
+box.textContent="Loading articles...";
+try{
+const request=db.from("articles").select("*").order("created_at",{ascending:false});
+const result=await Promise.race([request, new Promise((_,reject)=>setTimeout(()=>reject(new Error("Article request timed out. Please refresh or check the Supabase connection.")),15000))]);
+const {data,error}=result;
+if(error)throw error;
 articles=data||[];
 $("totalCount").textContent=articles.length;
 $("publishedCount").textContent=articles.filter(a=>a.status==="published").length;
 $("draftCount").textContent=articles.filter(a=>a.status==="draft").length;
 renderArticles();
 if(currentRole==="admin")refreshScreenshotArticleOptions();
+}catch(err){
+console.error("loadArticles failed:",err);
+box.textContent="Articles could not be loaded: "+(err?.message||"Unknown error")+" — please retry.";
+}
 }
 function renderArticles(){
 const q=$("searchArticles").value.toLowerCase(),st=$("statusFilter").value,cat=$("categoryFilter").value;
@@ -1927,7 +1922,7 @@ const designStudioMarkup=`
 <details open><summary>Colours</summary>
 <label>Primary accent <input type="color" id="dsPrimary"></label><label>Navigation / dark <input type="color" id="dsDark"></label><label>Page background <input type="color" id="dsBg"></label><label>Card background <input type="color" id="dsCard"></label><label>Main text <input type="color" id="dsText"></label><label>Headline colour <input type="color" id="dsHeadline"></label><label>Border colour <input type="color" id="dsBorder"></label>
 </details><details open><summary>Typography & sizing</summary>
-<label>Font family<select id="dsFont"><option>Arial</option><option>Georgia</option><option>Verdana</option><option>Tahoma</option><option>Trebuchet MS</option></select></label>
+<label>Font family<select id="dsFont"><option>Arial</option><option>Georgia</option><option>Verdana</option><option>Tahoma</option><option>Trebuchet MS</option><option>Playfair Display</option><option>DM Serif Display</option><option>Merriweather</option><option>Libre Baskerville</option><option>Space Grotesk</option><option>Montserrat</option><option>Manrope</option><option>Lora</option><option>Source Serif 4</option></select></label>
 <label>Headline size <output id="dsHeadlineOut"></output><input type="range" id="dsHeadlineSize" min="18" max="64" value="38"></label>
 <label>Body size <output id="dsBodyOut"></output><input type="range" id="dsBodySize" min="12" max="24" value="16"></label>
 <label>Navigation size <output id="dsNavOut"></output><input type="range" id="dsNavSize" min="10" max="24" value="14"></label>
@@ -1937,7 +1932,14 @@ const designStudioMarkup=`
 <label>Section spacing <output id="dsSpaceOut"></output><input type="range" id="dsSpace" min="0" max="80" value="24"></label>
 <label>Card spacing <output id="dsGapOut"></output><input type="range" id="dsGap" min="4" max="40" value="12"></label>
 </details><details open><summary>Preview size</summary><label>Device<select id="dsDevice"><option value="desktop">Desktop</option><option value="tablet">Tablet</option><option value="phone">Phone</option><option value="custom">Custom</option></select></label><label>Preview width (px)<input type="number" id="dsCustomWidth" min="320" max="1600" value="1200"></label></details>
-<button type="button" id="dsSave">Save Design Settings</button><button type="button" id="dsReset" class="secondary">Reset preview controls</button><div id="dsMessage" class="notice hidden"></div>
+<details open><summary>Independent headline and masthead styling</summary>
+<label>Masthead background <input type="color" id="dsMastBg" value="#ffffff"></label><label>Masthead text <input type="color" id="dsMastText" value="#171717"></label>
+<label>Latest Stories headline colour <input type="color" id="dsLatestColor" value="#171717"></label><label>Top Stories headline colour <input type="color" id="dsTopColor" value="#171717"></label>
+<label>Section header colour <input type="color" id="dsSectionColor" value="#171717"></label>
+<label>Masthead font<select id="dsMastFont"><option>Playfair Display</option><option>DM Serif Display</option><option>Montserrat</option><option>Space Grotesk</option><option>Manrope</option><option>Arial</option><option>Georgia</option></select></label>
+<label>Headline font<select id="dsStoryFont"><option>Space Grotesk</option><option>Montserrat</option><option>Playfair Display</option><option>DM Serif Display</option><option>Merriweather</option><option>Libre Baskerville</option><option>Manrope</option><option>Arial</option><option>Georgia</option></select></label>
+<label>Article font<select id="dsArticleFont"><option>Source Serif 4</option><option>Lora</option><option>Merriweather</option><option>Libre Baskerville</option><option>Georgia</option><option>Arial</option><option>Manrope</option></select></label>
+</details><button type="button" id="dsSave">Save Design Settings</button><button type="button" id="dsReset" class="secondary">Reset preview controls</button><div id="dsMessage" class="notice hidden"></div>
 <hr><h3>Import HTML template (preview only)</h3><p class="help">Choose a downloaded HTML file to preview it safely. It is not automatically applied to the public website.</p><input type="file" id="dsImport" accept=".html,.htm,text/html"><div id="dsImportInfo" class="help"></div><button id="dsSaveImported" class="secondary" disabled>Save imported template in settings</button>
 </div><div class="ds-preview-area"><div class="ds-preview-top"><strong>Live Preview</strong><small id="dsPreviewLabel">Desktop · 1200px</small></div><div class="ds-frame" id="dsFrame"><div class="ds-sample" id="dsSample"><header><strong>PEOPLE'S CHOICE</strong><span>Magazine</span></header><nav>HOME　NEWS　ENTERTAINMENT　MUSIC</nav><section class="hero"><small>FEATURED STORY</small><h1 id="dsPreviewHeadline">Stories that matter</h1><p>Discover the latest stories, music, culture and people.</p><button>Read Story</button></section><div class="cards"><article><h2>Latest Stories</h2><p>Explore recent news and features.</p></article><article><h2>Top 10 Music Chart</h2><p>Discover this week's trending music.</p></article><article><h2>Creators' Corner</h2><p>Meet creators and watch their work.</p></article></div></div></div><iframe id="dsImportedFrame" class="hidden" title="Imported HTML preview" sandbox="" style="width:100%;height:65vh;border:0"></iframe></div></div>`;
 $('tab-design').innerHTML=designStudioMarkup;
@@ -1945,7 +1947,7 @@ const dsIds=['dsPrimary','dsDark','dsBg','dsCard','dsText','dsHeadline','dsBorde
 function dsDefaults(){return{dsPrimary:settings.ds_primary||settings.theme_primary||'#e7549b',dsDark:settings.ds_dark||settings.theme_dark||'#171717',dsBg:settings.ds_bg||settings.theme_background||'#f5f5f5',dsCard:settings.ds_card||'#ffffff',dsText:settings.ds_text||settings.theme_text||'#171717',dsHeadline:settings.ds_headline||settings.theme_text||'#171717',dsBorder:settings.ds_border||'#dddddd',dsFont:settings.ds_font||settings.font_family||'Arial',dsHeadlineSize:settings.ds_headline_size||38,dsBodySize:settings.ds_body_size||16,dsNavSize:settings.ds_nav_size||14,dsRadius:settings.ds_radius||10,dsWidth:settings.ds_width||1200,dsSpace:settings.ds_space||24,dsGap:settings.ds_gap||12}}
 function dsUpdate(){const v={};dsIds.forEach(id=>v[id]=$(id).value);const sample=$('dsSample');sample.style.background=v.dsBg;sample.style.color=v.dsText;sample.style.fontFamily=v.dsFont;sample.querySelector('header').style.background=v.dsDark;sample.querySelector('header').style.color='#fff';sample.querySelector('nav').style.background=v.dsDark;sample.querySelector('nav').style.fontSize=v.dsNavSize+'px';sample.querySelector('.hero').style.background=v.dsCard;sample.querySelector('.hero').style.padding=v.dsSpace+'px';sample.querySelector('h1').style.color=v.dsHeadline;sample.querySelector('h1').style.fontSize=v.dsHeadlineSize+'px';sample.querySelectorAll('p').forEach(p=>p.style.fontSize=v.dsBodySize+'px');sample.querySelectorAll('article').forEach(a=>{a.style.background=v.dsCard;a.style.borderColor=v.dsBorder;a.style.borderRadius=v.dsRadius+'px'});sample.querySelectorAll('button').forEach(b=>b.style.background=v.dsPrimary);sample.querySelector('.cards').style.gap=v.dsGap+'px';sample.querySelector('.cards').style.padding=v.dsSpace+'px';sample.style.maxWidth=v.dsWidth+'px';sample.style.margin='auto';const outputIds={dsHeadlineSize:'dsHeadlineOut',dsBodySize:'dsBodyOut',dsNavSize:'dsNavOut',dsRadius:'dsRadiusOut',dsWidth:'dsWidthOut',dsSpace:'dsSpaceOut',dsGap:'dsGapOut'};Object.entries(outputIds).forEach(([id,out])=>$(out).textContent=$(id).value+'px');let width=Number($('dsCustomWidth').value)||1200;const device=$('dsDevice').value;if(device==='phone')width=390;else if(device==='tablet')width=768;else if(device==='desktop')width=1200; $('dsCustomWidth').value=width;$('dsFrame').style.width='100%';$('dsSample').style.width=Math.min(width,$('dsFrame').clientWidth||width)+'px';$('dsPreviewLabel').textContent=device+' · '+width+'px';}
 dsIds.forEach(id=>$(id).addEventListener('input',dsUpdate));$('dsDevice').onchange=()=>{const d=$('dsDevice').value;if(d==='phone')$('dsCustomWidth').value=390;else if(d==='tablet')$('dsCustomWidth').value=768;else if(d==='desktop')$('dsCustomWidth').value=1200;dsUpdate()};$('dsCustomWidth').oninput=()=>{$('dsDevice').value='custom';dsUpdate()};
-function dsLoad(){const v=dsDefaults();dsIds.forEach(id=>$(id).value=v[id]);dsUpdate()}
+function dsLoad(){const v=dsDefaults();dsIds.forEach(id=>$(id).value=v[id]);["dsMastBg","dsMastText","dsLatestColor","dsTopColor","dsSectionColor"].forEach(id=>$(id).value=settings[id.replace("ds","ds_").toLowerCase()]||({dsMastBg:"#ffffff",dsMastText:"#171717",dsLatestColor:"#171717",dsTopColor:"#171717",dsSectionColor:"#171717"})[id]);["dsMastFont","dsStoryFont","dsArticleFont"].forEach(id=>$(id).value=settings[id.replace("ds","ds_").toLowerCase()]||({dsMastFont:"Playfair Display",dsStoryFont:"Space Grotesk",dsArticleFont:"Source Serif 4"})[id]);dsUpdate()}
 dsLoad();
 function dsResetValues(){
 const defaults={dsPrimary:'#e7549b',dsDark:'#171717',dsBg:'#f5f5f5',dsCard:'#ffffff',dsText:'#171717',dsHeadline:'#171717',dsBorder:'#dddddd',dsFont:'Arial',dsHeadlineSize:38,dsBodySize:16,dsNavSize:14,dsRadius:10,dsWidth:1200,dsSpace:24,dsGap:12};
@@ -1957,7 +1959,7 @@ $('dsReset').addEventListener('click',async()=>{
   try {
     if(currentRole!=='admin'){msg('dsMessage','Administrator permission required.',true);return;}
     const d=dsResetValues();
-    const changes={ds_primary:d.dsPrimary,ds_dark:d.dsDark,ds_bg:d.dsBg,ds_card:d.dsCard,ds_text:d.dsText,ds_headline:d.dsHeadline,ds_border:d.dsBorder,ds_font:d.dsFont,ds_headline_size:d.dsHeadlineSize,ds_body_size:d.dsBodySize,ds_nav_size:d.dsNavSize,ds_radius:d.dsRadius,ds_width:d.dsWidth,ds_space:d.dsSpace,ds_gap:d.dsGap};
+    const changes={ds_primary:d.dsPrimary,ds_dark:d.dsDark,ds_bg:d.dsBg,ds_card:d.dsCard,ds_text:d.dsText,ds_headline:d.dsHeadline,ds_border:d.dsBorder,ds_font:d.dsFont,ds_headline_size:d.dsHeadlineSize,ds_body_size:d.dsBodySize,ds_nav_size:d.dsNavSize,ds_radius:d.dsRadius,ds_width:d.dsWidth,ds_space:d.dsSpace,ds_gap:d.dsGap,ds_mast_bg:"#ffffff",ds_mast_text:"#171717",ds_latest_color:"#171717",ds_top_color:"#171717",ds_section_color:"#171717",ds_mast_font:"Playfair Display",ds_story_font:"Space Grotesk",ds_article_font:"Source Serif 4"};
     await saveExtraSettings(changes,'dsMessage');
   } catch(err) { msg('dsMessage','Reset failed: '+(err?.message||err),true); }
 });
