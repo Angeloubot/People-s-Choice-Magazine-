@@ -541,15 +541,17 @@ currentUser=user;currentRole=p.role;
 $("userInfo").textContent=(p.full_name||user.email)+" · "+String(p.role).toUpperCase();
 $("login").classList.add("hidden");$("dashboard").classList.remove("hidden");
 
+// Load the article list independently so unrelated admin modules cannot block it.
+loadArticles();
 if(currentRole==="admin"){
-await Promise.all([loadSettings(),loadBanners(),loadVideos(),initChart(),loadAdverts()]);
+Promise.allSettled([loadSettings(),loadBanners(),loadVideos(),initChart(),loadAdverts()]);
 }else{
 ["website","banners","videos","chart","screenshots","advertisers"].forEach(t=>{
 const button=document.querySelector(`[data-tab="${t}"]`);
 if(button)button.classList.add("hidden");
 });
 }
-await loadJournalists();await loadArticles();
+loadJournalists().catch(err=>console.warn("Journalists list failed:",err));
 }
 async function loadJournalists(){
 const {data,error}=await db.from("journalists").select("id,name").order("name");
