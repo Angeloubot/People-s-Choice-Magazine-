@@ -18,7 +18,7 @@
 <meta name="twitter:title" content="People's Choice Magazine">  
 <meta name="twitter:description" content="Your Voice. Your Stories. Your Choice.">  
 <meta name="twitter:image" content="https://peopleschoicemagazine.co.zw/logo.png">  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script src="config.js"></script>  <style>  
-:root {  
+:root { --mast-bg:#fff; --mast-text:#171717; --latest-color:#171717; --top-color:#171717; --section-color:#171717; --mast-font:Georgia,serif; --story-font:Arial,sans-serif; --article-font:Georgia,serif;  
   --pink:#e7549b;  
   --dark:#171717;  
   --light:#fff1f7;  
@@ -866,6 +866,15 @@ footer {
   }  
 }  
 
+/* INDEPENDENT DESIGN STUDIO TYPOGRAPHY AND COLOURS */
+.masthead{background:var(--mast-bg)!important;color:var(--mast-text)!important}
+.logo{color:var(--mast-text)!important;font-family:var(--mast-font)!important}
+.logo span{color:var(--mast-text)!important}
+.news-info h3,.top-story{font-family:var(--story-font)!important}
+.news-info h3{color:var(--latest-color)!important}
+.sidebar h2,.top-story{color:var(--top-color)!important}
+.section-title,.category-banner h2,.creator-heading h2{color:var(--section-color)!important}
+.article-content,.article-body{font-family:var(--article-font)!important}
 /* DESIGN STUDIO SETTINGS */
 :root { --design-header:#fff; --design-nav:var(--dark); --design-headline:var(--dark); --design-body:var(--dark); --design-border:#eee; --design-button:var(--pink); --design-card:#fff; --design-spacing:1rem; --design-gap:20px; --design-radius:4px; --design-width:1250px; --design-headline-size:19px; --design-body-size:13px; --design-nav-size:12px; }
 .masthead { background:var(--design-header); }
@@ -1294,6 +1303,14 @@ async function loadSiteSettings() {
   }  
   
 
+  /* Independent Design Studio settings */
+  const safeFont=(v)=>typeof v==="string"&&/^[a-zA-Z0-9 ,'-]+$/.test(v)?v:"";
+  const setColor=(key,varName)=>{if(/^#[0-9a-f]{3,8}$/i.test(s[key]||""))root.style.setProperty(varName,s[key]);};
+  setColor("ds_mast_bg","--mast-bg");setColor("ds_mast_text","--mast-text");
+  setColor("ds_latest_color","--latest-color");setColor("ds_top_color","--top-color");setColor("ds_section_color","--section-color");
+  if(safeFont(s.ds_mast_font))root.style.setProperty("--mast-font",s.ds_mast_font+",serif");
+  if(safeFont(s.ds_story_font))root.style.setProperty("--story-font",s.ds_story_font+",sans-serif");
+  if(safeFont(s.ds_article_font))root.style.setProperty("--article-font",s.ds_article_font+",serif");
   /* DESIGN STUDIO: apply ds_ controls */
   const designColourMap={
     ds_primary:"--design-button", ds_dark:"--design-nav",
