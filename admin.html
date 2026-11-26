@@ -592,23 +592,29 @@ finally{b.disabled=false;}
 };
 async function loadArticles(){
 const box=$("articles");
+if(!box)return;
 box.textContent="Loading articles...";
+const retryButton=()=>{
+  const b=document.createElement("button");b.type="button";b.textContent="Retry loading articles";
+  b.onclick=()=>loadArticles();box.appendChild(document.createTextNode(" "));box.appendChild(b);
+};
 try{
-const request=db.from("articles").select("*").order("created_at",{ascending:false});
-const result=await Promise.race([request, new Promise((_,reject)=>setTimeout(()=>reject(new Error("Article request timed out. Please refresh or check the Supabase connection.")),15000))]);
-const {data,error}=result;
-if(error)throw error;
-articles=data||[];
-$("totalCount").textContent=articles.length;
-$("publishedCount").textContent=articles.filter(a=>a.status==="published").length;
-$("draftCount").textContent=articles.filter(a=>a.status==="draft").length;
-renderArticles();
-if(currentRole==="admin")refreshScreenshotArticleOptions();
+  // Keep this query independent of optional joins and avoid an endless loading state.
+  const {data,error}=await db.from("articles").select("*").order("created_at",{ascending:false});
+  if(error)throw error;
+  articles=Array.isArray(data)?data:[];
+  $("totalCount").textContent=articles.length;
+  $("publishedCount").textContent=articles.filter(a=>a.status==="published").length;
+  $("draftCount").textContent=articles.filter(a=>a.status==="draft").length;
+  renderArticles();
+  if(currentRole==="admin")refreshScreenshotArticleOptions();
 }catch(err){
-console.error("loadArticles failed:",err);
-box.textContent="Articles could not be loaded: "+(err?.message||"Unknown error")+" — please retry.";
+  console.error("loadArticles failed:",err);
+  box.textContent="Articles could not be loaded. "+(err?.message||"Unknown error")+". Check your Supabase articles-table access and connection, then retry.";
+  retryButton();
 }
 }
+
 function renderArticles(){
 const q=$("searchArticles").value.toLowerCase(),st=$("statusFilter").value,cat=$("categoryFilter").value;
 const list=articles.filter(a=>(a.title||"").toLowerCase().includes(q)&&(st==="all"||a.status===st)&&(cat==="all"||a.category===cat));
