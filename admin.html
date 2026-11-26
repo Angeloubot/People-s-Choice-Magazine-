@@ -1937,7 +1937,7 @@ const designStudioMarkup=`
 <label>Section spacing <output id="dsSpaceOut"></output><input type="range" id="dsSpace" min="0" max="80" value="24"></label>
 <label>Card spacing <output id="dsGapOut"></output><input type="range" id="dsGap" min="4" max="40" value="12"></label>
 </details><details open><summary>Preview size</summary><label>Device<select id="dsDevice"><option value="desktop">Desktop</option><option value="tablet">Tablet</option><option value="phone">Phone</option><option value="custom">Custom</option></select></label><label>Preview width (px)<input type="number" id="dsCustomWidth" min="320" max="1600" value="1200"></label></details>
-<button id="dsSave">Save Design Settings</button><button id="dsReset" class="secondary">Reset preview controls</button><div id="dsMessage" class="notice hidden"></div>
+<button type="button" id="dsSave">Save Design Settings</button><button type="button" id="dsReset" class="secondary">Reset preview controls</button><div id="dsMessage" class="notice hidden"></div>
 <hr><h3>Import HTML template (preview only)</h3><p class="help">Choose a downloaded HTML file to preview it safely. It is not automatically applied to the public website.</p><input type="file" id="dsImport" accept=".html,.htm,text/html"><div id="dsImportInfo" class="help"></div><button id="dsSaveImported" class="secondary" disabled>Save imported template in settings</button>
 </div><div class="ds-preview-area"><div class="ds-preview-top"><strong>Live Preview</strong><small id="dsPreviewLabel">Desktop · 1200px</small></div><div class="ds-frame" id="dsFrame"><div class="ds-sample" id="dsSample"><header><strong>PEOPLE'S CHOICE</strong><span>Magazine</span></header><nav>HOME　NEWS　ENTERTAINMENT　MUSIC</nav><section class="hero"><small>FEATURED STORY</small><h1 id="dsPreviewHeadline">Stories that matter</h1><p>Discover the latest stories, music, culture and people.</p><button>Read Story</button></section><div class="cards"><article><h2>Latest Stories</h2><p>Explore recent news and features.</p></article><article><h2>Top 10 Music Chart</h2><p>Discover this week's trending music.</p></article><article><h2>Creators' Corner</h2><p>Meet creators and watch their work.</p></article></div></div></div><iframe id="dsImportedFrame" class="hidden" title="Imported HTML preview" sandbox="" style="width:100%;height:65vh;border:0"></iframe></div></div>`;
 $('tab-design').innerHTML=designStudioMarkup;
@@ -1953,13 +1953,21 @@ Object.entries(defaults).forEach(([id,value])=>$(id).value=value);
 $('dsDevice').value='desktop';$('dsCustomWidth').value=1200;dsUpdate();
 return defaults;
 }
-$('dsReset').onclick=async()=>{
-if(currentRole!=='admin'){msg('dsMessage','Administrator permission required.',true);return;}
-const d=dsResetValues();
-const changes={ds_primary:d.dsPrimary,ds_dark:d.dsDark,ds_bg:d.dsBg,ds_card:d.dsCard,ds_text:d.dsText,ds_headline:d.dsHeadline,ds_border:d.dsBorder,ds_font:d.dsFont,ds_headline_size:d.dsHeadlineSize,ds_body_size:d.dsBodySize,ds_nav_size:d.dsNavSize,ds_radius:d.dsRadius,ds_width:d.dsWidth,ds_space:d.dsSpace,ds_gap:d.dsGap};
-await saveExtraSettings(changes,'dsMessage');
-};
-$('dsSave').onclick=async()=>{const changes={ds_primary:$('dsPrimary').value,ds_dark:$('dsDark').value,ds_bg:$('dsBg').value,ds_card:$('dsCard').value,ds_text:$('dsText').value,ds_headline:$('dsHeadline').value,ds_border:$('dsBorder').value,ds_font:$('dsFont').value,ds_headline_size:+$('dsHeadlineSize').value,ds_body_size:+$('dsBodySize').value,ds_nav_size:+$('dsNavSize').value,ds_radius:+$('dsRadius').value,ds_width:+$('dsWidth').value,ds_space:+$('dsSpace').value,ds_gap:+$('dsGap').value};await saveExtraSettings(changes,'dsMessage')};
+$('dsReset').addEventListener('click',async()=>{
+  try {
+    if(currentRole!=='admin'){msg('dsMessage','Administrator permission required.',true);return;}
+    const d=dsResetValues();
+    const changes={ds_primary:d.dsPrimary,ds_dark:d.dsDark,ds_bg:d.dsBg,ds_card:d.dsCard,ds_text:d.dsText,ds_headline:d.dsHeadline,ds_border:d.dsBorder,ds_font:d.dsFont,ds_headline_size:d.dsHeadlineSize,ds_body_size:d.dsBodySize,ds_nav_size:d.dsNavSize,ds_radius:d.dsRadius,ds_width:d.dsWidth,ds_space:d.dsSpace,ds_gap:d.dsGap};
+    await saveExtraSettings(changes,'dsMessage');
+  } catch(err) { msg('dsMessage','Reset failed: '+(err?.message||err),true); }
+});
+$('dsSave').addEventListener('click',async()=>{
+  try {
+    if(currentRole!=='admin'){msg('dsMessage','Administrator permission required.',true);return;}
+    const changes={ds_primary:$('dsPrimary').value,ds_dark:$('dsDark').value,ds_bg:$('dsBg').value,ds_card:$('dsCard').value,ds_text:$('dsText').value,ds_headline:$('dsHeadline').value,ds_border:$('dsBorder').value,ds_font:$('dsFont').value,ds_headline_size:+$('dsHeadlineSize').value,ds_body_size:+$('dsBodySize').value,ds_nav_size:+$('dsNavSize').value,ds_radius:+$('dsRadius').value,ds_width:+$('dsWidth').value,ds_space:+$('dsSpace').value,ds_gap:+$('dsGap').value};
+    await saveExtraSettings(changes,'dsMessage');
+  } catch(err) { msg('dsMessage','Save failed: '+(err?.message||err),true); }
+});
 let importedHtml='';$('dsImport').onchange=async()=>{const f=$('dsImport').files[0];if(!f)return;if(f.size>5*1024*1024){$('dsImportInfo').textContent='Please choose a file smaller than 5MB.';return;}importedHtml=await f.text();$('dsImportedFrame').srcdoc=importedHtml;$('dsImportedFrame').classList.remove('hidden');$('dsSample').classList.add('hidden');$('dsSaveImported').disabled=false;$('dsImportInfo').textContent='Preview loaded: '+f.name+' (scripts disabled in preview)'};
 $('dsSaveImported').onclick=async()=>{if(!importedHtml)return;await saveExtraSettings({imported_template_html:importedHtml,imported_template_name:$('dsImport').files[0]?.name||'Imported template'},'dsMessage')};
 $('dsSample').classList.remove('hidden');$('dsImportedFrame').classList.add('hidden');
