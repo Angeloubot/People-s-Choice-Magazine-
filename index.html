@@ -865,6 +865,16 @@ footer {
     font-size:34px;  
   }  
 }  
+
+/* DESIGN STUDIO SETTINGS */
+:root { --design-header:#fff; --design-nav:var(--dark); --design-headline:var(--dark); --design-body:var(--dark); --design-border:#eee; --design-button:var(--pink); --design-card:#fff; --design-spacing:1rem; }
+.masthead { background:var(--design-header); }
+nav { background:var(--design-nav); }
+.news-card,.video-card { background:var(--design-card); border-color:var(--design-border); }
+.news-info h3,.section-title,.category-banner h2,.creator-heading h2 { color:var(--design-headline); }
+.news-info p,.category-banner p { color:var(--design-body); }
+.read-more,.share-button { border-color:var(--design-button); }
+
 </style>  </head>  <body>  <div class="topbar" id="site-topbar">  
 Your Voice. Your Stories. Your Choice.  
 </div>  <header class="masthead">  
@@ -1277,6 +1287,28 @@ async function loadSiteSettings() {
     document.body.style.fontFamily=s.font_family+",sans-serif";  
   }  
   
+
+  /* DESIGN STUDIO: apply homepage appearance controls */
+  const designColourMap={
+    header_color:"--design-header", theme_header:"--design-header",
+    nav_color:"--design-nav", theme_nav:"--design-nav",
+    headline_color:"--design-headline", theme_headline:"--design-headline",
+    body_color:"--design-body", theme_body:"--design-body",
+    border_color:"--design-border", theme_border:"--design-border",
+    button_color:"--design-button", theme_button:"--design-button",
+    card_color:"--design-card", theme_card:"--design-card"
+  };
+  Object.entries(designColourMap).forEach(([key,variable])=>{
+    const value=s[key];
+    if(typeof value==="string"&&/^#[0-9a-f]{3,8}$/i.test(value))
+      root.style.setProperty(variable,value);
+  });
+  if(s.header_color||s.theme_header) document.querySelector(".masthead").style.backgroundColor=s.header_color||s.theme_header;
+  if(s.nav_color||s.theme_nav) $("main-nav").style.backgroundColor=s.nav_color||s.theme_nav;
+  if(s.spacing_scale!==undefined || s.content_spacing!==undefined){
+    const spacing=Number(s.spacing_scale??s.content_spacing);
+    if(Number.isFinite(spacing)) root.style.setProperty("--design-spacing",Math.max(.5,Math.min(2,spacing))+"rem");
+  }
   const visibility=s.section_visibility||{};  
   
   Object.entries(sectionMap).forEach(([key,id])=>{  
