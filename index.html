@@ -867,13 +867,19 @@ footer {
 }  
 
 /* DESIGN STUDIO SETTINGS */
-:root { --design-header:#fff; --design-nav:var(--dark); --design-headline:var(--dark); --design-body:var(--dark); --design-border:#eee; --design-button:var(--pink); --design-card:#fff; --design-spacing:1rem; }
+:root { --design-header:#fff; --design-nav:var(--dark); --design-headline:var(--dark); --design-body:var(--dark); --design-border:#eee; --design-button:var(--pink); --design-card:#fff; --design-spacing:1rem; --design-gap:20px; --design-radius:4px; --design-width:1250px; --design-headline-size:19px; --design-body-size:13px; --design-nav-size:12px; }
 .masthead { background:var(--design-header); }
-nav { background:var(--design-nav); }
-.news-card,.video-card { background:var(--design-card); border-color:var(--design-border); }
+nav { background:var(--design-nav); font-size:var(--design-nav-size); }
+nav a { font-size:var(--design-nav-size); }
+.container { max-width:var(--design-width); }
+.news-card,.video-card,.sidebar { background:var(--design-card); border-color:var(--design-border); border-radius:var(--design-radius); }
 .news-info h3,.section-title,.category-banner h2,.creator-heading h2 { color:var(--design-headline); }
 .news-info p,.category-banner p { color:var(--design-body); }
 .read-more,.share-button { border-color:var(--design-button); }
+.news-grid,.video-grid { gap:var(--design-gap); }
+.news-info { padding:var(--design-spacing); }
+.news-info h3 { font-size:var(--design-headline-size); }
+.news-info p { font-size:var(--design-body-size); }
 
 </style>  </head>  <body>  <div class="topbar" id="site-topbar">  
 Your Voice. Your Stories. Your Choice.  
@@ -1288,27 +1294,34 @@ async function loadSiteSettings() {
   }  
   
 
-  /* DESIGN STUDIO: apply homepage appearance controls */
+  /* DESIGN STUDIO: apply ds_ controls */
   const designColourMap={
-    header_color:"--design-header", theme_header:"--design-header",
-    nav_color:"--design-nav", theme_nav:"--design-nav",
-    headline_color:"--design-headline", theme_headline:"--design-headline",
-    body_color:"--design-body", theme_body:"--design-body",
-    border_color:"--design-border", theme_border:"--design-border",
-    button_color:"--design-button", theme_button:"--design-button",
-    card_color:"--design-card", theme_card:"--design-card"
+    ds_primary:"--design-button", ds_dark:"--design-nav",
+    ds_card:"--design-card", ds_text:"--design-body",
+    ds_headline:"--design-headline", ds_border:"--design-border"
   };
   Object.entries(designColourMap).forEach(([key,variable])=>{
     const value=s[key];
     if(typeof value==="string"&&/^#[0-9a-f]{3,8}$/i.test(value))
       root.style.setProperty(variable,value);
   });
-  if(s.header_color||s.theme_header) document.querySelector(".masthead").style.backgroundColor=s.header_color||s.theme_header;
-  if(s.nav_color||s.theme_nav) $("main-nav").style.backgroundColor=s.nav_color||s.theme_nav;
-  if(s.spacing_scale!==undefined || s.content_spacing!==undefined){
-    const spacing=Number(s.spacing_scale??s.content_spacing);
-    if(Number.isFinite(spacing)) root.style.setProperty("--design-spacing",Math.max(.5,Math.min(2,spacing))+"rem");
+  if(typeof s.ds_bg==="string"&&/^#[0-9a-f]{3,8}$/i.test(s.ds_bg)){
+    root.style.setProperty("--page",s.ds_bg);
+    document.body.style.backgroundColor=s.ds_bg;
   }
+  if(s.ds_dark) $("main-nav").style.backgroundColor=s.ds_dark;
+  if(s.ds_font&&["Arial","Georgia","Verdana","Tahoma","Trebuchet MS"].includes(s.ds_font))
+    document.body.style.fontFamily=s.ds_font+",sans-serif";
+  const sizeMap={ds_headline_size:"--design-headline-size",ds_body_size:"--design-body-size",ds_nav_size:"--design-nav-size"};
+  Object.entries(sizeMap).forEach(([key,variable])=>{
+    const value=Number(s[key]);
+    if(Number.isFinite(value)&&value>=10&&value<=60)root.style.setProperty(variable,value+"px");
+  });
+  const numericMap={ds_radius:["--design-radius",0,40,"px"],ds_width:["--design-width",700,1600,"px"],ds_space:["--design-spacing",0,5,"rem"],ds_gap:["--design-gap",0,50,"px"]};
+  Object.entries(numericMap).forEach(([key,[variable,min,max,unit]])=>{
+    const value=Number(s[key]);
+    if(Number.isFinite(value)&&value>=min&&value<=max)root.style.setProperty(variable,value+unit);
+  });
   const visibility=s.section_visibility||{};  
   
   Object.entries(sectionMap).forEach(([key,id])=>{  
