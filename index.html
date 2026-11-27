@@ -893,6 +893,34 @@ nav a { font-size:var(--design-nav-size); }
 .news-info h3 { font-size:var(--design-headline-size); }
 .news-info p { font-size:var(--design-body-size); }
 
+
+/* MUSIC CHART STUDIO: ADMIN-CONTROLLED PRESENTATION */
+:root{
+--chart-studio-header-bg:#222;--chart-studio-header-title:var(--chart-title-color,#fff);--chart-studio-header-sub:var(--chart-secondary,#fff);--chart-studio-song-title:var(--chart-title-color,#fff);--chart-studio-artist:var(--chart-secondary,#ccc);
+--chart-studio-card-bg:var(--chart-card-background,#222);--chart-studio-section-bg:var(--chart-background,#171717);--chart-studio-rank-bg:var(--chart-accent,#e7549b);--chart-studio-rank-color:#171717;
+--chart-studio-trend-up:#20c878;--chart-studio-trend-down:#ff5555;--chart-studio-trend-same:#b0b0b0;--chart-studio-trend-new:#ffcc33;
+--chart-studio-header-size:58px;--chart-studio-header-padding:28px;--chart-studio-header-spacing:0px;--chart-studio-header-sub-size:14px;
+--chart-studio-card-radius:0px;--chart-studio-card-gap:12px;--chart-studio-song-title-size:18px;--chart-studio-artist-size:12px;--chart-studio-rank-size:19px;
+--chart-studio-header-font:Arial,Helvetica,sans-serif;--chart-studio-header-weight:900;--chart-studio-header-align:left;
+--chart-studio-song-title-weight:700;--chart-studio-artist-weight:400;--chart-studio-columns:2;--chart-studio-card-layout:horizontal;
+}
+#music-chart{background:var(--chart-studio-section-bg,var(--chart-background))}
+#music-chart .chart-heading{background-color:var(--chart-studio-header-bg,var(--chart-header-background));padding:var(--chart-studio-header-padding) 24px;text-align:var(--chart-studio-header-align)}
+#music-chart .chart-heading h2{color:var(--chart-studio-header-title,var(--chart-title-color));font-family:var(--chart-studio-header-font);font-size:var(--chart-studio-header-size);font-weight:var(--chart-studio-header-weight);letter-spacing:var(--chart-studio-header-spacing);text-align:var(--chart-studio-header-align)}
+#music-chart .chart-heading p{display:block;color:var(--chart-studio-header-sub);font-size:var(--chart-studio-header-sub-size);margin-top:10px}
+#music-chart .chart-grid{grid-template-columns:repeat(var(--chart-studio-columns),minmax(0,1fr));gap:var(--chart-studio-card-gap)}
+#music-chart .chart-card{flex-direction:var(--chart-studio-card-layout);border-radius:var(--chart-studio-card-radius);background:var(--chart-studio-card-bg)}
+#music-chart .chart-info{background:var(--chart-studio-card-bg)}
+#music-chart .chart-info h3{color:var(--chart-studio-song-title);font-size:var(--chart-studio-song-title-size);font-weight:var(--chart-studio-song-title-weight)}
+#music-chart .chart-info p{color:var(--chart-studio-artist);font-size:var(--chart-studio-artist-size);font-weight:var(--chart-studio-artist-weight)}
+#music-chart .chart-rank{background:var(--chart-studio-rank-bg);color:var(--chart-studio-rank-color);font-size:var(--chart-studio-rank-size);display:var(--chart-studio-show-rank,grid)}
+.chart-trend{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:4px 7px;margin:0 0 8px;border-radius:4px;font-size:11px;font-weight:900;line-height:1.2;width:max-content}
+.chart-trend.up{color:var(--chart-studio-trend-up);border:1px solid currentColor}
+.chart-trend.down{color:var(--chart-studio-trend-down);border:1px solid currentColor}
+.chart-trend.same{color:var(--chart-studio-trend-same);border:1px solid currentColor}
+.chart-trend.new{color:var(--chart-studio-trend-new);border:1px solid currentColor}
+@media(max-width:700px){#music-chart .chart-grid{grid-template-columns:1fr}}
+
 </style>  </head>  <body>  <div class="topbar" id="site-topbar">  
 Your Voice. Your Stories. Your Choice.  
 </div>  <header class="masthead">  
@@ -1175,30 +1203,70 @@ function applySectionBackground(elementId,imageUrl) {
   
 /* ADMIN-EDITABLE CHART COLOURS */  
   
-function applyChartColours(settings) {  
-  
-  const root=document.documentElement;  
-  
-  const colourSettings={  
-    chart_bg_color:"--chart-background",  
-    chart_header_color:"--chart-header-background",  
-    chart_accent_color:"--chart-accent",  
-    chart_title_color:"--chart-title-color",  
-    chart_secondary_color:"--chart-secondary",  
-    chart_card_color:"--chart-card-background"  
-  };  
-  
-  Object.entries(colourSettings).forEach(([setting,cssVariable])=>{  
-  
-    const colour=settings[setting];  
-  
-    if(typeof colour==="string"&&/^#[0-9a-f]{6}$/i.test(colour)) {  
-      root.style.setProperty(cssVariable,colour);  
-    }  
-  
-  });  
-}  
-  
+function applyChartColours(settings) {
+  const root=document.documentElement;
+  const colourSettings={
+    chart_bg_color:"--chart-background",chart_header_color:"--chart-header-background",
+    chart_accent_color:"--chart-accent",chart_title_color:"--chart-title-color",
+    chart_secondary_color:"--chart-secondary",chart_card_color:"--chart-card-background"
+  };
+  Object.entries(colourSettings).forEach(([key,variable])=>{
+    const value=settings[key];
+    if(typeof value==="string"&&/^#[0-9a-f]{6}$/i.test(value))root.style.setProperty(variable,value);
+  });
+  const colourVars={
+    chart_studio_header_bg:"--chart-studio-header-bg",
+    chart_studio_header_title_color:"--chart-studio-header-title",
+    chart_studio_header_sub_color:"--chart-studio-header-sub",
+    chart_studio_song_title_color:"--chart-studio-song-title",
+    chart_studio_artist_color:"--chart-studio-artist",
+    chart_studio_card_bg:"--chart-studio-card-bg",
+    chart_studio_section_bg:"--chart-studio-section-bg",
+    chart_studio_rank_bg:"--chart-studio-rank-bg",
+    chart_studio_rank_color:"--chart-studio-rank-color",
+    chart_studio_trend_up:"--chart-studio-trend-up",
+    chart_studio_trend_down:"--chart-studio-trend-down",
+    chart_studio_trend_same:"--chart-studio-trend-same",
+    chart_studio_trend_new:"--chart-studio-trend-new"
+  };
+  Object.entries(colourVars).forEach(([key,variable])=>{
+    if(typeof settings[key]==="string"&&/^#[0-9a-f]{6}$/i.test(settings[key]))root.style.setProperty(variable,settings[key]);
+  });
+  const numberVars={
+    chart_studio_header_size:"--chart-studio-header-size",
+    chart_studio_header_padding:"--chart-studio-header-padding",
+    chart_studio_header_spacing:"--chart-studio-header-spacing",
+    chart_studio_header_sub_size:"--chart-studio-header-sub-size",
+    chart_studio_card_radius:"--chart-studio-card-radius",
+    chart_studio_card_gap:"--chart-studio-card-gap",
+    chart_studio_song_title_size:"--chart-studio-song-title-size",
+    chart_studio_artist_size:"--chart-studio-artist-size",
+    chart_studio_rank_size:"--chart-studio-rank-size"
+  };
+  Object.entries(numberVars).forEach(([key,variable])=>{
+    const value=Number(settings[key]);
+    if(Number.isFinite(value))root.style.setProperty(variable,value+"px");
+  });
+  const directVars={
+    chart_studio_header_font:"--chart-studio-header-font",
+    chart_studio_header_weight:"--chart-studio-header-weight",
+    chart_studio_header_align:"--chart-studio-header-align",
+    chart_studio_song_title_weight:"--chart-studio-song-title-weight",
+    chart_studio_artist_weight:"--chart-studio-artist-weight",
+    chart_studio_columns:"--chart-studio-columns",
+    chart_studio_card_layout:"--chart-studio-card-layout"
+  };
+  Object.entries(directVars).forEach(([key,variable])=>{if(settings[key]!==undefined)root.style.setProperty(variable,settings[key]);});
+  if(settings.chart_studio_header_overlay!==undefined)root.style.setProperty("--chart-studio-header-overlay",Math.max(0,Math.min(100,Number(settings.chart_studio_header_overlay)||0))/100);
+  const header=$("chart-header");
+  if(header&&settings.chart_studio_header_image&&/^https?:\/\//i.test(settings.chart_studio_header_image)){
+    header.style.backgroundImage=`linear-gradient(rgba(0,0,0,var(--chart-studio-header-overlay,.58)),rgba(0,0,0,var(--chart-studio-header-overlay,.58))),url("${settings.chart_studio_header_image.replace(/["\\\\]/g,"")}")`;
+  }else if(header&&settings.chart_header_bg){applySectionBackground("chart-header",settings.chart_header_bg);}
+  const description=document.querySelector("#music-chart .chart-note");
+  if(description)description.style.display=settings.chart_studio_show_description===false?"none":"";
+  root.style.setProperty("--chart-studio-show-rank",settings.chart_studio_show_rank===false?"none":"grid");
+}
+
 function applySocialPreview(imageUrl) {  
   if(!imageUrl||!/^https?:\/\//i.test(imageUrl))return;  
   
@@ -1559,7 +1627,18 @@ async function loadArticles() {
     :"<p>No national stories published yet.</p>";  
 }  
   
-/* TOP 10 MUSIC CHART */  
+/* TOP 10 MUSIC CHART */
+function renderChartTrend(song){
+  const movement=(siteSettings.chart_song_movement||{})[song.id];
+  if(siteSettings.chart_studio_show_trend===false||!movement)return "";
+  const styles={up:{icon:"↗",word:"RISING",cls:"up"},down:{icon:"↘",word:"FALLING",cls:"down"},same:{icon:"→",word:"UNCHANGED",cls:"same"},new:{icon:"★",word:"NEW ENTRY",cls:"new"}};
+  const item=styles[movement];if(!item)return "";
+  const mode=siteSettings.chart_studio_trend_style||"arrow";
+  const label=mode==="word"?item.word:mode==="both"?item.icon+" "+item.word:item.icon;
+  return `<span class="chart-trend ${item.cls}" aria-label="${item.word}">${label}</span>`;
+}
+
+  
   
 function renderMusicChart() {  
   
@@ -1597,6 +1676,8 @@ function renderMusicChart() {
   
       <div class="chart-info">  
   
+        ${renderChartTrend(s)}
+
         <h3>${esc(s.title)}</h3>  
   
         <p>${esc(s.artist)}</p>  
