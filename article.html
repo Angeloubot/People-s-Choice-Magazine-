@@ -17,6 +17,15 @@
   --dark: #171717;
   --gray: #777;
   --light: #f5f5f5;
+  --article-page-bg:#f5f5f5;
+  --article-card-bg:#ffffff;
+  --article-headline-color:#171717;
+  --article-body-color:#292929;
+  --article-excerpt-color:#333333;
+  --article-category-color:#e7549b;
+  --article-meta-color:#777777;
+  --article-accent:#e7549b;
+  --article-headline-weight:700;
 }
 
 * {
@@ -27,7 +36,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: var(--light);
+  background: var(--article-page-bg);
   color: var(--dark);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -81,13 +90,13 @@ nav a {
   max-width: 900px;
   margin: 35px auto;
   padding: 36px;
-  background: #fff;
+  background: var(--article-card-bg);
 }
 
 /* ARTICLE CATEGORY */
 
 .category {
-  color: var(--pink);
+  color: var(--article-category-color);
   font-weight: bold;
   text-transform: uppercase;
   font-size: 12px;
@@ -102,15 +111,15 @@ h1 {
   font-size: clamp(32px, 5.5vw, 48px);
   line-height: 1.18;
   letter-spacing: -0.6px;
-  font-weight: 700;
+  font-weight: var(--article-headline-weight);
   margin: 10px 0 18px;
-  color: #171717;
+  color: var(--article-headline-color);
 }
 
 /* AUTHOR AND DATE */
 
 .meta {
-  color: var(--gray);
+  color: var(--article-meta-color);
   font-size: 14px;
   line-height: 1.7;
   margin-bottom: 24px;
@@ -136,7 +145,7 @@ h1 {
   font-size: 21px;
   font-weight: bold;
   line-height: 1.75;
-  color: #333;
+  color: var(--article-excerpt-color);
   margin-bottom: 28px;
 }
 
@@ -146,7 +155,7 @@ h1 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 19px;
   line-height: 1.95;
-  color: #292929;
+  color: var(--article-body-color);
   letter-spacing: 0.1px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -166,7 +175,7 @@ h1 {
 
 .share a {
   display: inline-block;
-  background: var(--pink);
+  background: var(--article-accent);
   color: white;
   padding: 13px 20px;
   margin: 12px 8px 0 0;
@@ -328,6 +337,30 @@ async function loadArticle() {
     container.innerHTML =
       '<div class="error">Sorry, this article could not be found.</div>';
     return;
+  }
+
+  /* LOAD DESIGN STUDIO ARTICLE PAGE STYLING */
+  const {data:siteData,error:siteError}=await db.from("site_settings")
+    .select("settings").eq("id","main").maybeSingle();
+  if(!siteError&&siteData?.settings){
+    const s=siteData.settings;
+    const root=document.documentElement;
+    const colours={
+      ds_article_bg:"--article-page-bg",
+      ds_article_card:"--article-card-bg",
+      ds_article_headline_color:"--article-headline-color",
+      ds_article_body_color:"--article-body-color",
+      ds_article_excerpt_color:"--article-excerpt-color",
+      ds_article_category_color:"--article-category-color",
+      ds_article_meta_color:"--article-meta-color",
+      ds_article_accent:"--article-accent"
+    };
+    Object.entries(colours).forEach(([key,variable])=>{
+      if(typeof s[key]==="string"&&/^#[0-9a-f]{6}$/i.test(s[key]))
+        root.style.setProperty(variable,s[key]);
+    });
+    if(["400","700"].includes(String(s.ds_article_headline_bold||"700")))
+      root.style.setProperty("--article-headline-weight",String(s.ds_article_headline_bold||"700"));
   }
 
   /* GET JOURNALIST NAME */
