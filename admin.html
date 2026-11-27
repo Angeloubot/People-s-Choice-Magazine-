@@ -504,7 +504,7 @@ if(currentRole!=="admin")return msg("settingsMessage","Administrator permission 
 const b=$("settingsSave");b.disabled=true;b.textContent="Saving...";
 try{
 const next={...settings};
-settingIds.forEach(id=>next[id]=$(id).value.trim());
+settingIds.forEach(id=>{const field=$(id);if(field)next[id]=field.value.trim();});
 const f=$("logo_file").files[0];
 if(f)next.logo_url=await upload("article-images","site/"+currentUser.id+"/"+Date.now()+"-"+fileName(f.name),f);
 else if(next.logo_url&&!validUrl(next.logo_url))throw Error("Enter a valid logo URL.");
