@@ -333,6 +333,56 @@ main{padding:10px}
 </div>
 <button id="saveChartColours">Save Chart Colours</button>
 <div id="chartColoursMessage" class="notice hidden"></div>
+<hr>
+<h2>Music Chart Studio</h2>
+<p class="help">Control the public chart's header, typography, layout, song cards, ranking badges and movement indicators. Settings are saved in site_settings and applied to the public homepage.</p>
+<h3>Header & section</h3>
+<div class="grid">
+<div><label>Header background colour</label><input id="csHeaderBg" type="color"></div>
+<div><label>Header background image URL</label><input id="csHeaderImage" type="url" placeholder="https://..."></div>
+<div><label>Header image overlay (0–100%)</label><input id="csHeaderOverlay" type="number" min="0" max="100" step="5"></div>
+<div><label>Header title size (px)</label><input id="csHeaderSize" type="number" min="18" max="100"></div>
+<div><label>Header font</label><select id="csHeaderFont"><option value="Arial, Helvetica, sans-serif">Arial</option><option value="Georgia, serif">Georgia</option><option value="'Trebuchet MS', sans-serif">Trebuchet</option><option value="Impact, sans-serif">Impact</option></select></div>
+<div><label>Header title weight</label><select id="csHeaderWeight"><option value="400">Normal</option><option value="600">Semi-bold</option><option value="700">Bold</option><option value="900">Extra bold</option></select></div>
+<div><label>Header alignment</label><select id="csHeaderAlign"><option value="left">Left</option><option value="center">Centre</option><option value="right">Right</option></select></div>
+<div><label>Header padding (px)</label><input id="csHeaderPadding" type="number" min="0" max="100"></div>
+<div><label>Header letter spacing (px)</label><input id="csHeaderSpacing" type="number" min="-2" max="15" step="0.5"></div>
+<div><label>Header title colour</label><input id="csHeaderTitleColor" type="color"></div>
+<div><label>Header subtitle colour</label><input id="csHeaderSubColor" type="color"></div>
+<div><label>Subtitle size (px)</label><input id="csHeaderSubSize" type="number" min="10" max="40"></div>
+<div class="check"><input id="csShowDescription" type="checkbox"><label for="csShowDescription">Show chart information note</label></div>
+</div>
+<h3>Song cards & layout</h3>
+<div class="grid">
+<div><label>Desktop columns</label><select id="csColumns"><option value="1">1 column</option><option value="2">2 columns</option><option value="3">3 columns</option><option value="4">4 columns</option></select></div>
+<div><label>Card layout</label><select id="csCardLayout"><option value="horizontal">Horizontal</option><option value="vertical">Vertical</option></select></div>
+<div><label>Card corner radius (px)</label><input id="csCardRadius" type="number" min="0" max="40"></div>
+<div><label>Card gap (px)</label><input id="csCardGap" type="number" min="0" max="40"></div>
+<div><label>Song title size (px)</label><input id="csSongTitleSize" type="number" min="10" max="36"></div>
+<div><label>Song title weight</label><select id="csSongTitleWeight"><option value="400">Normal</option><option value="600">Semi-bold</option><option value="700">Bold</option><option value="900">Extra bold</option></select></div>
+<div><label>Artist size (px)</label><input id="csArtistSize" type="number" min="9" max="26"></div>
+<div><label>Artist weight</label><select id="csArtistWeight"><option value="400">Normal</option><option value="600">Semi-bold</option><option value="700">Bold</option></select></div>
+<div><label>Song title colour</label><input id="csSongTitleColor" type="color"></div>
+<div><label>Artist colour</label><input id="csArtistColor" type="color"></div>
+<div><label>Card background</label><input id="csCardBg" type="color"></div>
+<div><label>Chart section background</label><input id="csSectionBg" type="color"></div>
+</div>
+<h3>Rank badges & movement arrows</h3>
+<div class="grid">
+<div><label>Rank badge background</label><input id="csRankBg" type="color"></div>
+<div><label>Rank badge text colour</label><input id="csRankColor" type="color"></div>
+<div><label>Rank badge size (px)</label><input id="csRankSize" type="number" min="10" max="40"></div>
+<div><label>Movement indicator style</label><select id="csTrendStyle"><option value="arrow">Arrows (↗ ↘ →)</option><option value="word">Words (UP / DOWN / SAME)</option><option value="both">Arrow + word</option></select></div>
+<div><label>Rising colour</label><input id="csTrendUp" type="color"></div>
+<div><label>Falling colour</label><input id="csTrendDown" type="color"></div>
+<div><label>Unchanged colour</label><input id="csTrendSame" type="color"></div>
+<div><label>New entry colour</label><input id="csTrendNew" type="color"></div>
+<div class="check"><input id="csShowTrend" type="checkbox"><label for="csShowTrend">Show movement indicators</label></div>
+<div class="check"><input id="csShowRank" type="checkbox"><label for="csShowRank">Show rank badges</label></div>
+</div>
+<button type="button" id="saveChartStudio">Save Music Chart Studio</button>
+<div id="chartStudioMessage" class="notice hidden"></div>
+<p class="help">Set each song's movement from its song row: Rising, Falling, Unchanged or New entry. This is an editorial indicator and does not alter voting totals or ranking.</p>
 </section>
 
 <section class="panel tab" id="tab-articles">
@@ -463,6 +513,7 @@ sectionOrder=Array.isArray(settings.section_order)?settings.section_order.slice(
 sectionKeys.forEach(([k])=>{if(!sectionOrder.includes(k))sectionOrder.push(k)});
 buildVisibility();buildOrder();
 if(typeof dsLoad==="function")dsLoad();
+if(typeof loadChartStudio==="function")loadChartStudio();
 }
 
 $("logo_url").addEventListener("input",()=>preview("logo_preview",validUrl($("logo_url").value)?$("logo_url").value:""));
@@ -545,7 +596,7 @@ $("login").classList.add("hidden");$("dashboard").classList.remove("hidden");
 // Load the article list independently so unrelated admin modules cannot block it.
 loadArticles();
 if(currentRole==="admin"){
-Promise.allSettled([loadSettings(),loadBanners(),loadVideos(),initChart(),loadAdverts()]);
+Promise.allSettled([loadSettings().then(()=>initChart()),loadBanners(),loadVideos(),loadAdverts()]);
 }else{
 ["website","banners","videos","chart","screenshots","advertisers"].forEach(t=>{
 const button=document.querySelector(`[data-tab="${t}"]`);
@@ -857,6 +908,14 @@ const info=document.createElement("div"),h=document.createElement("h3");h.textCo
 const p=document.createElement("p");p.textContent=s.artist+" · Votes: "+(counts[s.id]||0);
 const st=document.createElement("p");st.className="help";st.textContent=(s.is_approved?"Approved":"Pending")+" · "+(s.is_active?"Active":"Inactive");
 info.append(h,p,st);
+const trendWrap=document.createElement("div");trendWrap.style.cssText="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:8px 0";
+const trendLabel=document.createElement("label");trendLabel.textContent="Movement";trendLabel.style.cssText="margin:0;font-size:12px";
+const trendSelect=document.createElement("select");trendSelect.style.cssText="max-width:180px;padding:8px";
+[["none","Not set"],["up","↗ Rising / peaking"],["down","↘ Falling"],["same","→ Unchanged"],["new","★ New entry"]].forEach(([v,t])=>{const o=document.createElement("option");o.value=v;o.textContent=t;trendSelect.append(o);});
+trendSelect.value=(settings.chart_song_movement||{})[s.id]||"none";
+const trendSave=document.createElement("button");trendSave.type="button";trendSave.className="secondary";trendSave.textContent="Save movement";
+trendSave.onclick=async()=>{const map={...(settings.chart_song_movement||{})};if(trendSelect.value==="none")delete map[s.id];else map[s.id]=trendSelect.value;await saveExtraSettings({chart_song_movement:map},"chartMessage");};
+trendWrap.append(trendLabel,trendSelect,trendSave);info.append(trendWrap);
 const ed=document.createElement("button");ed.textContent="Edit";ed.className="secondary";ed.onclick=()=>editSong(s);
 const ap=document.createElement("button");ap.textContent=s.is_approved?"Unapprove":"Approve";ap.className="success";ap.onclick=()=>updateSong(s,{is_approved:!s.is_approved});
 const ac=document.createElement("button");ac.textContent=s.is_active?"Deactivate":"Activate";ac.className="secondary";ac.onclick=()=>updateSong(s,{is_active:!s.is_active});
@@ -976,6 +1035,46 @@ $("saveChartColours").onclick=()=>{
 const changes={};
 ["chart_bg_color","chart_header_color","chart_accent_color","chart_title_color","chart_secondary_color","chart_card_color"].forEach(id=>changes[id]=$(id).value);
 saveExtraSettings(changes,"chartColoursMessage");
+};
+
+/* MUSIC CHART STUDIO */
+const chartStudioFields={
+csHeaderBg:["chart_studio_header_bg","#222222"],csHeaderImage:["chart_studio_header_image",""],csHeaderOverlay:["chart_studio_header_overlay",58],
+csHeaderSize:["chart_studio_header_size",58],csHeaderFont:["chart_studio_header_font","Arial, Helvetica, sans-serif"],
+csHeaderWeight:["chart_studio_header_weight","900"],csHeaderAlign:["chart_studio_header_align","left"],
+csHeaderPadding:["chart_studio_header_padding",28],csHeaderSpacing:["chart_studio_header_spacing",0],
+csHeaderTitleColor:["chart_studio_header_title_color","#ffffff"],csHeaderSubColor:["chart_studio_header_sub_color","#ffffff"],
+csHeaderSubSize:["chart_studio_header_sub_size",14],csShowDescription:["chart_studio_show_description",true],
+csColumns:["chart_studio_columns",2],csCardLayout:["chart_studio_card_layout","horizontal"],
+csCardRadius:["chart_studio_card_radius",0],csCardGap:["chart_studio_card_gap",12],
+csSongTitleSize:["chart_studio_song_title_size",18],csSongTitleWeight:["chart_studio_song_title_weight","700"],
+csArtistSize:["chart_studio_artist_size",12],csArtistWeight:["chart_studio_artist_weight","400"],
+csSongTitleColor:["chart_studio_song_title_color","#ffffff"],csArtistColor:["chart_studio_artist_color","#cccccc"],
+csCardBg:["chart_studio_card_bg","#222222"],csSectionBg:["chart_studio_section_bg","#171717"],
+csRankBg:["chart_studio_rank_bg","#e7549b"],csRankColor:["chart_studio_rank_color","#171717"],
+csRankSize:["chart_studio_rank_size",19],csTrendStyle:["chart_studio_trend_style","arrow"],
+csTrendUp:["chart_studio_trend_up","#20c878"],csTrendDown:["chart_studio_trend_down","#ff5555"],
+csTrendSame:["chart_studio_trend_same","#b0b0b0"],csTrendNew:["chart_studio_trend_new","#ffcc33"],
+csShowTrend:["chart_studio_show_trend",true],csShowRank:["chart_studio_show_rank",true]
+};
+function loadChartStudio(){
+Object.entries(chartStudioFields).forEach(([id,[key,fallback]])=>{
+const el=$(id);if(!el)return;
+const value=settings[key]??fallback;
+if(el.type==="checkbox")el.checked=!!value;else el.value=value;
+});
+}
+loadChartStudio();
+$("saveChartStudio").onclick=async()=>{
+const changes={};
+for(const [id,[key]] of Object.entries(chartStudioFields)){
+const el=$(id);if(!el)continue;
+let value=el.type==="checkbox"?el.checked:el.value;
+if(el.type==="number"){value=Number(value);if(!Number.isFinite(value))return msg("chartStudioMessage","Please enter valid numbers.",true);}
+if(id==="csHeaderImage"&&value&&!validUrl(value))return msg("chartStudioMessage","Enter a valid header image URL.",true);
+changes[key]=value;
+}
+await saveExtraSettings(changes,"chartStudioMessage");
 };
 $("saveBranding").onclick=()=>{
 const values=[["desktopLogoWidth",40,600],["mobileLogoWidth",40,350],["desktopHeaderHeight",40,300],["mobileHeaderHeight",40,250],["headerSpacing",0,100]];
